@@ -1,0 +1,358 @@
+{
+  "Simple Clear": {
+    "glyph": " ",
+    "mapType": "overworld",
+    "fgColor": "#FFFFFF",
+    "bgColor": "#000000",
+    "description": "",
+    "height": 1
+  },
+  "Simple Wall": {
+    "glyph": "█",
+    "mapType": "overworld",
+    "fgColor": "#FFFFFF",
+    "bgColor": "#000000",
+    "description": "",
+    "height": 1
+  },
+  "Large Palm Trees": {
+    "glyph": "Ϫ",
+    "mapType": "overworld",
+    "fgColor": "#BAE2BE",
+    "bgColor": "#104B4F",
+    "description": "",
+    "height": 1
+  },
+  "Palm Trees": {
+    "glyph": "ϫ",
+    "mapType": "overworld",
+    "fgColor": "#98C367",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1
+  },
+  "Mountain Spring": {
+    "glyph": "▲",
+    "mapType": "overworld",
+    "fgColor": "#5CC1B3",
+    "bgColor": "#0F7F87",
+    "description": "",
+    "height": 1
+  },
+  "Steep Mountains": {
+    "glyph": "▲",
+    "mapType": "overworld",
+    "fgColor": "#5CC1B3",
+    "bgColor": "#0F7F87",
+    "description": "",
+    "height": 1
+  },
+  "Mountain Tops": {
+    "glyph": "▲",
+    "mapType": "overworld",
+    "fgColor": "#9DC15C",
+    "bgColor": "#0F7F87",
+    "description": "",
+    "height": 1
+  },
+  "Rocky Mountains": {
+    "glyph": "◬",
+    "mapType": "overworld",
+    "fgColor": "#60A6AE",
+    "bgColor": "#11737A",
+    "description": "",
+    "height": 1
+  },
+  "Low Mountains": {
+    "glyph": "▴",
+    "mapType": "overworld",
+    "fgColor": "#4F9DA6",
+    "bgColor": "#15666B",
+    "description": "",
+    "height": 1
+  },
+  "Sea Water": {
+    "glyph": "=",
+    "mapType": "overworld",
+    "fgColor": "#87E0FF",
+    "bgColor": "#1D97C1",
+    "description": "",
+    "height": 1
+  },
+  "River Water": {
+    "glyph": "-",
+    "mapType": "overworld",
+    "fgColor": "#87E0FF",
+    "bgColor": "#1D97C1",
+    "description": "",
+    "height": 1
+  },
+  "River Rapids": {
+    "glyph": "~",
+    "mapType": "overworld",
+    "fgColor": "#87E0FF",
+    "bgColor": "#1D97C1",
+    "description": "",
+    "height": 1
+  },
+  "River Falls": {
+    "glyph": "ᔐ",
+    "mapType": "overworld",
+    "fgColor": "#87E0FF",
+    "bgColor": "#1D97C1",
+    "description": "",
+    "height": 1
+  },
+  "Shallow Water": {
+    "glyph": "=",
+    "mapType": "overworld",
+    "fgColor": "#87E0FF",
+    "bgColor": "#1D97C1",
+    "description": "",
+    "height": 1
+  },
+  "Shallow Waves": {
+    "glyph": "~",
+    "mapType": "overworld",
+    "fgColor": "#FFFFFF",
+    "bgColor": "#1D97C1",
+    "description": "",
+    "height": 1
+  },
+  "Deep Water": {
+    "glyph": "=",
+    "mapType": "overworld",
+    "fgColor": "#FFFFFF",
+    "bgColor": "#000000",
+    "description": "",
+    "height": 1
+  },
+  "Deep Waves": {
+    "glyph": "≈",
+    "mapType": "overworld",
+    "fgColor": "#FFFFFF",
+    "bgColor": "#000000",
+    "description": "",
+    "height": 1
+  },
+  "Low Grasses": {
+    "glyph": ".",
+    "mapType": "overworld",
+    "fgColor": "#187E85",
+    "bgColor": "#155E63",
+    "description": "",
+    "height": 1
+  },
+  "Medium Grasses": {
+    "glyph": ",",
+    "mapType": "overworld",
+    "fgColor": "#DAF9B7",
+    "bgColor": "#155E63",
+    "description": "",
+    "height": 1
+  },
+  "Tall Grasses": {
+    "glyph": "⍵",
+    "mapType": "overworld",
+    "fgColor": "#BEF481",
+    "bgColor": "#155E63",
+    "description": "",
+    "height": 1
+  },
+  "Sand Beach": {
+    "glyph": ".",
+    "mapType": "overworld",
+    "fgColor": "#A8A85D",
+    "bgColor": "#FDFDAC",
+    "description": "",
+    "height": 1
+  },
+  "Small Village": {
+    "glyph": "⏏",
+    "mapType": "overworld",
+    "fgColor": "#54542E",
+    "bgColor": "#60A6AE",
+    "description": "",
+    "height": 1
+  },
+  "Water Tower": {
+    "glyph": "⍾",
+    "mapType": "overworld",
+    "fgColor": "#434324",
+    "bgColor": "#8D8B8B",
+    "description": "",
+    "height": 1
+  },
+  "Village Field": {
+    "glyph": "░",
+    "mapType": "overworld",
+    "fgColor": "#4F9DA6",
+    "bgColor": "#155E63",
+    "description": "",
+    "height": 1
+  },
+  "Rice Paddy": {
+    "glyph": "ʭ",
+    "mapType": "overworld",
+    "fgColor": "#73d800",
+    "bgColor": "#1A87AD",
+    "description": "",
+    "height": 1
+  },
+  "North-South Highway": {
+    "glyph": "│",
+    "mapType": "overworld",
+    "fgColor": "#E2F004",
+    "bgColor": "#747171",
+    "description": "",
+    "height": 1
+  },
+  "East-West Highway": {
+    "glyph": "─",
+    "mapType": "overworld",
+    "fgColor": "#E2F004",
+    "bgColor": "#747171",
+    "description": "",
+    "height": 1
+  },
+  "West-South Highway": {
+    "glyph": "╭",
+    "mapType": "overworld",
+    "fgColor": "#E2F004",
+    "bgColor": "#747171",
+    "description": "",
+    "height": 1
+  },
+  "East-South Highway": {
+    "glyph": "╮",
+    "mapType": "overworld",
+    "fgColor": "#E2F004",
+    "bgColor": "#747171",
+    "description": "",
+    "height": 1
+  },
+  "West-North Highway": {
+    "glyph": "╯",
+    "mapType": "overworld",
+    "fgColor": "#E2F004",
+    "bgColor": "#747171",
+    "description": "",
+    "height": 1
+  },
+  "East-North Highway": {
+    "glyph": "╰",
+    "mapType": "overworld",
+    "fgColor": "#E2F004",
+    "bgColor": "#747171",
+    "description": "",
+    "height": 1
+  },
+  "Low Grass": {
+    "glyph": ".",
+    "mapType": "local",
+    "fgColor": "#187E85",
+    "bgColor": "#155E63",
+    "description": "",
+    "height": 1,
+    "sightBlockPercent": 0
+  },
+  "Medium Tree 1": {
+    "glyph": "ሦ",
+    "mapType": "local",
+    "fgColor": "#98C367",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "sightBlockPercent": 100
+  },
+  "Medium Tree 2": {
+    "glyph": "ቸ",
+    "mapType": "local",
+    "fgColor": "#DAF9B7",
+    "bgColor": "#155E63",
+    "description": "",
+    "height": 1,
+    "sightBlockPercent": 100
+  },
+  "Medium Tree 3": {
+    "glyph": "ቿ",
+    "mapType": "local",
+    "fgColor": "#BEF481",
+    "bgColor": "#155E63",
+    "description": "",
+    "height": 1,
+    "sightBlockPercent": 100
+  },
+  "Bush 1": {
+    "glyph": "ൡ",
+    "mapType": "local",
+    "fgColor": "#98C367",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "sightBlockPercent": 25
+  },
+  "Bush 2": {
+    "glyph": "ጬ",
+    "mapType": "local",
+    "fgColor": "#88AF5C",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "sightBlockPercent": 25
+  },
+  "Bush 3": {
+    "glyph": "ጫ",
+    "mapType": "local",
+    "fgColor": "#799C52",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "sightBlockPercent": 25
+  },
+  "Bush 4": {
+    "glyph": "ጭ",
+    "mapType": "local",
+    "fgColor": "#88AF5C",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "sightBlockPercent": 25
+  },
+  "Tall Grass 1": {
+    "glyph": "ᖗ",
+    "mapType": "local",
+    "fgColor": "#98C367",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "sightBlockPercent": 15
+  },
+  "Tall Grass 2": {
+    "glyph": "ঀ",
+    "mapType": "local",
+    "fgColor": "#98C367",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "sightBlockPercent": 15
+  },
+  "Medium Grass 1": {
+    "glyph": ",",
+    "mapType": "local",
+    "fgColor": "#DAF9B7",
+    "bgColor": "#155e63",
+    "description": "",
+    "height": 1,
+    "sightBlockPercent": 10
+  },
+  "Medium Grass 2": {
+    "glyph": ";",
+    "mapType": "local",
+    "fgColor": "#DAF9B7",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "sightBlockPercent": 10
+  }
+}

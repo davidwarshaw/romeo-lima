@@ -1,0 +1,50 @@
+[
+  {
+    "rank": "SGT",
+    "role": "Squad Lead",
+    "marchingOrder": 0,
+    "pointman": false
+  },
+  {
+    "rank": "CPL",
+    "role": "Asst Lead",
+    "marchingOrder": 4,
+    "pointman": false
+  },
+  {
+    "rank": "SPC",
+    "role": "Medic",
+    "marchingOrder": 1,
+    "pointman": false
+  },
+  {
+    "rank": "SPC",
+    "role": "Marksman",
+    "marchingOrder": 5,
+    "pointman": false
+  },
+  {
+    "rank": "PFC",
+    "role": "Grenadier",
+    "marchingOrder": 2,
+    "pointman": false
+  },
+  {
+    "rank": "PFC",
+    "role": "Automatic R",
+    "marchingOrder": 6,
+    "pointman": false
+  },
+  {
+    "rank": "PFC",
+    "role": "Rifleman",
+    "marchingOrder": 3,
+    "pointman": true
+  },
+  {
+    "rank": "PVT",
+    "role": "Rifleman",
+    "marchingOrder": 7,
+    "pointman": false
+  }
+]

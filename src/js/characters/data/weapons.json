@@ -1,0 +1,168 @@
+[
+  {
+    "name": "M1911A1",
+    "type": "sidearm",
+    "faction": "US",
+    "description": "",
+    "bursts": 1,
+    "roundsPerBurst": 1,
+    "power": 80,
+    "accuracy": 100
+  },
+  {
+    "name": "Hi-Power",
+    "type": "sidearm",
+    "faction": "US",
+    "description": "",
+    "bursts": 1,
+    "roundsPerBurst": 1,
+    "power": 20,
+    "accuracy": 100
+  },
+  {
+    "name": "Model 27",
+    "type": "sidearm",
+    "faction": "US",
+    "description": "",
+    "bursts": 1,
+    "roundsPerBurst": 1,
+    "power": 20,
+    "accuracy": 100
+  },
+  {
+    "name": "M1917",
+    "type": "sidearm",
+    "faction": "US",
+    "description": "",
+    "bursts": 1,
+    "roundsPerBurst": 1,
+    "power": 80,
+    "accuracy": 100
+  },
+  {
+    "name": "MAC-10",
+    "type": "sidearm",
+    "faction": "US",
+    "description": "",
+    "bursts": 1,
+    "roundsPerBurst": 4,
+    "power": 20,
+    "accuracy": 100
+  },
+  {
+    "name": "M14",
+    "type": "rifle",
+    "faction": "US",
+    "description": "",
+    "bursts": 2,
+    "roundsPerBurst": 1,
+    "power": 60,
+    "accuracy": 100
+  },
+  {
+    "name": "M1A1",
+    "type": "rifle",
+    "faction": "US",
+    "description": "",
+    "bursts": 1,
+    "roundsPerBurst": 1,
+    "power": 40,
+    "accuracy": 100
+  },
+  {
+    "name": "M16E1",
+    "type": "rifle",
+    "faction": "US",
+    "description": "",
+    "bursts": 1,
+    "roundsPerBurst": 3,
+    "power": 40,
+    "accuracy": 100
+  },
+  {
+    "name": "M177",
+    "type": "rifle",
+    "faction": "US",
+    "description": "",
+    "bursts": 1,
+    "roundsPerBurst": 3,
+    "power": 40,
+    "accuracy": 100
+  },
+  {
+    "name": "M207",
+    "type": "rifle",
+    "faction": "US",
+    "description": "",
+    "bursts": 1,
+    "roundsPerBurst": 3,
+    "power": 40,
+    "accuracy": 100
+  },
+  {
+    "name": "M1C",
+    "type": "rifle",
+    "faction": "US",
+    "description": "",
+    "role": "Marksman",
+    "bursts": 1,
+    "roundsPerBurst": 1,
+    "power": 60,
+    "accuracy": 100
+  },
+  {
+    "name": "M1903A4",
+    "type": "rifle",
+    "faction": "US",
+    "description": "",
+    "role": "Marksman",
+    "bursts": 1,
+    "roundsPerBurst": 1,
+    "power": 60,
+    "accuracy": 100
+  },
+  {
+    "name": "M40",
+    "type": "rifle",
+    "faction": "US",
+    "description": "",
+    "role": "Marksman",
+    "bursts": 1,
+    "roundsPerBurst": 1,
+    "power": 60,
+    "accuracy": 100
+  },
+  {
+    "name": "M60",
+    "type": "automatic rifle",
+    "faction": "US",
+    "description": "",
+    "role": "Automatic R",
+    "bursts": 2,
+    "roundsPerBurst": 4,
+    "power": 60,
+    "accuracy": 100
+  },
+  {
+    "name": "M63A",
+    "type": "automatic rifle",
+    "faction": "US",
+    "description": "",
+    "role": "Automatic R",
+    "bursts": 2,
+    "roundsPerBurst": 5,
+    "power": 40,
+    "accuracy": 100
+  },
+  {
+    "name": "M1918A2",
+    "type": "automatic rifle",
+    "faction": "US",
+    "description": "",
+    "role": "Automatic R",
+    "bursts": 2,
+    "roundsPerBurst": 4,
+    "power": 80,
+    "accuracy": 100
+  }
+]
