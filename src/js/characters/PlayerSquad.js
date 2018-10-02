@@ -3,12 +3,9 @@ import Squad from './Squad';
 
 export default class PlayerSquad extends Squad {
 
-  constructor(members, x, y, startingEquipment) {
-    super(members, x, y);
-
-    // Add some starting equipment
-    startingEquipment
-      .forEach(item => this.inventory.push(item));
+  constructor(members, x, y, inventory) {
+    super(members, x, y, inventory);
+    this.visibleToEnemies = false;
   }
 
   renderSquadMembers(display, watchBrightness, map, xOffset, yOffset) {

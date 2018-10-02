@@ -2,7 +2,9 @@ export default [
   {
     tiles: [],
     watches: [],
-    chanceToHappen: 10,
+
+    // TODO make this not 0
+    chanceToHappen: 0,
     cooldown: 10,
     chanceToSucceed: 66,
     name: '"Should we check it out?"',
@@ -16,7 +18,7 @@ export default [
           'It\'s a bicycle.""'
         },
         {
-          name: '${Team Lead}',
+          name: '${Squad Lead}',
           text: '"It looks like it\'s been rigged to carry cargo. ' +
           '\n\nShould we check it out?"'
         }

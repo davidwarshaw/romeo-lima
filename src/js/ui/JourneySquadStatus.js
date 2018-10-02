@@ -28,6 +28,10 @@ export default class JourneySquadStatus extends SquadStatus {
       `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` +
         `${member.weapon.name}`;
     display.drawText(col, this.y + 3, formattedText, columnWidth);
+
+    // Stats row is two lower than weapon row, to leve room for position
+    const statsRow = this.y + 5;
+    super.renderStats(display, member, i, col, statsRow);
   }
 
   inputHandler(input) {

@@ -107,4 +107,8 @@ export default class Window {
   inputHandler() {
     // Override me
   }
+
+  getCommands() {
+    // Override me
+  }
 }

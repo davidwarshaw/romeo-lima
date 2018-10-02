@@ -5,7 +5,7 @@ import utils from '../util/utils';
 import Cache from '../util/Cache';
 import Window from '../ui/Window';
 
-import tileDictionary from './data/tileDictionary.json';
+import localTileDictionary from './data/localTileDictionary.json';
 
 export default class LocalMap extends Window {
   constructor(game, battleSystem) {
@@ -28,7 +28,7 @@ export default class LocalMap extends Window {
 
   getTile(x, y) {
     const name = this.map[utils.keyFromXY(x, y)].name;
-    return tileDictionary[name];
+    return localTileDictionary[name];
   }
 
   brightnessForWatch() {
@@ -42,11 +42,11 @@ export default class LocalMap extends Window {
 
     Object.values(this.map).forEach((tile) => {
 
-      const tileDef = tileDictionary[tile.name];
+      const tileDef = localTileDictionary[tile.name];
 
       // If the tile is visible, brightness comes from time of day (watch)
       // Otherwise, tile gets default not visible brightness
-      const visibleTile = this.battleSystem.playerSquadFov
+      const visibleTile = this.battleSystem.playerSquadLocalFov
         .isVisible(tile.x, tile.y);
       const tileBrightness = visibleTile ?
         watchBrightness : properties.localMapNotVisibleBrightness;
@@ -70,7 +70,7 @@ export default class LocalMap extends Window {
 
     this.enemySquad
       .renderSquadMembers(display, watchBrightness, this, this.x, this.y,
-        this.battleSystem.playerSquadFov);
+        this.battleSystem.playerSquadLocalFov);
     this.squad
       .renderSquadMembers(display, watchBrightness, this, this.x, this.y);
   }
@@ -84,7 +84,7 @@ export default class LocalMap extends Window {
     }
     target.line.forEach((point) => {
       const tile = this.map[utils.keyFromXY(point.x, point.y)];
-      const tileDef = tileDictionary[tile.name];
+      const tileDef = localTileDictionary[tile.name];
       const highlightValue = 20;
       const fgAdjusted = utils
         .adjustBrightness(tileDef.fgColor, highlightValue);
@@ -105,10 +105,10 @@ export default class LocalMap extends Window {
 
       // Only render visible points of the line
       .filter(point =>
-        this.battleSystem.playerSquadFov.isVisible(point.x, point.y))
+        this.battleSystem.playerSquadLocalFov.isVisible(point.x, point.y))
       .forEach((point, i) => {
         const tile = this.map[utils.keyFromXY(point.x, point.y)];
-        const tileDef = tileDictionary[tile.name];
+        const tileDef = localTileDictionary[tile.name];
         const brighterThanWatch = Math.round(watchBrightness / 3);
         const glyph = i === 1 ?
           projectile.muzzleGlyph :
@@ -122,10 +122,29 @@ export default class LocalMap extends Window {
   }
 
   inputHandler(input) {
-    this.battleSystem.tryToMoveSquad(input, this);
+    // Map handles many stateful inputs, so dispatch to the system
+    this.battleSystem.handleInput(input, this);
 
     // Trigger a redraw
     this.game.refresh();
   }
 
+  getCommands() {
+    const actionCommands = [
+      '[←→↑↓] Move',
+      '[Z] Wait',
+      '[P] Prone/Stand',
+      '[A] Target',
+      '[I] Inventory',
+      '[E] Escape'
+    ];
+    const attackCommands = [
+      '[←→↑↓] Move',
+      '[↵] Fire',
+      '[S] Next Target',
+      '[A] Cancel'
+    ];
+    return this.battleSystem.targetMode ?
+      attackCommands : actionCommands;
+  }
 }

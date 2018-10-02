@@ -5,7 +5,7 @@ import utils from '../util/utils';
 import Cache from '../util/Cache';
 import Window from '../ui/Window';
 
-import tileDictionary from './data/tileDictionary.json';
+import overworldTileDictionary from './data/overworldTileDictionary.json';
 
 export default class OverworldMap extends Window {
   constructor(game, journeySystem) {
@@ -27,7 +27,9 @@ export default class OverworldMap extends Window {
 
   getTile(x, y) {
     const name = this.map[utils.keyFromXY(x, y)].name;
-    return tileDictionary[name];
+    const tileDef = overworldTileDictionary[name];
+    tileDef.name = name;
+    return tileDef;
   }
 
   brightnessForWatch() {
@@ -40,11 +42,14 @@ export default class OverworldMap extends Window {
     const watchBrightness = this.brightnessForWatch();
 
     Object.values(this.map).forEach((tile) => {
-      const tileDef = tileDictionary[tile.name];
+      const tileDef = overworldTileDictionary[tile.name];
 
       // If the tile is visible, brightness comes from time of day (watch)
       // Otherwise, tile gets default not visible brightness
-      const tileBrightness = watchBrightness;
+      const visibleTile = this.journeySystem.playerSquadOverworldFov
+        .isVisible(tile.x, tile.y);
+      const tileBrightness = visibleTile ?
+        watchBrightness : properties.overworldMapNotVisibleBrightness;
 
       // Cache the adjusted colors for speediness
       const fgCacheKey = `${tileDef.fgColor}-${tileBrightness}`;
@@ -62,17 +67,27 @@ export default class OverworldMap extends Window {
 
     this.enemies
       .forEach(enemy => enemy
-        .renderSquad(display, watchBrightness, this, this.x, this.y));
+        .renderSquad(display, watchBrightness, this, this.x, this.y,
+          this.journeySystem.playerSquadOverworldFov));
     this.squad.renderSquad(display, watchBrightness, this, this.x, this.y);
   }
 
   inputHandler(input) {
-    const moved = this.journeySystem.tryToMoveSquad(input, this);
-    if (moved) {
+    // Map handles many stateful inputs, so dispatch to the system
+    const shouldStep = this.journeySystem.handleInput(input, this);
+    if (shouldStep) {
       this.journeySystem.step();
     }
 
     // Trigger a redraw
     this.game.refresh();
+  }
+
+  getCommands() {
+    return [
+      '[←→↑↓] March',
+      '[Z] Rest',
+      '[I] Inventory'
+    ];
   }
 }

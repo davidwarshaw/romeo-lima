@@ -6,20 +6,26 @@ import JourneyState from '../states/JourneyState';
 import BattleSystem from '../systems/BattleSystem';
 
 import ActionReport from '../ui/ActionReport';
+import ContextCommands from '../ui/ContextCommands';
 import BattleSquadStatus from '../ui/BattleSquadStatus';
 import Dialog from '../ui/Dialog';
+import LootModal from '../ui/LootModal';
 
 import LocalMap from '../maps/LocalMap';
 
 export default class BattleState extends State {
-  constructor(game, overworld, enemySquad) {
+  constructor(game, overworld, enemySquad, ambushState, playerSide) {
     super(game);
 
     this.enemySquad = enemySquad;
-    this.battleSystem = new BattleSystem(game, this, overworld);
+    this.battleSystem = new BattleSystem(
+      game, this, overworld, ambushState, playerSide);
 
     this.ActionReport = new ActionReport(game, this.battleSystem);
     this.windowManager.addWindow(this.ActionReport);
+
+    this.contextCommands = new ContextCommands(game, this.windowManager);
+    this.windowManager.addWindow(this.contextCommands);
 
     this.squadStatus = new BattleSquadStatus(game, this.battleSystem);
     this.windowManager.addWindow(this.squadStatus);
@@ -30,6 +36,19 @@ export default class BattleState extends State {
 
   endBattle() {
     this.game.switchState(new JourneyState(this.game));
+  }
+
+  showLoot(loot) {
+    this.lootBox = new LootModal(
+      this.game, this.battleSystem,
+      () => {
+        this.windowManager.removeWindow(this.lootBox);
+        this.lootBox = null;
+        this.game.refresh();
+        this.endBattle();
+      },
+      loot);
+    this.windowManager.addWindow(this.lootBox);
   }
 
   showCantLeaveBox() {

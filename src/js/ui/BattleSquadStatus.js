@@ -19,36 +19,30 @@ export default class OverworldSquadStatus extends SquadStatus {
     const bgColor = member.selected ?
       this.style.nameColor : this.style.fieldBgColor;
 
-    let statusRow = 0;
-
     // Name
-    statusRow++;
     let formattedText =
       `%c{${nameColor}}%b{${bgColor}}` +
         `${pointIndicator}${member.rank} ${member.name}`;
-    display.drawText(col, this.y + statusRow, formattedText, columnWidth);
+    display.drawText(col, this.y + 1, formattedText, columnWidth);
 
     // Number and role
-    statusRow++;
     formattedText =
       `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` +
         `${member.number} ${member.role}`;
-    display.drawText(col, this.y + statusRow, formattedText, columnWidth);
+    display.drawText(col, this.y + 2, formattedText, columnWidth);
 
     // Weapon
-    statusRow++;
     formattedText =
       `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` +
         `${member.weapon.name}`;
-    display.drawText(col, this.y + statusRow, formattedText, columnWidth);
+    display.drawText(col, this.y + 3, formattedText, columnWidth);
 
     // Position
     if (member.prone) {
       const proneText = member.prone ? 'Prone' : 'Standing';
-      statusRow++;
       formattedText =
         `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` + proneText;
-      display.drawText(col, this.y + statusRow, formattedText, columnWidth);
+      display.drawText(col, this.y + 4, formattedText, columnWidth);
     }
 
     // If this member is selected add text for moves left or attack mode
@@ -60,13 +54,12 @@ export default class OverworldSquadStatus extends SquadStatus {
       else if (!member.prone) {
         moveText = `Moves: ${this.system.currentCharacterMoves}`;
       }
-
-      statusRow++;
       formattedText =
       `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` + moveText;
-      display.drawText(col, this.y + statusRow, formattedText, columnWidth);
+      display.drawText(col, this.y + 4, formattedText, columnWidth);
     }
 
+    super.renderStats(display, member, i, col, this.y + 5);
   }
 
   inputHandler(input) {

@@ -33,4 +33,8 @@ export default class WindowManager {
       focusWindow.inputHandler(input);
     }
   }
+
+  getWindowCommands() {
+    return this.focusWindow().getCommands();
+  }
 }

@@ -134,4 +134,16 @@ export default class Dialog extends Window {
     // Trigger a redraw
     this.game.refresh();
   }
+
+  getCommands() {
+    const singleButtonCommands = [
+      '[↵] Select'
+    ];
+    const twoButtonCommands = [
+      '[←→] Toggle',
+      '[↵] Select'
+    ];
+    return this.singleButton ?
+      singleButtonCommands : twoButtonCommands;
+  }
 }

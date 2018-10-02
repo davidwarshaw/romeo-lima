@@ -1,11 +1,11 @@
 import properties from '../properties';
-import utils from './utils';
-import TileMath from './TileMath';
-import Cache from './Cache';
+import utils from '../util/utils';
+import TileMath from '../util/TileMath';
+import Cache from '../util/Cache';
 
-import tileDictionary from '../maps/data/tileDictionary.json';
+import localTileDictionary from '../maps/data/localTileDictionary.json';
 
-export default class Fov {
+export default class LocalFov {
   constructor(map, members) {
     this.map = map;
     this.members = members;
@@ -43,22 +43,23 @@ export default class Fov {
       .filter(tileLine => tileLine.length > 0)
       .forEach(tileLine => {
         let tileIndex = 0;
-        let sightBlockage = 0;
+        let totalConcealment = 0;
         let stillVisible = true;
         while (stillVisible) {
           const { x, y } = tileLine[tileIndex];
           const tile = this.map[utils.keyFromXY(x, y)];
-          const tileDef = tileDictionary[tile.name];
+          const tileDef = localTileDictionary[tile.name];
 
           // Set the tile as visible
           this.visibleMap[utils.keyFromXY(x, y)] = true;
 
           // Accumulate sight line blockage until 100% blocked
-          // The first two tiles don't contribute to sight blockage
-          // and are automatically visible
-          if (tileIndex >= 2) {
-            sightBlockage += tileDef.sightBlockPercent;
-            if (sightBlockage >= 100) {
+          // The first two tiles only contribute to sight blockage
+          // if they're 100% concealment
+          if ((tileIndex < 2 && tileDef.concealment === 100) ||
+              tileIndex >= 2) {
+            totalConcealment += tileDef.concealment;
+            if (totalConcealment >= 100) {
               stillVisible = false;
             }
           }

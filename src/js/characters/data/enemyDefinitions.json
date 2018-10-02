@@ -1,0 +1,159 @@
+{
+  "Lone Soldier": {
+    "glyph": "L",
+    "overworldVisible": false,
+    "difficulty": 1,
+    "members": [
+      {
+        "rank": "PVT",
+        "role": "Rifleman",
+        "count": 1
+      }
+    ]
+  },
+  "Fireteam": {
+    "glyph": "F",
+    "overworldVisible": false,
+    "difficulty": 4,
+    "members": [
+      {
+        "rank": "PVT",
+        "role": "Rifleman",
+        "count": 2
+      },
+      {
+        "rank": "PFC",
+        "role": "Rifleman",
+        "count": 1
+      },
+      {
+        "rank": "CPL",
+        "role": "Asst Lead",
+        "count": 1
+      }
+    ]
+  },
+  "Automatic Fireteam": {
+    "glyph": "A",
+    "overworldVisible": false,
+    "difficulty": 7,
+    "members": [
+      {
+        "rank": "PVT",
+        "role": "Rifleman",
+        "count": 2
+      },
+      {
+        "rank": "PFC",
+        "role": "Automatic R",
+        "count": 1
+      },
+      {
+        "rank": "CPL",
+        "role": "Asst Lead",
+        "count": 1
+      }
+    ]
+  },
+  "Squad": {
+    "glyph": "S",
+    "overworldVisible": true,
+    "difficulty": 20,
+    "members": [
+      {
+        "rank": "SGT",
+        "role": "Squad Lead",
+        "count": 1
+      },
+      {
+        "rank": "CPL",
+        "role": "Asst Lead",
+        "count": 1
+      },
+      {
+        "rank": "PFC",
+        "role": "Automatic R",
+        "count": 2
+      },
+      {
+        "rank": "PFC",
+        "role": "Rifleman",
+        "count": 5
+      },
+      {
+        "rank": "PVT",
+        "role": "Rifleman",
+        "count": 4
+      }
+    ]
+  },
+  "Platoon": {
+    "glyph": "P",
+    "overworldVisible": true,
+    "difficulty": 50,
+    "members": [
+      {
+        "rank": "LT",
+        "role": "Platoon Lead",
+        "count": 1
+      },
+      {
+        "rank": "SGT",
+        "role": "Squad Lead",
+        "count": 2
+      },
+      {
+        "rank": "CPL",
+        "role": "Asst Lead",
+        "count": 2
+      },
+      {
+        "rank": "SPC",
+        "role": "Medic",
+        "count": 1
+      },
+      {
+        "rank": "SPC",
+        "role": "Marksman",
+        "count": 1
+      },
+      {
+        "rank": "PFC",
+        "role": "Grenadier",
+        "count": 2
+      },
+      {
+        "rank": "PFC",
+        "role": "Automatic R",
+        "count": 4
+      },
+      {
+        "rank": "PFC",
+        "role": "Rifleman",
+        "count": 10
+      },
+      {
+        "rank": "PVT",
+        "role": "Rifleman",
+        "count": 8
+      }
+    ]
+  },
+  "Sniper Team": {
+    "glyph": "T",
+    "overworldVisible": false,
+    "difficulty": 5,
+    "members": [
+      {
+        "rank": "SPC",
+        "role": "Marksman",
+        "count": 1
+      },
+      {
+        "rank": "SPC",
+        "role": "Rifleman",
+        "count": 1
+      }
+    ]
+  }
+}

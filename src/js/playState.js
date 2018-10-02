@@ -2,6 +2,7 @@ import properties from './properties';
 import utils from './util/utils';
 
 import PlayerSquad from './characters/PlayerSquad';
+import Inventory from './characters/Inventory';
 import EnemySquad from './characters/EnemySquad';
 
 import overworldMapCreation from './maps/overworldMapCreation';
@@ -30,15 +31,31 @@ function createPlayState() {
   const squadStartY = utils.clamp(heightOffset, 5, overworldHeight - 5);
 
   // Squad
-  const squadMembers = squadProcedures.createSquadMembers('US', true);
-  const squadEquipment = squadProcedures.startingEquipment();
+  const squadMembers = squadProcedures.createPlayerSquadMembers();
+  const squadInventory = new Inventory();
+  squadProcedures.populatePlayerInventory(squadMembers, squadInventory);
   const squad = new PlayerSquad(
-    squadMembers, squadStartX, squadStartY, squadEquipment);
+    squadMembers, squadStartX, squadStartY, squadInventory);
 
   // Enemies
-  const enemies = [];
-  const enemySquadMembers = squadProcedures.createSquadMembers('NVA', false);
-  enemies.push(new EnemySquad(enemySquadMembers, 10, 10));
+  const enemies = squadProcedures.getOverworldEnemyLocations(map)
+    .map((location) => {
+      const { x, y, difficulty } = location;
+      const definition =
+        squadProcedures.selectEnemyDefinition(difficulty);
+      const definitions = definition.members;
+      const playerControlled = false;
+      const faction = 'NVA';
+      const enemySquadMembers = squadProcedures
+        .createSquadMembers(definitions, playerControlled, faction);
+      const { glyph, overworldVisible } = definition;
+      const enemySquadInventory = new Inventory();
+      squadProcedures
+        .populateEnemyInventory(enemySquadMembers, enemySquadInventory);
+      return new EnemySquad(
+        enemySquadMembers, x, y, enemySquadInventory,
+        glyph, overworldVisible);
+    });
 
   return {
     day: 0,

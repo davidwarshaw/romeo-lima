@@ -2,7 +2,7 @@ import properties from '../properties';
 import utils from '../util/utils';
 import text from '../util/text';
 import TileMath from '../util/TileMath';
-import Fov from '../util/Fov';
+import LocalFov from '../maps/LocalFov';
 
 import BallisticsSystem from './BallisticsSystem';
 
@@ -10,9 +10,11 @@ import localMapCreation from '../maps/localMapCreation';
 import squadProcedures from '../characters/squadProcedures';
 
 export default class BattleSystem {
-  constructor(game, state, overworld) {
+  constructor(game, state, overworld, ambushState, playerSide) {
     this.game = game;
     this.state = state;
+    this.ambushState = ambushState;
+    this.playerSide = playerSide;
 
     this.playState = game.playState;
     this.playerSquad = game.playState.squad;
@@ -31,20 +33,20 @@ export default class BattleSystem {
       properties.localWidth, properties.localHeight);
     this.map = game.playState.localMap;
 
-    const ambush = true;
-    squadProcedures
-      .placeSquadMembersInLocalMap(this.playerSquad, this.map, ambush);
-    squadProcedures
-      .placeEnemiesInLocalMap(this.enemySquad, this.map, ambush);
+    squadProcedures.placePlayerSquadInLocalMap(
+      this.playerSquad, this.map, this.ambushState, this.playerSide);
+    squadProcedures.placeEnemySquadInLocalMap(
+      this.enemySquad, this.map, this.ambushState, this.playerSide);
 
     // Build one FOV map for each squad. Each squad member sees the same FOV.
-    this.playerSquadFov = new Fov(this.map, this.playerSquad.members);
-    this.enemySquadFov = new Fov(this.map, this.enemySquad.members);
+    this.playerSquadLocalFov = new LocalFov(this.map, this.playerSquad.members);
+
+    //this.enemySquadLocalFov = new LocalFov(this.map, this.enemySquad.members);
 
     this.ballisticsSystem = new BallisticsSystem(
       this.map,
-      this.playerSquad, this.playerSquadFov,
-      this.enemySquad, this.enemySquadFov);
+      this.playerSquad, this.playerSquadLocalFov,
+      this.enemySquad, this.enemySquadLocalFov);
 
     // Set the next controlled character
     this.characters = squadProcedures
@@ -98,6 +100,7 @@ export default class BattleSystem {
   nextCharacter() {
     // If there is nobody from the enemy squad, end the battle
     if (squadProcedures.numberOfAliveMembers(this.enemySquad) <= 0) {
+      this.enemySquad.alive = false;
       this.endBattle();
     }
 
@@ -142,7 +145,7 @@ export default class BattleSystem {
 
   }
 
-  tryToMoveSquad(input, local) {
+  handleInput(input, local) {
     // Don't accept input while a projectile is in flight
     if (this.projectile.active) {
       return;
@@ -155,11 +158,15 @@ export default class BattleSystem {
           this.setTarget();
         }
         else if (!this.currentCharacter.prone) {
+          const { x, y } = this.currentCharacter;
+          if (!this.shouldMove(local, x - 1, y)) {
+            break;
+          }
           this.currentCharacter.x =
-            utils.clamp(this.currentCharacter.x - 1, 0, local.width - 1);
+            utils.clamp(x - 1, 0, local.width - 1);
           this.currentCharacterMoves--;
           this.characterIsMoving = true;
-          this.playerSquadFov.recalculate();
+          this.playerSquadLocalFov.recalculate();
         }
         break;
       case 'RIGHT':
@@ -169,11 +176,15 @@ export default class BattleSystem {
           this.setTarget();
         }
         else if (!this.currentCharacter.prone) {
+          const { x, y } = this.currentCharacter;
+          if (!this.shouldMove(local, x + 1, y)) {
+            break;
+          }
           this.currentCharacter.x =
-            utils.clamp(this.currentCharacter.x + 1, 0, local.width - 1);
+            utils.clamp(x + 1, 0, local.width - 1);
           this.currentCharacterMoves--;
           this.characterIsMoving = true;
-          this.playerSquadFov.recalculate();
+          this.playerSquadLocalFov.recalculate();
         }
         break;
       case 'UP':
@@ -183,11 +194,15 @@ export default class BattleSystem {
           this.setTarget();
         }
         else if (!this.currentCharacter.prone) {
+          const { x, y } = this.currentCharacter;
+          if (!this.shouldMove(local, x, y - 1)) {
+            break;
+          }
           this.currentCharacter.y =
-            utils.clamp(this.currentCharacter.y - 1, 0, local.height - 1);
+            utils.clamp(y - 1, 0, local.height - 1);
           this.currentCharacterMoves--;
           this.characterIsMoving = true;
-          this.playerSquadFov.recalculate();
+          this.playerSquadLocalFov.recalculate();
         }
 
         break;
@@ -198,11 +213,15 @@ export default class BattleSystem {
           this.setTarget();
         }
         else if (!this.currentCharacter.prone) {
+          const { x, y } = this.currentCharacter;
+          if (!this.shouldMove(local, x, y + 1)) {
+            break;
+          }
           this.currentCharacter.y =
-            utils.clamp(this.currentCharacter.y + 1, 0, local.height - 1);
+            utils.clamp(y + 1, 0, local.height - 1);
           this.currentCharacterMoves--;
           this.characterIsMoving = true;
-          this.playerSquadFov.recalculate();
+          this.playerSquadLocalFov.recalculate();
         }
         break;
       case 'WAIT':
@@ -299,6 +318,15 @@ export default class BattleSystem {
     }
   }
 
+  shouldMove(local, nextX, nextY) {
+    // Dont allow a move into a non-traversable tile
+    const tile = local.getTile(nextX, nextY);
+
+    // Dont allow a move into a tile with a squad member in it
+    const playerSquadMemberInTile = this.playerSquad.getByXY(nextX, nextY);
+    return tile.traversable && !playerSquadMemberInTile;
+  }
+
   moveAnimationFrame() {
     this.game.refresh();
     this.projectile.fireSequenceIndex++;
@@ -368,7 +396,7 @@ export default class BattleSystem {
     const closestEnemies = this.enemySquad.members
 
       // Only target visible enemies
-      .filter(member => this.playerSquadFov.isVisible(member.x, member.y))
+      .filter(member => this.playerSquadLocalFov.isVisible(member.x, member.y))
 
       // Only target alive enemies
       .filter(member => member.alive)
@@ -401,7 +429,7 @@ export default class BattleSystem {
     const enemyNumbers = this.enemySquad.members
 
       // Only target visible enemies
-      .filter(member => this.playerSquadFov.isVisible(member.x, member.y))
+      .filter(member => this.playerSquadLocalFov.isVisible(member.x, member.y))
 
       // Only target alive enemies
       .filter(member => member.alive)
@@ -435,6 +463,10 @@ export default class BattleSystem {
   endBattle() {
     // Deselect the current character before switching states
     this.currentCharacter.selected = false;
-    this.state.endBattle();
+
+    // Create the loot and then show the loot window
+    const loot = squadProcedures
+      .getLootByEnemySquad(this.enemySquad.members, this.enemySquad.inventory);
+    this.state.showLoot(loot);
   }
 }

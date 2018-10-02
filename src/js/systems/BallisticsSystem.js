@@ -1,17 +1,19 @@
 import properties from '../properties';
 import utils from '../util/utils';
 
-import tileDictionary from '../maps/data/tileDictionary.json';
+import localTileDictionary from '../maps/data/localTileDictionary.json';
 
 export default class BallisticsSystem {
-  constructor(map, playerSquad, playerSquadFov, enemySquad, enemySquadFov) {
+  constructor(map,
+    playerSquad, playerSquadLocalFov,
+    enemySquad, enemySquadLocalFov) {
     this.map = map;
 
     this.playerSquad = playerSquad;
-    this.playerSquadFov = playerSquadFov;
+    this.playerSquadLocalFov = playerSquadLocalFov;
 
     this.enemySquad = enemySquad;
-    this.enemySquadFov = enemySquadFov;
+    this.enemySquadLocalFov = enemySquadLocalFov;
   }
 
   effectFire(firingCharacter, targetLine) {
@@ -36,7 +38,7 @@ export default class BallisticsSystem {
     while (roundTraveling) {
       const { x, y } = targetLine[targetLineIndex];
       const tile = this.map[utils.keyFromXY(x, y)];
-      const tileDef = tileDictionary[tile.name];
+      const tileDef = localTileDictionary[tile.name];
 
       // Check to see if the round is stopped by terrain
       const roll = properties.rng.getPercentage();
@@ -88,7 +90,7 @@ export default class BallisticsSystem {
   chanceToBeStoppedByTerrain(firingStats, weaponAccuracy, tileDef) {
     const impatience = (100 - firingStats.patience) / 100;
     const weaponInaccuracy = (100 - weaponAccuracy) / 100;
-    const tileBlockedness = (tileDef.sightBlockPercent) / 100;
+    const tileBlockedness = (tileDef.concealment) / 100;
     const chance = (impatience * weaponInaccuracy * tileBlockedness) * 100;
     return chance;
   }

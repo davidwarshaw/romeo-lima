@@ -2,39 +2,21 @@ import utils from '../util/utils';
 
 export default class Squad {
 
-  constructor(members, x, y) {
+  constructor(members, x, y, inventory) {
     this.members = members;
     this.x = x;
     this.y = y;
-
-    // Initialize inventory with member carried weapons
-    this.inventory = this.members
-      .map(member => member.weapon);
+    this.inventory = inventory;
 
     this.formations = ['File', 'Abreast'];
     this.formation = this.formations[1];
+
+    this.alive = true;
 
     this.overworldGlyph = 'S';
     this.deadGlyph = '%';
     this.fgColor = '#FFFFFF';
     this.bgColor = null;
-  }
-
-  getSortedInventory() {
-    // Sort items by name
-    return this.inventory.sort((l, r) => {
-      const lName = l.name.toUpperCase(); // ignore upper and lowercase
-      const rName = r.name.toUpperCase(); // ignore upper and lowercase
-      if (lName < rName) {
-        return -1;
-      }
-      if (lName > rName) {
-        return 1;
-      }
-
-      // names must be equal
-      return 0;
-    });
   }
 
   getMembersByNumber() {
@@ -66,14 +48,16 @@ export default class Squad {
     // TODO needs formatting
     return text
       .replace('${Pointman}', this.getPointman().name)
-      .replace('${Team Lead}', this.getByRole('Team Lead').name);
+      .replace('${Squad Lead}', this.getByRole('Squad Lead').name);
   }
 
   populateNames(text) {
     // Check if the text is a corpus (it will be an array)
     if (Array.isArray(text)) {
       return text.map(paragraph => {
+        console.log(paragraph);
         const { name, text } = paragraph;
+        console.log(this.populate(name));
         return { name: this.populate(name), text: this.populate(text) };
       });
     }
@@ -86,8 +70,9 @@ export default class Squad {
 
   renderSquad(display, watchBrightness, map, xOffset, yOffset) {
     const tile = map.getTile(this.x, this.y);
+    const glyph = this.alive ? this.overworldGlyph : this.deadGlyph;
     const bgAdjusted = utils.adjustBrightness(tile.bgColor, watchBrightness);
-    display.draw(xOffset + this.x, yOffset + this.y, this.overworldGlyph,
+    display.draw(xOffset + this.x, yOffset + this.y, glyph,
       this.fgColor, bgAdjusted);
   }
 

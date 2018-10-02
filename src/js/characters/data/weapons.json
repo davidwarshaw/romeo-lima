@@ -1,108 +1,130 @@
-[
-  {
-    "name": "M1911A1",
-    "type": "sidearm",
+{
+  "M1911A1": {
+    "type": "weapon",
+    "class": "sidearm",
+    "assignable": true,
     "faction": "US",
+    "ammo": ".45 ACP",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 80,
     "accuracy": 100
   },
-  {
-    "name": "Hi-Power",
-    "type": "sidearm",
+  "Hi-Power": {
+    "type": "weapon",
+    "class": "sidearm",
+    "assignable": true,
     "faction": "US",
+    "ammo": "9x19mm NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 20,
     "accuracy": 100
   },
-  {
-    "name": "Model 27",
-    "type": "sidearm",
+  "Model 27": {
+    "type": "weapon",
+    "class": "sidearm",
+    "assignable": true,
     "faction": "US",
+    "ammo": "9x19mm NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 20,
     "accuracy": 100
   },
-  {
-    "name": "M1917",
-    "type": "sidearm",
+  "M1917": {
+    "type": "weapon",
+    "class": "sidearm",
+    "assignable": true,
     "faction": "US",
+    "ammo": ".45 ACP",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 80,
     "accuracy": 100
   },
-  {
-    "name": "MAC-10",
-    "type": "sidearm",
+  "MAC-10": {
+    "type": "weapon",
+    "class": "sidearm",
+    "assignable": true,
     "faction": "US",
+    "ammo": "9x19mm NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 4,
     "power": 20,
     "accuracy": 100
   },
-  {
-    "name": "M14",
-    "type": "rifle",
+  "M14": {
+    "type": "weapon",
+    "class": "rifle",
+    "assignable": true,
     "faction": "US",
+    "ammo": "7.62 NATO",
     "description": "",
     "bursts": 2,
     "roundsPerBurst": 1,
     "power": 60,
     "accuracy": 100
   },
-  {
-    "name": "M1A1",
-    "type": "rifle",
+  "M1A1": {
+    "type": "weapon",
+    "class": "rifle",
+    "assignable": true,
     "faction": "US",
+    "ammo": "5.56 NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 40,
     "accuracy": 100
   },
-  {
-    "name": "M16E1",
-    "type": "rifle",
+  "M16E1": {
+    "type": "weapon",
+    "class": "rifle",
+    "assignable": true,
     "faction": "US",
+    "ammo": "5.56 NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 3,
     "power": 40,
     "accuracy": 100
   },
-  {
-    "name": "M177",
-    "type": "rifle",
+  "M177": {
+    "type": "weapon",
+    "class": "rifle",
+    "assignable": true,
     "faction": "US",
+    "ammo": "5.56 NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 3,
     "power": 40,
     "accuracy": 100
   },
-  {
-    "name": "M207",
-    "type": "rifle",
+  "M207": {
+    "type": "weapon",
+    "class": "rifle",
+    "assignable": true,
     "faction": "US",
+    "ammo": "5.56 NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 3,
     "power": 40,
     "accuracy": 100
   },
-  {
-    "name": "M1C",
-    "type": "rifle",
+  "M1C": {
+    "type": "weapon",
+    "class": "rifle",
+    "assignable": true,
     "faction": "US",
+    "ammo": "7.62 NATO",
     "description": "",
     "role": "Marksman",
     "bursts": 1,
@@ -110,10 +132,12 @@
     "power": 60,
     "accuracy": 100
   },
-  {
-    "name": "M1903A4",
-    "type": "rifle",
+  "M1903A4": {
+    "type": "weapon",
+    "class": "rifle",
+    "assignable": true,
     "faction": "US",
+    "ammo": "7.62 NATO",
     "description": "",
     "role": "Marksman",
     "bursts": 1,
@@ -121,10 +145,12 @@
     "power": 60,
     "accuracy": 100
   },
-  {
-    "name": "M40",
-    "type": "rifle",
+  "M40": {
+    "type": "weapon",
+    "class": "rifle",
+    "assignable": true,
     "faction": "US",
+    "ammo": "7.62 NATO",
     "description": "",
     "role": "Marksman",
     "bursts": 1,
@@ -132,10 +158,12 @@
     "power": 60,
     "accuracy": 100
   },
-  {
-    "name": "M60",
-    "type": "automatic rifle",
+  "M60": {
+    "type": "weapon",
+    "class": "automatic rifle",
+    "assignable": true,
     "faction": "US",
+    "ammo": "7.62 NATO",
     "description": "",
     "role": "Automatic R",
     "bursts": 2,
@@ -143,10 +171,12 @@
     "power": 60,
     "accuracy": 100
   },
-  {
-    "name": "M63A",
-    "type": "automatic rifle",
+  "M63A": {
+    "type": "weapon",
+    "class": "automatic rifle",
+    "assignable": true,
     "faction": "US",
+    "ammo": "5.56 NATO",
     "description": "",
     "role": "Automatic R",
     "bursts": 2,
@@ -154,15 +184,91 @@
     "power": 40,
     "accuracy": 100
   },
-  {
-    "name": "M1918A2",
-    "type": "automatic rifle",
+  "M1918A2": {
+    "type": "weapon",
+    "class": "automatic rifle",
+    "assignable": true,
     "faction": "US",
+    "ammo": ".45 ACP",
     "description": "",
     "role": "Automatic R",
     "bursts": 2,
     "roundsPerBurst": 4,
     "power": 80,
     "accuracy": 100
+  },
+  "P-64": {
+    "type": "weapon",
+    "class": "sidearm",
+    "assignable": true,
+    "faction": "NVA",
+    "ammo": ".45 ACP",
+    "description": "",
+    "bursts": 1,
+    "roundsPerBurst": 1,
+    "power": 80,
+    "accuracy": 100
+  },
+  "MN-91": {
+    "type": "weapon",
+    "class": "rifle",
+    "assignable": true,
+    "faction": "NVA",
+    "ammo": "7.62 WPC",
+    "description": "",
+    "role": "Marksman",
+    "bursts": 1,
+    "roundsPerBurst": 1,
+    "power": 60,
+    "accuracy": 100
+  },
+  "AK-47": {
+    "type": "weapon",
+    "class": "rifle",
+    "assignable": true,
+    "faction": "NVA",
+    "ammo": "5.45 WPC",
+    "description": "",
+    "bursts": 1,
+    "roundsPerBurst": 3,
+    "power": 40,
+    "accuracy": 100
+  },
+  "AKM": {
+    "type": "weapon",
+    "class": "rifle",
+    "assignable": true,
+    "faction": "NVA",
+    "ammo": "5.45 WPC",
+    "description": "",
+    "bursts": 1,
+    "roundsPerBurst": 3,
+    "power": 40,
+    "accuracy": 100
+  },
+  "Type 56": {
+    "type": "weapon",
+    "class": "rifle",
+    "assignable": true,
+    "faction": "NVA",
+    "ammo": "5.45 WPC",
+    "description": "",
+    "bursts": 1,
+    "roundsPerBurst": 3,
+    "power": 40,
+    "accuracy": 100
+  },
+  "RPD": {
+    "type": "weapon",
+    "class": "automatic rifle",
+    "assignable": true,
+    "faction": "NVA",
+    "ammo": "7.62 WPC",
+    "description": "",
+    "role": "Automatic R",
+    "bursts": 2,
+    "roundsPerBurst": 4,
+    "power": 60,
+    "accuracy": 100
   }
-]
+}

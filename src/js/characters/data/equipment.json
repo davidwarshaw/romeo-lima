@@ -1,8 +1,108 @@
-[
-  {
-    "name": "PRC-25",
-    "type": "equipment",
+{
+  "Battle Dressings": {
+    "type": "medical equipment",
     "faction": "US",
-    "description": "A battery powered, manpack two-way VHF radiotelephone with a range of 10 miles.\nInoperative."
+    "startWith": 2,
+    "description": ""
+  },
+  "Morphine Syrettes": {
+    "type": "medical equipment",
+    "faction": "US",
+    "startWith": 2,
+    "description": ""
+  },
+  "Cigarette Packs": {
+    "type": "existence equipment",
+    "faction": "US",
+    "startWith": 4,
+    "description": ""
+  },
+  "C-Rations": {
+    "type": "existence equipment",
+    "faction": "US",
+    "startWith": 10,
+    "description": ""
+  },
+  "Extra Socks": {
+    "type": "existence equipment",
+    "faction": "US",
+    "startWith": 2,
+    "description": ""
+  },
+  "9x19mm NATO": {
+    "type": "ammunition",
+    "faction": "US",
+    "startWith": 0,
+    "description": ""
+  },
+  "9x18mm PM": {
+    "type": "ammunition",
+    "faction": "NVA",
+    "startWith": 0,
+    "description": ""
+  },
+  "5.56 NATO": {
+    "type": "ammunition",
+    "faction": "US",
+    "startWith": 0,
+    "description": ""
+  },
+  "5.45 WPC": {
+    "type": "ammunition",
+    "faction": "NVA",
+    "startWith": 0,
+    "description": ""
+  },
+  "7.62 NATO": {
+    "type": "ammunition",
+    "faction": "US",
+    "startWith": 0,
+    "description": ""
+  },
+  "7.62 WPC": {
+    "type": "ammunition",
+    "faction": "NVA",
+    "startWith": 0,
+    "description": ""
+  },
+  ".45 ACP": {
+    "type": "ammunition",
+    "faction": "US",
+    "startWith": 0,
+    "description": ""
+  },
+  "PRC-25 (Inoperative)": {
+    "type": "miscellaneous equipment",
+    "assignable": true,
+    "faction": "US",
+    "startWith": 1,
+    "description": "A battery powered, man portable, two-way VHF radiotelephone with a range of 10 miles. The unit is mounted on a backpack harness and features a handset and 3' whip antenna.\n\nThe unit is damaged beyond repair."
+  },
+  "Death Cards": {
+    "type": "miscellaneous equipment",
+    "faction": "US",
+    "startWith": 50,
+    "description": "From a pack of 50 \"death cards\". The face of each card features a skull superimposed on the ace of spades. Text on the reverse side reads:\n\n\t  \"Cái chết đang chờ lính Việt Cộng\"\n\n\t[ \"Only death awaits the Viet Cong\" ]"
+  },
+  "M18 Grenade": {
+    "type": "grenade",
+    "assignable": false,
+    "faction": "US",
+    "startWith": 0,
+    "description": "Smoke grenade"
+  },
+  "Mk II Grenade": {
+    "type": "grenade",
+    "assignable": false,
+    "faction": "US",
+    "startWith": 0,
+    "description": "Fragmentation grenade"
+  },
+  "M26 Grenade": {
+    "type": "grenade",
+    "assignable": false,
+    "faction": "US",
+    "startWith": 0,
+    "description": "Fragmentation grenade"
   }
-]
+}

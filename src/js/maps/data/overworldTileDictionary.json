@@ -1,358 +1,305 @@
 {
   "Simple Clear": {
     "glyph": " ",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#FFFFFF",
     "bgColor": "#000000",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Simple Wall": {
     "glyph": "█",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#FFFFFF",
     "bgColor": "#000000",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Large Palm Trees": {
     "glyph": "Ϫ",
-    "mapType": "overworld",
+    "enemySpawn": true,
     "fgColor": "#BAE2BE",
     "bgColor": "#104B4F",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Palm Trees": {
     "glyph": "ϫ",
-    "mapType": "overworld",
+    "enemySpawn": true,
     "fgColor": "#98C367",
     "bgColor": "#125459",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Mountain Spring": {
     "glyph": "▲",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#5CC1B3",
     "bgColor": "#0F7F87",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Steep Mountains": {
     "glyph": "▲",
-    "mapType": "overworld",
+    "enemySpawn": true,
+    "localMapCreationFunction": "steppes",
+    "localMapCreationArgument": "{ \"percentDense\": \"50\", \"angle\": 0.75, \"steepness\": 3  }",
     "fgColor": "#5CC1B3",
     "bgColor": "#0F7F87",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Mountain Tops": {
     "glyph": "▲",
-    "mapType": "overworld",
+    "enemySpawn": false,
+    "localMapCreationFunction": "steppes",
+    "localMapCreationArgument": "{ \"percentDense\": \"50\", \"angle\": 0.75, \"steepness\": 4  }",
     "fgColor": "#9DC15C",
     "bgColor": "#0F7F87",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Rocky Mountains": {
     "glyph": "◬",
-    "mapType": "overworld",
+    "enemySpawn": true,
+    "localMapCreationFunction": "steppes",
+    "localMapCreationArgument": "{ \"percentDense\": \"50\", \"angle\": 0.75, \"steepness\": 2  }",
     "fgColor": "#60A6AE",
     "bgColor": "#11737A",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Low Mountains": {
     "glyph": "▴",
-    "mapType": "overworld",
+    "enemySpawn": true,
+    "localMapCreationFunction": "steppes",
+    "localMapCreationArgument": "{ \"percentDense\": \"50\", \"angle\": 0.75, \"steepness\": 1  }",
     "fgColor": "#4F9DA6",
     "bgColor": "#15666B",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Sea Water": {
     "glyph": "=",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#87E0FF",
     "bgColor": "#1D97C1",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "River Water": {
     "glyph": "-",
-    "mapType": "overworld",
+    "enemySpawn": false,
+    "localMapCreationFunction": "forestRiver",
+    "localMapCreationArgument": "{ \"percentDense\": \"50\", \"angle\": 0.75, \"radius\": 100 }",
     "fgColor": "#87E0FF",
     "bgColor": "#1D97C1",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "River Rapids": {
     "glyph": "~",
-    "mapType": "overworld",
+    "enemySpawn": false,
+    "localMapCreationFunction": "forestRiver",
+    "localMapCreationArgument": "{ \"percentDense\": \"50\", \"angle\": 0.75, \"radius\": 60 }",
     "fgColor": "#87E0FF",
     "bgColor": "#1D97C1",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "River Falls": {
     "glyph": "ᔐ",
-    "mapType": "overworld",
+    "enemySpawn": false,
+    "localMapCreationFunction": "waterfall",
+    "localMapCreationArgument": "{ \"percentDense\": 50, \"southBend\": true }",
     "fgColor": "#87E0FF",
     "bgColor": "#1D97C1",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Shallow Water": {
     "glyph": "=",
-    "mapType": "overworld",
+    "enemySpawn": false,
+    "localMapCreationFunction": "marsh",
+    "localMapCreationArgument": "{ \"percentDense\": \"15\" }",
     "fgColor": "#87E0FF",
     "bgColor": "#1D97C1",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Shallow Waves": {
     "glyph": "~",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#FFFFFF",
     "bgColor": "#1D97C1",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Deep Water": {
     "glyph": "=",
-    "mapType": "overworld",
+    "enemySpawn": false,
+    "localMapCreationFunction": "marsh",
+    "localMapCreationArgument": "{ \"percentDense\": \"10\" }",
     "fgColor": "#FFFFFF",
     "bgColor": "#000000",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Deep Waves": {
     "glyph": "≈",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#FFFFFF",
     "bgColor": "#000000",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Low Grasses": {
     "glyph": ".",
-    "mapType": "overworld",
+    "enemySpawn": true,
+    "localMapCreationFunction": "forest",
+    "localMapCreationArgument": "{ \"percentDense\": \"20\" }",
     "fgColor": "#187E85",
     "bgColor": "#155E63",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Medium Grasses": {
     "glyph": ",",
-    "mapType": "overworld",
+    "enemySpawn": true,
+    "localMapCreationFunction": "marsh",
+    "localMapCreationArgument": "{ \"percentDense\": \"60\" }",
     "fgColor": "#DAF9B7",
     "bgColor": "#155E63",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Tall Grasses": {
     "glyph": "⍵",
-    "mapType": "overworld",
+    "enemySpawn": true,
+    "localMapCreationFunction": "marsh",
+    "localMapCreationArgument": "{ \"percentDense\": \"40\" }",
     "fgColor": "#BEF481",
     "bgColor": "#155E63",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Sand Beach": {
     "glyph": ".",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#A8A85D",
     "bgColor": "#FDFDAC",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Small Village": {
     "glyph": "⏏",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#54542E",
     "bgColor": "#60A6AE",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Water Tower": {
     "glyph": "⍾",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#434324",
     "bgColor": "#8D8B8B",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Village Field": {
     "glyph": "░",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#4F9DA6",
     "bgColor": "#155E63",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "Rice Paddy": {
     "glyph": "ʭ",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#73d800",
     "bgColor": "#1A87AD",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "North-South Highway": {
     "glyph": "│",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#E2F004",
     "bgColor": "#747171",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "East-West Highway": {
     "glyph": "─",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#E2F004",
     "bgColor": "#747171",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "West-South Highway": {
     "glyph": "╭",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#E2F004",
     "bgColor": "#747171",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "East-South Highway": {
     "glyph": "╮",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#E2F004",
     "bgColor": "#747171",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "West-North Highway": {
     "glyph": "╯",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#E2F004",
     "bgColor": "#747171",
     "description": "",
-    "height": 1
+    "height": 1,
+    "traversable": true
   },
   "East-North Highway": {
     "glyph": "╰",
-    "mapType": "overworld",
+    "enemySpawn": false,
     "fgColor": "#E2F004",
     "bgColor": "#747171",
     "description": "",
-    "height": 1
-  },
-  "Low Grass": {
-    "glyph": ".",
-    "mapType": "local",
-    "fgColor": "#187E85",
-    "bgColor": "#155E63",
-    "description": "",
     "height": 1,
-    "sightBlockPercent": 0
-  },
-  "Medium Tree 1": {
-    "glyph": "ሦ",
-    "mapType": "local",
-    "fgColor": "#98C367",
-    "bgColor": "#125459",
-    "description": "",
-    "height": 1,
-    "sightBlockPercent": 100
-  },
-  "Medium Tree 2": {
-    "glyph": "ቸ",
-    "mapType": "local",
-    "fgColor": "#DAF9B7",
-    "bgColor": "#155E63",
-    "description": "",
-    "height": 1,
-    "sightBlockPercent": 100
-  },
-  "Medium Tree 3": {
-    "glyph": "ቿ",
-    "mapType": "local",
-    "fgColor": "#BEF481",
-    "bgColor": "#155E63",
-    "description": "",
-    "height": 1,
-    "sightBlockPercent": 100
-  },
-  "Bush 1": {
-    "glyph": "ൡ",
-    "mapType": "local",
-    "fgColor": "#98C367",
-    "bgColor": "#125459",
-    "description": "",
-    "height": 1,
-    "sightBlockPercent": 25
-  },
-  "Bush 2": {
-    "glyph": "ጬ",
-    "mapType": "local",
-    "fgColor": "#88AF5C",
-    "bgColor": "#125459",
-    "description": "",
-    "height": 1,
-    "sightBlockPercent": 25
-  },
-  "Bush 3": {
-    "glyph": "ጫ",
-    "mapType": "local",
-    "fgColor": "#799C52",
-    "bgColor": "#125459",
-    "description": "",
-    "height": 1,
-    "sightBlockPercent": 25
-  },
-  "Bush 4": {
-    "glyph": "ጭ",
-    "mapType": "local",
-    "fgColor": "#88AF5C",
-    "bgColor": "#125459",
-    "description": "",
-    "height": 1,
-    "sightBlockPercent": 25
-  },
-  "Tall Grass 1": {
-    "glyph": "ᖗ",
-    "mapType": "local",
-    "fgColor": "#98C367",
-    "bgColor": "#125459",
-    "description": "",
-    "height": 1,
-    "sightBlockPercent": 15
-  },
-  "Tall Grass 2": {
-    "glyph": "ঀ",
-    "mapType": "local",
-    "fgColor": "#98C367",
-    "bgColor": "#125459",
-    "description": "",
-    "height": 1,
-    "sightBlockPercent": 15
-  },
-  "Medium Grass 1": {
-    "glyph": ",",
-    "mapType": "local",
-    "fgColor": "#DAF9B7",
-    "bgColor": "#155e63",
-    "description": "",
-    "height": 1,
-    "sightBlockPercent": 10
-  },
-  "Medium Grass 2": {
-    "glyph": ";",
-    "mapType": "local",
-    "fgColor": "#DAF9B7",
-    "bgColor": "#125459",
-    "description": "",
-    "height": 1,
-    "sightBlockPercent": 10
+    "traversable": true
   }
 }

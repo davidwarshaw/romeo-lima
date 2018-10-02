@@ -1,14 +1,23 @@
 import properties from '../properties';
+import utils from '../util/utils';
+
+import Inventory from './Inventory';
+
 import surnames from './data/surnames.json';
-import squadDefinition from './data/squadDefinition.json';
+import playerSquadDefinition from './data/playerSquadDefinition.json';
+import enemyDefinitions from './data/enemyDefinitions.json';
+import enemyDistributions from './data/enemyDistributions.json';
 import weapons from './data/weapons.json';
 import equipment from './data/equipment.json';
 
+import overworldTileDictionary from '../maps/data/overworldTileDictionary.json';
+import localTileDictionary from '../maps/data/localTileDictionary.json';
+
 function weaponReport() {
-  weapons
+  Object.entries(weapons)
     .sort((l, r) => {
-      const luc = l.type.toUpperCase();
-      const ruc = r.type.toUpperCase();
+      const luc = l[1].type.toUpperCase();
+      const ruc = r[1].type.toUpperCase();
       if (luc < ruc) {
         return -1;
       }
@@ -18,7 +27,8 @@ function weaponReport() {
       return 0;
     })
     .forEach(weapon => {
-      const { name, type, bursts, roundsPerBurst, power, accuracy } = weapon;
+      const name = weapon[0];
+      const { type, bursts, roundsPerBurst, power, accuracy } = weapon[1];
       const score = bursts * roundsPerBurst * power * accuracy;
       console.log(`${type} ${name}`);
       console.log(`${bursts} x ${roundsPerBurst} x ${power} x ${accuracy}` +
@@ -26,8 +36,42 @@ function weaponReport() {
     });
 }
 
-function startingEquipment() {
-  return equipment.map(type => Object.assign({}, type));
+function populateInventory(members, inventory, startWithEquipment) {
+
+  // Add starting equipment
+  if (startWithEquipment) {
+    Object.entries(equipment)
+      .forEach(item => {
+        [...Array(item[1].startWith).keys()]
+          .forEach(() => inventory.addItem(item[0], item[1]));
+      });
+  }
+
+  // Add and assign member weapons
+  members.forEach(member => {
+    // Add weapon
+    const itemName = member.weapon.name;
+    const itemDetail = member.weapon;
+    const itemNumber = inventory.addItem(itemName, itemDetail);
+    inventory.assignItem(itemNumber, member.number);
+
+    // Add ammo
+    const startingRounds = 5 * itemDetail.bursts * itemDetail.roundsPerBurst;
+    const ammoName = itemDetail.ammo;
+    const ammoDetail = equipment[ammoName];
+    [...Array(startingRounds).keys()]
+      .forEach(() => inventory.addItem(ammoName, ammoDetail));
+  });
+}
+
+function populatePlayerInventory(members, inventory) {
+  const startWithEquipment = true;
+  return populateInventory(members, inventory, startWithEquipment);
+}
+
+function populateEnemyInventory(members, inventory) {
+  const startWithEquipment = false;
+  return populateInventory(members, inventory, startWithEquipment);
 }
 
 function rollStats() {
@@ -40,20 +84,36 @@ function rollStats() {
   return { initiative, aggression, patience, resilience, presence, perception };
 }
 
-function createSquadMembers(faction, playerControlled) {
-  const members = squadDefinition.map((definition, i) => {
+function weaponForMember(member, faction) {
+
+  const roleWeapons = Object.entries(weapons)
+    .filter(weapon => weapon[1].faction === faction)
+    .filter(weapon => weapon[1].role === member.role);
+
+  const rifles = Object.entries(weapons)
+    .filter(weapon => weapon[1].faction === faction)
+    .filter(weapon => weapon[1].class === 'rifle');
+
+  const weaponEntry = roleWeapons.length > 0 ? roleWeapons[0] : rifles[0];
+
+  const weapon = Object.assign({}, { name: weaponEntry[0] }, weaponEntry[1]);
+
+  return weapon;
+}
+
+function createPlayerSquadMembers() {
+  const definitions = playerSquadDefinition;
+  const faction = 'US';
+  const playerControlled = true;
+  return createSquadMembers(definitions, playerControlled, faction);
+}
+
+function createSquadMembers(definitions, playerControlled, faction) {
+  const members = definitions.map((definition, i) => {
     const number = i + 1;
 
-    const roleWeapons = weapons
-      .filter(weapon => weapon.role === definition.role);
-    const rifles = weapons
-      .filter(weapon => weapon.type === 'rifle');
-    const weaponType = roleWeapons.length > 0 ? roleWeapons[0] : rifles[0];
-
     // Make a copy of the weapon
-    const weapon = Object.assign({}, weaponType);
-
-    weapon.memberNumber = number;
+    const weapon = weaponForMember(definition, faction);
 
     const member = {
       playerControlled,
@@ -76,40 +136,196 @@ function createSquadMembers(faction, playerControlled) {
   return members;
 }
 
-function placeSquadMembersInLocalMap(squad, map, ambush) {
-  const { members, formation } = squad;
-  const spacing = 2;
-  const pointmanLead = 4;
-  members
-    .forEach((member) => {
-      if (formation === 'File') {
-        member.x = 1 +
-          (member.marchingOrder * spacing);
-        member.y = Math.round(properties.localHeight / 2);
-      }
-      else {
-        const offset = properties.localHeight -
-          (spacing * (members.length - 1)) + 1;
-        member.x = 1;
-        member.y = Math.round(offset / 2) +
-          (member.marchingOrder * spacing);
-      }
+function getOverworldEnemyLocations(map) {
+  return Object.values(map)
+    .filter(tile => {
+      const tileDef = overworldTileDictionary[tile.name];
+      return tileDef.enemySpawn;
+    })
+    .map(tile => {
+      const { x, y } = tile;
+      const {
+        overworldWidth, overworldHeight,
+        baseOverworldEnemyProb, xOverworldEnemyProb,
+        southernOverworldEnemyHeight, southernOverworldEnemyProb } = properties;
+      const xProb =
+        (1 - ((overworldWidth - x) / overworldWidth))
+        * xOverworldEnemyProb;
+      const ySouthernThreshold = overworldHeight - southernOverworldEnemyHeight;
+      const yProb = y >= ySouthernThreshold ? southernOverworldEnemyProb : 0;
+      const tileProb = Math.max(xProb, yProb);
+      const difficulty = utils.clamp(~~(1 + (10 * tileProb)), 1, 10);
+      const enemyProb = ~~(100 * tileProb * baseOverworldEnemyProb);
 
-      // Pointman is 2 positions to the right
-      if (member.pointman) {
-        member.x += pointmanLead;
-        member.y = Math.round(properties.localHeight / 2);
+      //
+      // if (yProb > 0.90) {
+      //   console.log(`${x}-${y}`);
+      //   console.log(`${tileProb} ${difficulty} ${enemyProb}`);
+      // }
+      const roll = properties.rng.getPercentage();
+      if (roll < enemyProb) {
+        return { x, y, difficulty };
       }
-    });
-
-  // If it's an ambush, move the squad to 2/3 across the map
-  if (ambush) {
-    const ambushOffset = Math.round(properties.localWidth * (3 / 7));
-    members.forEach((member) => member.x += ambushOffset);
-  }
+      return null;
+    })
+    .filter(location => location);
 }
 
-function placeEnemiesInLocalMap(squad, map, ambush) {
+function selectEnemyDefinition(difficulty) {
+  const distroForDifficulty = enemyDistributions
+    .filter(definition => definition.difficulty === difficulty)
+    .slice(0, 1)[0];
+
+  const definitionType =
+    properties.rng.getWeightedValue(distroForDifficulty.distribution);
+  const definition = enemyDefinitions[definitionType];
+
+  return definition;
+}
+
+function createEnemyMembers(definition, faction) {
+  const members = [];
+  definition.members.forEach((memberDefinition, i) => {
+    const number = i + 1;
+
+    // Make a copy of the weapon
+    const weapon = weaponForMember(memberDefinition, faction);
+
+    const member = {
+      playerControlled: false,
+      faction,
+      rank: memberDefinition.rank,
+      role: memberDefinition.role,
+      marchingOrder: i,
+      number,
+      name: properties.rng.getWeightedValue(surnames),
+      pointman: false,
+      prone: false,
+      stats: rollStats(),
+      injuries: 0,
+      alive: true,
+      weapon,
+      selected: false
+    };
+
+    // Add copies of the member if more than one are specified
+    for (let i = 0; i < definition.count; i++) {
+      members.push(Object.assign({}, member));
+    }
+  });
+
+  return members;
+}
+
+function tileRectForSide(side, opposite, numMembers) {
+  const localStartingWidth = numMembers * 2;
+
+  let xFrom;
+  let yFrom;
+  let xTo;
+  let yTo;
+  if ((!opposite && side === 'TOP') || (opposite && side === 'BOTTOM')) {
+    const borderBuffer = 1;
+    const localStartingSideOffset =
+      Math.round((properties.localWidth - localStartingWidth) / 2);
+
+    xFrom = localStartingSideOffset;
+    yFrom = borderBuffer;
+    xTo = properties.localWidth - 1 - localStartingSideOffset;
+    yTo = borderBuffer + properties.localStartingDepth;
+  }
+  else if ((!opposite && side === 'BOTTOM') || (opposite && side === 'TOP')) {
+    const borderBuffer = 1;
+    const localStartingSideOffset =
+      Math.round((properties.localWidth - localStartingWidth) / 2);
+
+    xFrom = localStartingSideOffset;
+    yFrom = properties.localHeight - 1 -
+      borderBuffer - properties.localStartingDepth;
+    xTo = properties.localWidth - 1 - localStartingSideOffset;
+    yTo = properties.localHeight - 1 - borderBuffer;
+  }
+  else if ((!opposite && side === 'RIGHT') || (opposite && side === 'LEFT')) {
+    const borderBuffer =
+      Math.round((properties.localWidth - properties.localHeight) / 2);
+    const localStartingSideOffset =
+      Math.round((properties.localHeight - localStartingWidth) / 2);
+
+    xFrom = properties.localWidth - 1 -
+      borderBuffer - properties.localStartingDepth;
+    yFrom = localStartingSideOffset;
+    xTo = properties.localWidth - 1 - borderBuffer;
+    yTo = properties.localHeight - 1 - localStartingSideOffset;
+  }
+  else if ((!opposite && side === 'LEFT') || (opposite && side === 'RIGHT')) {
+    const borderBuffer =
+      Math.round((properties.localWidth - properties.localHeight) / 2);
+    const localStartingSideOffset =
+      Math.round((properties.localHeight - localStartingWidth) / 2);
+
+    xFrom = borderBuffer;
+    yFrom = localStartingSideOffset;
+    xTo = borderBuffer + properties.localStartingDepth;
+    yTo = properties.localHeight - 1 - localStartingSideOffset;
+  }
+  return { xFrom, yFrom, xTo, yTo };
+}
+
+function placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite) {
+  const numMembers = squad.members.length;
+  let eligibleRect;
+  if (ambushState === 'No-Ambush') {
+    eligibleRect = tileRectForSide(playerSide, opposite, numMembers);
+  }
+  else if (ambushState === 'Player-Ambushed') {
+    eligibleRect = tileRectForSide(playerSide, opposite, numMembers);
+  }
+  else if (ambushState === 'Enemy-Ambushed') {
+    eligibleRect = tileRectForSide(playerSide, opposite, numMembers);
+  }
+  const eligibleTiles = Object.values(map)
+
+    // Only place members on a startable tiles
+    .filter(tile => {
+      const tileDef = localTileDictionary[tile.name];
+      return tileDef.startable;
+    })
+
+    // Only place members in the starting rectangle
+    .filter(tile => {
+      const { x, y } = tile;
+      const { xFrom, yFrom, xTo, yTo } = eligibleRect;
+      return x >= xFrom && x <= xTo && y >= yFrom && y <= yTo;
+    })
+
+    // Randomize order
+    .map(tile => ({
+      x: tile.x, y: tile.y, randomOrder: properties.rng.getUniform()
+    }))
+    .sort((l, r) => l.randomOrder - r.randomOrder);
+
+  // Get a tile for each squad member
+  const memberTiles = eligibleTiles.slice(0, numMembers);
+
+  squad.members.forEach((member, i) => {
+    member.x = memberTiles[i].x;
+    member.y = memberTiles[i].y;
+  });
+}
+
+function placePlayerSquadInLocalMap(squad, map, ambushState, playerSide) {
+  // Player squad does not go on the opposite of the player side
+  const opposite = false;
+  return placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite);
+}
+
+function placeEnemySquadInLocalMap(squad, map, ambushState, playerSide) {
+  // Enemy squad goes on the opposite of the player side
+  const opposite = true;
+  return placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite);
+}
+
+function placeSingleEnemyInLocalMap(squad) {
   const spacing = 2;
   squad.members = squad.members
     .map((member) => {
@@ -123,15 +339,28 @@ function placeEnemiesInLocalMap(squad, map, ambush) {
       return member;
     })
     .sort((l, r) => l.rand - r.rand)
-    .slice(0, 5);
+    .slice(0, 1);
+}
 
-  // If it's an ambush, stage the enemies on either side of the sqaud
-  if (ambush) {
-    const ambushOffset = Math.round(properties.localWidth * (6 / 7));
-    squad.members
-      .slice(0, 2)
-      .forEach(member => member.x += ambushOffset);
-  }
+function getEnemySquadByOverworldXY(enemies, x, y) {
+  const enemiesInTile = enemies
+    .filter(enemy => enemy.x === x && enemy.y === y)
+    .slice(0, 1);
+  return enemiesInTile.length > 0 ? enemiesInTile[0] : null;
+}
+
+function getLootByEnemySquad(members, inventory) {
+  const numItems = members.length * properties.lootDropsPerEnemyMember;
+  const loot = new Inventory();
+  inventory.getItems()
+    .map((item) => {
+      item.rand = properties.rng.getPercentage();
+      return item;
+    })
+    .sort((l, r) => l.rand - r.rand)
+    .slice(0, numItems)
+    .forEach(item => loot.addItem(item.name, item));
+  return loot;
 }
 
 function getAllMembersByTurnOrder(squad, enemySquad) {
@@ -152,10 +381,18 @@ function numberOfAliveMembers(squad) {
 
 export default {
   weaponReport,
-  startingEquipment,
+  populatePlayerInventory,
+  populateEnemyInventory,
+  createPlayerSquadMembers,
   createSquadMembers,
-  placeSquadMembersInLocalMap,
-  placeEnemiesInLocalMap,
+  placePlayerSquadInLocalMap,
+  getOverworldEnemyLocations,
+  selectEnemyDefinition,
+  createEnemyMembers,
+  placeEnemySquadInLocalMap,
+  placeSingleEnemyInLocalMap,
+  getEnemySquadByOverworldXY,
+  getLootByEnemySquad,
   getAllMembersByTurnOrder,
   getMovesForMember,
   numberOfAliveMembers

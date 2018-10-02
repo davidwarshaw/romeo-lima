@@ -1,0 +1,76 @@
+[
+  {
+    "difficulty": 1,
+    "distribution": {
+      "Lone Soldier": 1,
+      "Fireteam": 1
+    }
+  },
+  {
+    "difficulty": 2,
+    "distribution": {
+      "Lone Soldier": 2,
+      "Fireteam": 1
+    }
+  },
+  {
+    "difficulty": 3,
+    "distribution": {
+      "Lone Soldier": 1,
+      "Fireteam": 2,
+      "Automatic Fireteam": 1
+    }
+  },
+  {
+    "difficulty": 4,
+    "distribution": {
+      "Lone Soldier": 1,
+      "Fireteam": 2,
+      "Automatic Fireteam": 1
+    }
+  },
+  {
+    "difficulty": 5,
+    "distribution": {
+      "Fireteam": 2,
+      "Automatic Fireteam": 3,
+      "Squad": 1
+    }
+  },
+  {
+    "difficulty": 6,
+    "distribution": {
+      "Fireteam": 1,
+      "Automatic Fireteam": 2,
+      "Squad": 2
+    }
+  },
+  {
+    "difficulty": 7,
+    "distribution": {
+      "Fireteam": 1,
+      "Automatic Fireteam": 1,
+      "Squad": 2,
+      "Sniper Team": 2
+    }
+  },
+  {
+    "difficulty": 8,
+    "distribution": {
+      "Squad": 1,
+      "Platoon": 1
+    }
+  },
+  {
+    "difficulty": 9,
+    "distribution": {
+      "Platoon": 1
+    }
+  },
+  {
+    "difficulty": 10,
+    "distribution": {
+      "Platoon": 1
+    }
+  }
+]

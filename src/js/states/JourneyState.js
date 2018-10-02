@@ -3,8 +3,9 @@ import State from './State';
 
 import JourneySystem from '../systems/JourneySystem';
 
+import ContextCommands from '../ui/ContextCommands';
 import JourneySquadStatus from '../ui/JourneySquadStatus';
-import Inventory from '../ui/Inventory';
+import InventoryModal from '../ui/InventoryModal';
 import OverworldMap from '../maps/OverworldMap';
 
 export default class JourneyState extends State {
@@ -12,6 +13,9 @@ export default class JourneyState extends State {
     super(game);
 
     this.journeySystem = new JourneySystem(game, this);
+
+    this.contextCommands = new ContextCommands(game, this.windowManager);
+    this.windowManager.addWindow(this.contextCommands);
 
     this.squadStatus = new JourneySquadStatus(game, this.journeySystem);
     this.windowManager.addWindow(this.squadStatus);
@@ -21,7 +25,7 @@ export default class JourneyState extends State {
   }
 
   showInventory() {
-    this.inventoryBox = new Inventory(
+    this.inventoryBox = new InventoryModal(
       this.game, this.journeySystem,
       () => {
         this.windowManager.removeWindow(this.inventoryBox);

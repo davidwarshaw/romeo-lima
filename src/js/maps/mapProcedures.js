@@ -24,8 +24,9 @@ function neighborCount(map, x, y, neighbors) {
 }
 
 function tilesWithNeighbors(map, target, neighbors, count) {
+  const targetsToCheck = Array.isArray(target) ? target : [target];
   return Object.values(map)
-    .filter(tile => tile.name === target)
+    .filter(tile => targetsToCheck.includes(tile.name))
     .filter(tile => neighborCount(map, tile.x, tile.y, neighbors) >= count);
 }
 

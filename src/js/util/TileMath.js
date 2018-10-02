@@ -1,5 +1,17 @@
 import properties from '../properties';
 
+function edgeTileFromAngle(radians) {
+  const x0 = Math.round(properties.localWidth / 2);
+  const y0 = Math.round(properties.localHeight / 2);
+  const x1 = Math.round(x0 + (properties.localWidth * Math.cos(radians)));
+  const y1 = Math.round(y0 + (properties.localHeight * Math.sin(radians)));
+
+  // console.log(`${x1}, ${y1}`);
+  const ray = tileRay(x0, y0, x1, y1);
+  const edgeTile = ray.pop();
+  return edgeTile;
+}
+
 function tileLine(x0, y0, x1, y1) {
   const linePoints = [];
   const dx = Math.abs(x1 - x0);
@@ -64,6 +76,7 @@ function distance(x0, y0, x1, y1) {
 }
 
 export default {
+  edgeTileFromAngle,
   tileLine,
   tileRay,
   distance

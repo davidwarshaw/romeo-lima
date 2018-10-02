@@ -13,7 +13,7 @@ export default class ActionReport extends Window {
 
     this.squad = game.playState.squad;
 
-    this.messagesToDisplay = 12;
+    this.messagesToDisplay = 11;
   }
 
   render(display) {

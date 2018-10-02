@@ -1,4 +1,8 @@
 
+function titleCase(lower) {
+  return lower.replace(/\b\w/, c => c.toUpperCase());
+}
+
 function createFireMessages(fireActions) {
   const messages = Object.entries(fireActions)
     .map(action => {
@@ -36,6 +40,7 @@ function truncateAndCenterText(text, left, width) {
 }
 
 export default {
+  titleCase,
   createFireMessages,
   timesWords,
   truncateAndCenterText
