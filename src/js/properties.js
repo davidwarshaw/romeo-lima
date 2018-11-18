@@ -5,7 +5,7 @@ ROT.Display.Rect.cache = true;
 
 export default {
   debug: {
-    showInvisibleEnemies: true,
+    showInvisibleEnemies: false,
     invisibleEnemiesFgColor: '#AA9F9D'
   },
   width: 126,

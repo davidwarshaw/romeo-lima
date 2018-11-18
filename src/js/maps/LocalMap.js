@@ -1,6 +1,7 @@
 
 import properties from '../properties';
 import utils from '../util/utils';
+import TileMath from '../util/TileMath';
 
 import Cache from '../util/Cache';
 import Window from '../ui/Window';
@@ -101,6 +102,7 @@ export default class LocalMap extends Window {
     if (!projectile.active || !roundInFlight) {
       return;
     }
+
     projectile.line
 
       // Only render visible points of the line

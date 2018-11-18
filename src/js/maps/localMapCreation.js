@@ -394,13 +394,60 @@ const mapCreators = {
 
     mapProcedures.tilesWithNeighbors(map, 'Low Grass', 'Bush 1', 3)
       .forEach(tile => tile.name = 'Medium Grass 1');
-    mapProcedures.tilesWithNeighbors(map, 'Low Grass', 'Tall Grass 1', 3)
+    mapProcedures.tilesWithNeighbors(map, 'Bush 1', 'Low Grass', 3)
       .forEach(tile => tile.name = 'Medium Grass 2');
 
     buildings.forEach(building => buildingCreation
       .placeBuildingInLocalMap(map, building));
 
+    buildingCreation.placePathsInLocalMap(map);
+
+    // Smooth out the path
+    const grasses = ['Low Grass', 'Medium Grass 1', 'Medium Grass 2',
+      'Tall Grass 1', 'Tall Grass 2'];
+    mapProcedures.tilesWithNeighbors(map, grasses, 'Path', 1)
+      .forEach(tile => tile.name = 'Path');
+    mapProcedures.tilesWithNeighbors(map, grasses, 'Path', 1)
+      .forEach(tile => tile.name = 'Path');
+    mapProcedures.tilesWithNeighbors(map, grasses, 'Path', 1)
+      .forEach(tile => tile.name = 'Path');
+
     return map;
+  },
+
+  clearing(width, height, argument) {
+    const { percentDense } = argument;
+
+    const largeEllipseChance = 45;
+    const smallEllipseChance = 65;
+
+    const forestMap = mapCreators.forest(width, height, { percentDense });
+    const largeEllipse = TileMath
+      .tileEllipse(width / 2, height / 2, width / 4, height / 4);
+    const smallEllipse = TileMath
+      .tileEllipse(width / 2, height / 2, width / 6, height / 6);
+
+    Object.entries(forestMap)
+      .forEach(tile => {
+        const inLargeEllipse =
+          largeEllipse[utils.keyFromXY(tile[1].x, tile[1].y)];
+        const inSmallEllipse =
+          smallEllipse[utils.keyFromXY(tile[1].x, tile[1].y)];
+        if (inLargeEllipse) {
+          const chance = properties.rng.getPercentage();
+          if (chance <= largeEllipseChance) {
+            tile[1].name = 'Low Grass';
+          }
+        }
+        if (inSmallEllipse) {
+          const chance = properties.rng.getPercentage();
+          if (chance <= smallEllipseChance) {
+            tile[1].name = 'Low Grass';
+          }
+        }
+      });
+
+    return forestMap;
   }
 };
 
@@ -410,7 +457,8 @@ function createLocalMap(seedTile, width, height) {
   // const createArgument = JSON.parse(seedTile.localMapCreationArgument);
   // return mapCreators[createFunction](width, height, createArgument);
 
-  const argument = { percentDense: 50 };
+  // const argument = { percentDense: 50 };
+  const argument = { percentDense: 50, angle: 0.75, radius: 60 };
   return mapCreators.village(width, height, argument);
 }
 

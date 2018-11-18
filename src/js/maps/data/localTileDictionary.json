@@ -12,8 +12,8 @@
   },
   "Path": {
     "glyph": ".",
-    "fgColor": "#FDC053",
-    "bgColor": "#CA9942",
+    "fgColor": "#A98E48",
+    "bgColor": "#787E51",
     "description": "",
     "height": 1,
     "traversable": true,
@@ -34,7 +34,7 @@
   },
   "Hut Door": {
     "glyph": "+",
-    "fgColor": "#7D7672",
+    "fgColor": "#97918E",
     "bgColor": "#68625E",
     "description": "",
     "height": 1,
@@ -45,7 +45,7 @@
   },
   "Hut Window": {
     "glyph": "⌹",
-    "fgColor": "#7D7672",
+    "fgColor": "#292725",
     "bgColor": "#68625E",
     "description": "",
     "height": 1,
@@ -56,7 +56,7 @@
   },
   "Hut Wall": {
     "glyph": "#",
-    "fgColor": "#7D7672",
+    "fgColor": "#97918E",
     "bgColor": "#68625E",
     "description": "",
     "height": 1,

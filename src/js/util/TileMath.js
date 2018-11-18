@@ -1,4 +1,20 @@
 import properties from '../properties';
+import utils from './utils';
+
+function octantOfLine(linePoints) {
+  const angle = angleOfLine(linePoints);
+  const fraction = angle / (Math.PI * 2);
+  const octant = utils.clamp(Math.round((fraction * 8) - 0.5), 0, 7);
+
+  // console.log(`angle: ${angle}, fraction: ${fraction}, octant: ${octant}`);
+  return octant;
+}
+
+function angleOfLine(linePoints) {
+  const dx = linePoints[linePoints.length - 1].x - linePoints[0].x;
+  const dy = linePoints[linePoints.length - 1].y - linePoints[0].y;
+  return Math.atan2(dy, dx) + Math.PI;
+}
 
 function edgeTileFromAngle(radians) {
   const x0 = Math.round(properties.localWidth / 2);
@@ -71,13 +87,42 @@ function tileRay(x0, y0, x1, y1) {
   return linePoints;
 }
 
+function tileEllipse(xCenter, yCenter, xAxis, yAxis) {
+  const points = {};
+  const xBound = Math.round(xAxis);
+  const yBound = Math.round(yAxis);
+  for (let y = -yBound; y <= yBound; y++) {
+    for (let x = -xBound; x <= xBound; x++) {
+      const row = Math.round(
+        (yAxis / xAxis) *
+        Math.sqrt(Math.pow(xAxis, 2) - Math.pow(x, 2)));
+
+      // console.log(`${x}, ${y}: row: +/- ${row}`);
+      if (y <= row && y >= -row) {
+        const mapX = Math.round(xCenter + x);
+        const mapY = Math.round(yCenter + y);
+        points[utils.keyFromXY(mapX, mapY)] = true;
+      }
+    }
+  }
+  return points;
+}
+
+function tileCircle(xCenter, yCenter, radius) {
+  return tileEllipse(xCenter, yCenter, radius, radius);
+}
+
 function distance(x0, y0, x1, y1) {
   return Math.sqrt(Math.pow(x1 - x0, 2) + Math.pow(y1 - y0, 2));
 }
 
 export default {
+  octantOfLine,
+  angleOfLine,
   edgeTileFromAngle,
   tileLine,
   tileRay,
+  tileEllipse,
+  tileCircle,
   distance
 };

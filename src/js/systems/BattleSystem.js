@@ -90,6 +90,7 @@ export default class BattleSystem {
       line: [],
       fireSequence: [],
       fireSequenceIndex: 0,
+      glyphOctants: ['-', '\\', '|', '/', '-', '\\', '|', '/'],
       glyph: '-',
       fgColor: '#FFFFFF',
       muzzleGlyph: '*',
@@ -274,6 +275,10 @@ export default class BattleSystem {
           this.projectile.fireSequence = this.generateFireSequence(
             this.currentCharacter.weapon.bursts,
             this.currentCharacter.weapon.roundsPerBurst);
+
+          // Use a glyph based on the angle of the firing line
+          const octant = TileMath.octantOfLine(this.projectile.line);
+          this.projectile.glyph = this.projectile.glyphOctants[octant];
 
           // Turn off target mode
           this.targetMode = false;
