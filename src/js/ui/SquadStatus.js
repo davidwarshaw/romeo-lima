@@ -15,6 +15,11 @@ export default class SquadStatus extends Window {
     this.system = system;
 
     this.squad = game.playState.squad;
+
+    this.columnWidth = 15;
+    this.columnPadding = 3;
+
+    this.pointmanGlyph = 'ᐃ';
   }
 
   render(display) {

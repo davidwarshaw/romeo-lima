@@ -40,13 +40,13 @@ export default class BattleSystem {
 
     // Build one FOV map for each squad. Each squad member sees the same FOV.
     this.playerSquadLocalFov = new LocalFov(this.map, this.playerSquad.members);
-
-    //this.enemySquadLocalFov = new LocalFov(this.map, this.enemySquad.members);
+    this.enemySquadLocalFov = new LocalFov(this.map, this.enemySquad.members);
 
     this.ballisticsSystem = new BallisticsSystem(
       this.map,
       this.playerSquad, this.playerSquadLocalFov,
-      this.enemySquad, this.enemySquadLocalFov);
+      this.enemySquad, this.enemySquadLocalFov,
+      this.playerSquad);
 
     // Set the next controlled character
     this.characters = squadProcedures
@@ -100,13 +100,14 @@ export default class BattleSystem {
 
   nextCharacter() {
     // If there is nobody from the enemy squad, end the battle
-    if (squadProcedures.numberOfAliveMembers(this.enemySquad) <= 0) {
+    if (this.enemySquad.numberOfAliveMembers() <= 0) {
       this.enemySquad.alive = false;
       this.endBattle();
+      return;
     }
 
-    // Deselect previous character if in the player squad
-    if (this.currentCharacter && this.currentCharacter.playerControlled) {
+    // Deselect previous character
+    if (this.currentCharacter) {
       this.currentCharacter.selected = false;
     }
 
@@ -138,10 +139,42 @@ export default class BattleSystem {
     }
     else {
       console.log('AI turn');
-      const action = this.enemySquad.actionForTurn(this.currentCharacter);
-      console.log(action.action);
+      const action = this.enemySquad.actionForTurn(
+        this.currentCharacter,
+        this.map,
+        this.enemySquadLocalFov,
+        this.playerSquad);
+      console.log(action);
+
+      if (action.action === 'WAIT') {
+        this.nextCharacter();
+      }
+      else if (action.action === 'ATTACK') {
+
+        // Set to the projectile to be in effect and set the interval
+        this.projectile.active = true;
+        this.projectile.line = TileMath.tileRay(
+          this.currentCharacter.x, this.currentCharacter.y,
+          action.target.x, action.target.y);
+        this.projectile.intervalId = setInterval(
+          () => this.fireAnimationFrame(),
+          properties.projectileIntervalMillis);
+
+        this.projectile.fireSequenceIndex = 0;
+        this.projectile.fireSequence = this.generateFireSequence(
+          this.currentCharacter.weapon.bursts,
+          this.currentCharacter.weapon.roundsPerBurst);
+
+        // Use a glyph based on the angle of the firing line
+        const octant = TileMath.octantOfLine(this.projectile.line);
+        this.projectile.glyph = this.projectile.glyphOctants[octant];
+
+        // Turn off target mode
+        this.targetMode = false;
+        this.clearTarget();
+      }
+
       this.messages.push(action.message);
-      this.nextCharacter();
     }
 
   }
@@ -307,7 +340,7 @@ export default class BattleSystem {
         }
         break;
       case 'ENTER/EXIT':
-        if (squadProcedures.numberOfAliveMembers(this.enemySquad) <= 0) {
+        if (this.enemySquad.numberOfAliveMembers() <= 0) {
           this.endBattle();
         }
         else {

@@ -3,6 +3,7 @@ import utils from '../util/utils';
 import TileMath from '../util/TileMath';
 
 import buildingCreation from './buildingCreation';
+import vehicleCreation from './vehicleCreation';
 import mapProcedures from './mapProcedures';
 
 const mapCreators = {
@@ -157,6 +158,11 @@ const mapCreators = {
       .tilesWithNeighbors(map, 'Deep Marsh Water', 'Bush 5', 1)
       .forEach(tile => tile.name = 'Shallow Marsh Water');
 
+    // Add mud grass
+    mapProcedures
+      .tilesByChance(map, 'Bush 5', 20)
+      .forEach(tile => tile.name = 'Mud Grass');
+
     return map;
   },
 
@@ -229,8 +235,17 @@ const mapCreators = {
       .tilesWithNeighbors(forestMap, marshGrassTiles, 'Marsh Grass', 3)
       .forEach(tile => tile.name = 'Medium Grass 1');
 
+    // Add mud grass
+    mapProcedures
+      .tilesByChance(forestMap, 'Shallow River Water', 20)
+      .forEach(tile => tile.name = 'Mud Grass');
+
+    // Add sampan
+    //vehicleCreation.placeSampanInLocalMap(forestMap, true);
+
     return forestMap;
   },
+
   waterfall(width, height, argument) {
     const { percentDense, southBend } = argument;
 
@@ -360,28 +375,44 @@ const mapCreators = {
 
     const numBuildings = Math
       .round(properties.rng.getNormal(6, 2));
-    let xMax = Math.round((1 / 2) * width * properties.rng.getUniform());
-    let yMax = Math.round((1 / 2) * height * properties.rng.getUniform());
+
+    const xCenter = Math.round(width * (1 / 4));
+    const yCenter = Math.round(height * (1 / 4));
+    const std = 10;
+    let xMax = Math.round(utils.clamp(
+      properties.rng.getNormal(xCenter, std),
+      xCenter - 10,
+      xCenter + 10));
+    let yMax = Math.round(utils.clamp(
+      properties.rng.getNormal(yCenter, std),
+      yCenter - 10,
+      yCenter + 10));
     let frontToSouth = true;
+
+    let xGlobalMin = xMax;
+    let yGlobalMax = yMax;
+
     const buildings = [...Array(numBuildings).keys()].map((i) => {
       const stringDim = properties.rng
         .getWeightedValue(buildingCreation.buildingWeights);
-      const buildingWidth = Number(stringDim.split('x')[0]);
-      const buildingHeight = Number(stringDim.split('x')[1]);
+      const buildingHeight = Number(stringDim.split('x')[0]);
+      const buildingWidth = Number(stringDim.split('x')[1]);
 
       if (yMax < buildingHeight) {
         yMax = buildingHeight + 2;
       }
+      console.log(`xMax: ${xMax} yMax: ${yMax}`);
       const x = utils.clamp(xMax, 0, width - buildingWidth);
       const y = utils.clamp(yMax - buildingHeight, 0, height - buildingHeight);
       xMax = x + buildingWidth + 2;
 
       if (i > numBuildings / 2) {
-        yMax = yMax + buildingHeight + 2;
-        xMax = Math.round(xMax / 2);
+        yMax = yGlobalMax + 2;
+        xMax = Math.round(xGlobalMin + ((xMax - xGlobalMin) / 2));
         frontToSouth = false;
       }
-      return { x, y, buildingWidth, buildingHeight, frontToSouth };
+      yGlobalMax = Math.max(yGlobalMax, yMax + buildingHeight);
+      return { x, y, stringDim, buildingWidth, buildingHeight, frontToSouth };
     });
 
     // Add groves around trees
@@ -410,6 +441,15 @@ const mapCreators = {
     mapProcedures.tilesWithNeighbors(map, grasses, 'Path', 1)
       .forEach(tile => tile.name = 'Path');
     mapProcedures.tilesWithNeighbors(map, grasses, 'Path', 1)
+      .forEach(tile => tile.name = 'Path');
+
+    // Add some grass with mud
+    mapProcedures.tilesWithNeighbors(map, 'Path', 'Low Grass', 3)
+      .forEach(tile => tile.name = 'Mud Grass');
+    mapProcedures
+      .tilesByChance(map, 'Path', 10)
+      .forEach(tile => tile.name = 'Mud Grass');
+    mapProcedures.tilesWithNeighbors(map, 'Mud Grass', 'Hut Wall', 1)
       .forEach(tile => tile.name = 'Path');
 
     return map;
@@ -458,8 +498,14 @@ function createLocalMap(seedTile, width, height) {
   // return mapCreators[createFunction](width, height, createArgument);
 
   // const argument = { percentDense: 50 };
-  const argument = { percentDense: 50, angle: 0.75, radius: 60 };
-  return mapCreators.village(width, height, argument);
+  const argument = {
+    percentDense: 50,
+    angle: 0.75,
+    radius: 60,
+    noiseStd: 3,
+    southBend: true
+  };
+  return mapCreators.forestRiver(width, height, argument);
 }
 
 export default {

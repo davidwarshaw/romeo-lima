@@ -1,7 +1,6 @@
 
 import properties from '../properties';
 import utils from '../util/utils';
-import TileMath from '../util/TileMath';
 
 import Cache from '../util/Cache';
 import Window from '../ui/Window';

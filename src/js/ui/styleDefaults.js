@@ -34,6 +34,7 @@ export default {
   lineColor: '#834a64',
   titleColor: '#9d4a64',
   textColor: '#B06E83',
+  inactiveTextColor: '#7B4D5B',
   nameColor: '#D7B6C1',
   fieldChar: ' ',
   upperLeftCornerChar: '┌',

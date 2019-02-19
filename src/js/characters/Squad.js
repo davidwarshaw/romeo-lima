@@ -19,8 +19,18 @@ export default class Squad {
     this.bgColor = null;
   }
 
+  getAliveMembers() {
+    return this.members.filter(member => member.alive);
+  }
+
   getMembersByNumber() {
     return this.members.sort((l, r) => l.number - r.number);
+  }
+
+  getAliveMembersByNumber() {
+    return this.members
+      .filter(member => member.alive)
+      .sort((l, r) => l.number - r.number);
   }
 
   getPointman() {
@@ -42,6 +52,29 @@ export default class Squad {
     const members = this.members
       .filter(member => member.x === x && member.y === y);
     return members[0] || null;
+  }
+
+  numberOfAliveMembers() {
+    return this.members
+      .map(member => member.alive ? 1 : 0)
+      .reduce((acc, l) => acc + l);
+  }
+
+  killMemberByNumber(number) {
+    const member = this.getByNumber(number);
+    member.alive = false;
+    member.pointman = false;
+    
+    this.inventory
+      .getItemsByMemberNumber(member.number)
+      .forEach(item => this.inventory.unassignItem(item.number));
+
+    const aliveMembers = this.getAliveMembersByNumber();
+    if (aliveMembers.length > 0) {
+      aliveMembers[aliveMembers.length - 1].pointman = true;
+    }
+
+    console.log(member);
   }
 
   populate(text) {

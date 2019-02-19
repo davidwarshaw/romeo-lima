@@ -1,7 +1,9 @@
-import properties from '../properties';
 import utils from '../util/utils';
 
 import TileMath from '../util/TileMath';
+
+import buildingDictionary from './data/buildingDictionary';
+import localTileDictionary from './data/localTileDictionary';
 
 const buildingWeights = {
   '11x11': 1,
@@ -12,7 +14,18 @@ const buildingWeights = {
   '5x5': 4,
   '3x3': 2
 };
-const hutTiles = ['Hut Floor', 'Hut Door', 'Hut Wall', 'Hut Window'];
+const hutTiles = [
+  'Hut Floor', 'Hut Door', 'Hut Wall', 'Hut Window', 'Hut Furniture'];
+
+function tileNameForGlyph(glyph) {
+  const tileName = Object.entries(localTileDictionary)
+    .map(entry => ({ name: entry[0], glyph: entry[1].glyph}))
+    .filter(tile => tile.glyph === glyph && tile.name.startsWith('Hut'));
+  if (tileName.length > 0) {
+    return tileName[0].name;
+  }
+  return '';
+}
 
 
 function placePathsInLocalMap(map) {
@@ -37,36 +50,24 @@ function placePathsInLocalMap(map) {
 }
 
 function placeBuildingInLocalMap(map, building) {
-  const { x, y, buildingWidth, buildingHeight, frontToSouth } = building;
+  const {
+    x, y,
+    stringDim,
+    buildingWidth, buildingHeight,
+    frontToSouth
+  } = building;
 
-  const windowSpan = utils
-    .clamp(Math.round(properties.rng.getNormal(8, 2)), 5, 10);
+  const buildingDef = buildingDictionary[stringDim];
 
   for (let row = y; row < y + buildingHeight; row++) {
     for (let col = x; col < x + buildingWidth; col++) {
-      let buildingTileName = 'Hut Floor';
+      const buildingRow = frontToSouth ?
+        row - y :
+        (buildingHeight - 1) - (row - y);
+      const buildingCol = col - x;
+      const buildingGlyph = buildingDef[buildingRow][buildingCol];
+      const buildingTileName = tileNameForGlyph(buildingGlyph);
 
-      const topWall = row === y;
-      const bottomWall = row === y + buildingHeight - 1;
-      const leftWall = col === x;
-      const rightWall = col === x + buildingWidth - 1;
-      const middle = col === x + Math.floor(buildingWidth / 2);
-
-      const wallCol = col - x + 1;
-      const wallRow = row - y + 1;
-
-      if (topWall || bottomWall || leftWall || rightWall) {
-        if ((frontToSouth && middle && bottomWall) ||
-            (!frontToSouth && middle && topWall)) {
-          buildingTileName = 'Hut Door';
-        }
-        else if (wallCol % windowSpan === 0 || wallRow % windowSpan === 0) {
-          buildingTileName = 'Hut Window';
-        }
-        else {
-          buildingTileName = 'Hut Wall';
-        }
-      }
       map[utils.keyFromXY(col, row)].name = buildingTileName;
     }
   }

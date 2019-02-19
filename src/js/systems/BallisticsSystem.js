@@ -52,19 +52,30 @@ export default class BallisticsSystem {
       }
 
       // Check the squads for characters who may have been hit
-      const characterInTile = this.enemySquad.getByXY(x, y) ||
-        this.playerSquad.getByXY(x, y);
+      this.enemySquad.getByXY(x, y);
+      let characterInTile = this.enemySquad.getByXY(x, y);
+      let characterSquad = null;
+      if (characterInTile) {
+        characterSquad = this.enemySquad;
+      }
+      else {
+        characterInTile = this.playerSquad.getByXY(x, y);
+        if (characterInTile) {
+          characterSquad = this.playerSquad;
+        }
+      }
 
       // Only living characters can be hit by fire
       if (characterInTile && characterInTile.alive) {
-        const roll = properties.rng.getPercentage();
+        // const roll = properties.rng.getPercentage();
+        const roll = 0;
         const chanceToHit = this.chanceToHitCharacter(
           firingStats, weaponAccuracy, characterInTile.stats, tileDef);
 
         // console.log(`${x}x${y}: ${roll} <= ${chanceToHit}` +
         //   `: ${characterInTile.name}`);
         if (roll <= chanceToHit) {
-          this.hitCharacter(characterInTile, fireActions);
+          this.hitCharacter(characterSquad, characterInTile, fireActions);
 
           // Hitting a character decreases power
           remainingPower--;
@@ -103,12 +114,12 @@ export default class BallisticsSystem {
     return chance;
   }
 
-  hitCharacter(characterToHit, fireActions) {
+  hitCharacter(characterSquad, characterToHit, fireActions) {
     this.addHitAction(characterToHit, fireActions);
 
     characterToHit.injuries++;
     if (characterToHit.injuries > properties.maxInjuries) {
-      characterToHit.alive = false;
+      characterSquad.killMemberByNumber(characterToHit.number);
 
       this.addKillAction(characterToHit, fireActions);
     }

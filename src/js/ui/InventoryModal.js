@@ -139,6 +139,25 @@ export default class InventoryModal extends Window {
       this.detailCol + 1, this.y + 2, formattedText, detailWidth);
   }
 
+  tryToAssignItemToMember(itemNumber, memberNumber) {
+    const member = this.squad.getByNumber(memberNumber);
+
+    // Don't allow assignment to not alive characters
+    if (!member.alive) {
+      return;
+    }
+
+    // If the item is not assigned to the character, assign it
+    if (this.squad.inventory.inventory[itemNumber].assigned !== memberNumber) {
+      this.squad.inventory.assignItem(itemNumber, memberNumber);
+    }
+
+    // Otherwise, unassign the item
+    else {
+      this.squad.inventory.unassignItem(itemNumber);
+    }
+  }
+
   inputHandler(input) {
     const inventoryDisplayForm = this.squad.inventory.getDisplayForm();
     const itemNumber = inventoryDisplayForm[this.listIndex].number;
@@ -155,28 +174,28 @@ export default class InventoryModal extends Window {
         this.exitCb();
         break;
       case 'NUM_1':
-        this.squad.inventory.assignItem(itemNumber, 1);
+        this.tryToAssignItemToMember(itemNumber, 2);
         break;
       case 'NUM_2':
-        this.squad.inventory.assignItem(itemNumber, 2);
+        this.tryToAssignItemToMember(itemNumber, 2);
         break;
       case 'NUM_3':
-        this.squad.inventory.assignItem(itemNumber, 3);
+        this.tryToAssignItemToMember(itemNumber, 3);
         break;
       case 'NUM_4':
-        this.squad.inventory.assignItem(itemNumber, 4);
+        this.tryToAssignItemToMember(itemNumber, 4);
         break;
       case 'NUM_5':
-        this.squad.inventory.assignItem(itemNumber, 5);
+        this.tryToAssignItemToMember(itemNumber, 5);
         break;
       case 'NUM_6':
-        this.squad.inventory.assignItem(itemNumber, 6);
+        this.tryToAssignItemToMember(itemNumber, 6);
         break;
       case 'NUM_7':
-        this.squad.inventory.assignItem(itemNumber, 7);
+        this.tryToAssignItemToMember(itemNumber, 7);
         break;
       case 'NUM_8':
-        this.squad.inventory.assignItem(itemNumber, 8);
+        this.tryToAssignItemToMember(itemNumber, 8);
         break;
     }
 

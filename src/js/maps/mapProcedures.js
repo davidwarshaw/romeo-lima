@@ -1,3 +1,4 @@
+import properties from '../properties';
 import utils from '../util/utils';
 
 function neighborCount(map, x, y, neighbors) {
@@ -30,6 +31,13 @@ function tilesWithNeighbors(map, target, neighbors, count) {
     .filter(tile => neighborCount(map, tile.x, tile.y, neighbors) >= count);
 }
 
+function tilesByChance(map, target, chance) {
+  const targetsToCheck = Array.isArray(target) ? target : [target];
+  return Object.values(map)
+    .filter(tile => targetsToCheck.includes(tile.name))
+    .filter(() => properties.rng.getPercentage() <= chance);
+}
+
 function searchAndAssign(map, x, y, nameToFind, nameToAssign) {
   if(map[utils.keyFromXY(x, y)]) {
     if(map[utils.keyFromXY(x, y)].name !== nameToFind ||
@@ -48,5 +56,6 @@ function searchAndAssign(map, x, y, nameToFind, nameToAssign) {
 export default {
   neighborCount,
   tilesWithNeighbors,
+  tilesByChance,
   searchAndAssign
 };

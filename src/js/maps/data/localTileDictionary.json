@@ -10,6 +10,50 @@
     "concealment": 0,
     "cover": 0
   },
+  "Mud Grass": {
+    "glyph": "⍦",
+    "fgColor": "#DAF9B7",
+    "bgColor": "#787E51",
+    "description": "",
+    "height": 1,
+    "traversable": true,
+    "startable": true,
+    "concealment": 0,
+    "cover": 0
+  },
+  "North-South Sampan Bow": {
+    "glyph": "ᐼ",
+    "fgColor": "#7D7672",
+    "bgColor": "#68625E",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "North-South Sampan Hull": {
+    "glyph": "ዘ",
+    "fgColor": "#7D7672",
+    "bgColor": "#68625E",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "North-South Sampan Stern": {
+    "glyph": "ᐺ",
+    "fgColor": "#7D7672",
+    "bgColor": "#68625E",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "concealment": 0,
+    "cover": 10
+  },
   "Path": {
     "glyph": ".",
     "fgColor": "#A98E48",
@@ -20,6 +64,17 @@
     "startable": true,
     "concealment": 0,
     "cover": 0
+  },
+  "Hut Furniture": {
+    "glyph": "ᇦ",
+    "fgColor": "#BEBAB8",
+    "bgColor": "#68625E",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "concealment": 0,
+    "cover": 10
   },
   "Hut Floor": {
     "glyph": ".",
@@ -66,7 +121,7 @@
     "cover": 80
   },
   "Falling Water": {
-    "glyph": "≣",
+    "glyph": "ᇦ",
     "fgColor": "#9FE6FF",
     "bgColor": "#77C0D9",
     "description": "",
@@ -82,7 +137,7 @@
     "bgColor": "#4AABCD",
     "description": "",
     "height": 1,
-    "traversable": false,
+    "traversable": true,
     "startable": false,
     "concealment": 0,
     "cover": 0
@@ -170,7 +225,7 @@
     "bgColor": "#17789A",
     "description": "",
     "height": 1,
-    "traversable": false,
+    "traversable": true,
     "startable": false,
     "concealment": 0,
     "cover": 0

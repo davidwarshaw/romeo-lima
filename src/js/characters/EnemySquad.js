@@ -1,5 +1,6 @@
 import properties from '../properties';
 import utils from '../util/utils';
+import TileMath from '../util/TileMath';
 
 import Squad from './Squad';
 
@@ -58,13 +59,50 @@ export default class EnemySquad extends Squad {
       fgColor, bgAdjusted);
   }
 
-  actionForTurn(member) {
-    return {
+  actionForTurn(member, map, enemySquadOverworldFov, playerSquad) {
+    const waitAction = {
       action: 'WAIT',
       message: {
         name: member.name,
         text: 'waits.'
       }
     };
+    const attackAction = {
+      action: 'ATTACK',
+      message: {
+        name: member.name,
+        text: 'attacks.'
+      }
+    };
+    const moveAction = {
+      action: 'MOVE',
+      message: {
+        name: member.name,
+        text: 'moves.'
+      }
+    };
+
+    const targettableMembers = playerSquad.members
+      .filter(targetMember => targetMember.alive)
+      .filter(targetMember =>
+        enemySquadOverworldFov.isVisible(targetMember.x, targetMember.y));
+
+    if (targettableMembers.length === 0) {
+      return waitAction;
+    }
+
+    const targettableMemberDistances = targettableMembers
+      .map(targetMember => {
+        const line = TileMath.tileLine(
+          member.x, member.y, targetMember.x, targetMember.y);
+        const distance = line.length;
+        return { targetMember, distance };
+      })
+      .sort((l, r) => l.distance - r.distance);
+
+    const closestTargettableMemberDistance = targettableMemberDistances[0];
+
+    attackAction.target = closestTargettableMemberDistance.targetMember;
+    return attackAction;
   }
 }

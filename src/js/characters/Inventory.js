@@ -25,13 +25,22 @@ export default class Inventory {
       this.inventory
         .filter(item =>
           item.assigned === memberNumber && item.type === assignType)
-        .forEach(item => item.assigned = 0);
+        .forEach(item => this.unassignItem(item.number));
 
       // Assign the item
       item.assigned = memberNumber;
 
       // Assigned items are inherently singular
       item.count = 1;
+    }
+  }
+
+  unassignItem(itemNumber) {
+    const item = this.inventory[itemNumber];
+
+    // Only assign if item is assignable
+    if (item.assignable) {
+      item.assigned = 0;
     }
   }
 
@@ -42,7 +51,11 @@ export default class Inventory {
   getItems() {
     return this.inventory;
   }
-  
+
+  getItemsByMemberNumber(memberNumber) {
+    return this.inventory.filter(item => item.assigned === memberNumber);
+  }
+
   getDisplayForm() {
     // Group unassigned equipment
     const groupable = this.inventory

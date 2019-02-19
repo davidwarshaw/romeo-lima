@@ -271,8 +271,42 @@ function tileRectForSide(side, opposite, numMembers) {
   return { xFrom, yFrom, xTo, yTo };
 }
 
+function tileRectForSide2(side, opposite, numMembers) {
+  const localStartingWidth = numMembers * 2;
+
+  let xFrom;
+  let yFrom;
+  let xTo;
+  let yTo;
+  if ((!opposite && side === 'RIGHT') || (opposite && side === 'LEFT')) {
+    const borderBuffer =
+      Math.round((properties.localWidth - properties.localHeight) / 2);
+    const localStartingSideOffset =
+      Math.round((properties.localHeight - localStartingWidth) / 2);
+
+    xFrom = properties.localWidth - 1 -
+      borderBuffer - properties.localStartingDepth;
+    xTo = properties.localWidth - 1 - borderBuffer;
+
+    yFrom = localStartingSideOffset;
+    yTo = properties.localHeight - 1 - localStartingSideOffset;
+  }
+  else if ((!opposite && side === 'LEFT') || (opposite && side === 'RIGHT')) {
+    const borderBuffer =
+      Math.round((properties.localWidth - properties.localHeight) / 2);
+    const localStartingSideOffset =
+      Math.round((properties.localHeight - localStartingWidth) / 2);
+
+    xFrom = borderBuffer;
+    yFrom = localStartingSideOffset;
+    xTo = borderBuffer + properties.localStartingDepth;
+    yTo = properties.localHeight - 1 - localStartingSideOffset;
+  }
+  return { xFrom, yFrom, xTo, yTo };
+}
+
 function placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite) {
-  const numMembers = squad.members.length;
+  const numMembers = squad.getAliveMembers().length;
   let eligibleRect;
   if (ambushState === 'No-Ambush') {
     eligibleRect = tileRectForSide(playerSide, opposite, numMembers);
@@ -307,7 +341,7 @@ function placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite) {
   // Get a tile for each squad member
   const memberTiles = eligibleTiles.slice(0, numMembers);
 
-  squad.members.forEach((member, i) => {
+  squad.getAliveMembers().forEach((member, i) => {
     member.x = memberTiles[i].x;
     member.y = memberTiles[i].y;
   });
@@ -373,12 +407,6 @@ function getMovesForMember(member) {
   return Math.round(member.stats.aggression / 10) * 2;
 }
 
-function numberOfAliveMembers(squad) {
-  return squad.members
-    .map(member => member.alive ? 1 : 0)
-    .reduce((acc, l) => acc + l);
-}
-
 export default {
   weaponReport,
   populatePlayerInventory,
@@ -394,6 +422,5 @@ export default {
   getEnemySquadByOverworldXY,
   getLootByEnemySquad,
   getAllMembersByTurnOrder,
-  getMovesForMember,
-  numberOfAliveMembers
+  getMovesForMember
 };
