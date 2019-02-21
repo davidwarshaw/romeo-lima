@@ -61,8 +61,25 @@ export default class LocalMap extends Window {
         bgCacheKey,
         () => utils.adjustBrightness(tileDef.bgColor, tileBrightness));
 
+      // If we want to show the enemy FOV, query it and adjust the BG
+      // color accordingly
+      const enemyFovTile = properties.debug.showEnemyFov ?
+        this.battleSystem.enemySquadLocalFov.isVisible(tile.x, tile.y) :
+        false;
+      const enemyCoverMapTile = properties.debug.showEnemyCoverMap ?
+        this.battleSystem.enemySquad.coverMap.isVisible(tile.x, tile.y) :
+        false;
+
+      let bgDebugAdjusted = bgAdjusted;
+      if (enemyFovTile) {
+        bgDebugAdjusted = properties.debug.enemyFovBgColor;
+      }
+      if (enemyCoverMapTile) {
+        bgDebugAdjusted = properties.debug.enemyCoverMapBgColor;
+      }
+
       display.draw(this.x + tile.x, this.y + tile.y, tileDef.glyph,
-        fgAdjusted, bgAdjusted);
+        fgAdjusted, bgDebugAdjusted);
     });
 
     this.renderTargetLine(display, watchBrightness);
@@ -102,7 +119,17 @@ export default class LocalMap extends Window {
       return;
     }
 
-    projectile.line
+    // Index of the actual projectile line is the number of true fire sequence
+    // items at or before the current fire sequence index
+    const actualLinesIndex = projectile.fireSequence
+      .slice(0, projectile.fireSequenceIndex)
+      .filter(fireSequenceItem => fireSequenceItem)
+      .length;
+
+    console.log(actualLinesIndex);
+    console.log(projectile.actualLines);
+
+    projectile.actualLines[actualLinesIndex]
 
       // Only render visible points of the line
       .filter(point =>

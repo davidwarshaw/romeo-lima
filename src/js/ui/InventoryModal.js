@@ -140,6 +140,10 @@ export default class InventoryModal extends Window {
   }
 
   tryToAssignItemToMember(itemNumber, memberNumber) {
+
+    // console.log('tryToAssignToMember: ' +
+    //   `itemNumber: ${itemNumber} memberNumber: ${memberNumber}`);
+
     const member = this.squad.getByNumber(memberNumber);
 
     // Don't allow assignment to not alive characters
@@ -174,7 +178,7 @@ export default class InventoryModal extends Window {
         this.exitCb();
         break;
       case 'NUM_1':
-        this.tryToAssignItemToMember(itemNumber, 2);
+        this.tryToAssignItemToMember(itemNumber, 1);
         break;
       case 'NUM_2':
         this.tryToAssignItemToMember(itemNumber, 2);

@@ -5,8 +5,12 @@ ROT.Display.Rect.cache = true;
 
 export default {
   debug: {
-    showInvisibleEnemies: true,
-    invisibleEnemiesFgColor: '#AA9F9D'
+    showInvisibleEnemies: false,
+    invisibleEnemiesFgColor: '#AA9F9D',
+    showEnemyFov: false,
+    enemyFovBgColor: '#AA9F9D',
+    showEnemyCoverMap: false,
+    enemyCoverMapBgColor: '#AA5555'
   },
   width: 126,
   height: 38,
@@ -52,5 +56,9 @@ export default {
   projectileIntervalMillis: 1,
   projectileRoundBreakFrames: 1,
   projectileBurstBreakFrames: 5,
-  maxInjuries: 2
+  moveIntervalMillis: 200,
+  maxInjuries: 2,
+  hitCharacterPowerLoss: 40,
+  fovConcealmentThreshold: 100,
+  fovCoverThreshold: 75
 };

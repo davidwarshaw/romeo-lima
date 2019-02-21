@@ -2,6 +2,8 @@ import properties from '../properties';
 import utils from '../util/utils';
 import TileMath from '../util/TileMath';
 
+import LocalFov from '../maps/LocalFov';
+
 import Squad from './Squad';
 
 export default class EnemySquad extends Squad {
@@ -11,13 +13,15 @@ export default class EnemySquad extends Squad {
     this.overworldGlyph = overworldGlyph;
     this.overworldVisible = overworldVisible;
 
+    this.coverMap = null;
+
     this.fgColor = '#FF0000';
     this.bgColor = null;
   }
 
   renderSquadMembers(display, watchBrightness, map, xOffset, yOffset,
     playerSquadLocalFov) {
-    this.getMembersByNumber().forEach((member) => {
+    this.getBattleMembersByNumber().forEach((member) => {
       const { x, y } = member;
 
       // Early exit if the tile the member is on is not visible
@@ -59,7 +63,17 @@ export default class EnemySquad extends Squad {
       fgColor, bgAdjusted);
   }
 
-  actionForTurn(member, map, enemySquadOverworldFov, playerSquad) {
+  initCoverMap(map, playerSquadMembers) {
+    // The cover map is just an FOV that uses cover instead of concealment
+    this.coverMap = new LocalFov(
+      map, playerSquadMembers, properties.fovCoverThreshold, 'cover');
+  }
+
+  actionForTurn(
+    member, numberOfMoves, map, enemySquadOverworldFov, playerSquad) {
+
+    this.coverMap.recalculate();
+
     const waitAction = {
       action: 'WAIT',
       message: {
@@ -81,6 +95,28 @@ export default class EnemySquad extends Squad {
         text: 'moves.'
       }
     };
+
+    const uncovered = this.coverMap.isVisible(member.x, member.y);
+    const coveredTilesByDistance = Object.values(map)
+      .filter(tile => !this.coverMap.isVisible(tile.x, tile.y))
+      .map((tile) => {
+        const distance = TileMath.distance(member.x, member.y, tile.x, tile.y);
+        return { tile, distance };
+      })
+      .sort((l, r) => l.distance - r.distance);
+
+    const closestCoveredTile = coveredTilesByDistance.length > 0 ?
+      coveredTilesByDistance.slice(0, 1)[0] :
+      null;
+
+    if (uncovered && closestCoveredTile) {
+      const closestX = closestCoveredTile.tile.x;
+      const closestY = closestCoveredTile.tile.y;
+      const lineToClosest = TileMath.tileLine(
+        member.x, member.y, closestX, closestY);
+      moveAction.moveLine = lineToClosest.slice(1, numberOfMoves + 1);
+      return moveAction;
+    }
 
     const targettableMembers = playerSquad.members
       .filter(targetMember => targetMember.alive)

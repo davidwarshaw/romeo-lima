@@ -129,6 +129,7 @@ function createSquadMembers(definitions, playerControlled, faction) {
       injuries: 0,
       alive: true,
       weapon,
+      inBattle: false,
       selected: false
     };
     return member;
@@ -205,6 +206,7 @@ function createEnemyMembers(definition, faction) {
       injuries: 0,
       alive: true,
       weapon,
+      inBattle: false,
       selected: false
     };
 
@@ -398,8 +400,8 @@ function getLootByEnemySquad(members, inventory) {
 }
 
 function getAllMembersByTurnOrder(squad, enemySquad) {
-  return squad.members
-    .concat(enemySquad.members)
+  return squad.getBattleMembersByNumber()
+    .concat(enemySquad.getBattleMembersByNumber())
     .sort((l, r) => l.stats.initiative - r.stats.initiative);
 }
 

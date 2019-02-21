@@ -9,7 +9,7 @@ export default class PlayerSquad extends Squad {
   }
 
   renderSquadMembers(display, watchBrightness, map, xOffset, yOffset) {
-    this.getMembersByNumber().forEach((member) => {
+    this.getBattleMembersByNumber().forEach((member) => {
       const tile = map.getTile(member.x, member.y);
       const bgAdjusted = utils.adjustBrightness(tile.bgColor, watchBrightness);
       const fgColor = member.selected ? tile.bgColor : this.fgColor;

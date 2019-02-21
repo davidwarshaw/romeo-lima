@@ -505,7 +505,7 @@ function createLocalMap(seedTile, width, height) {
     noiseStd: 3,
     southBend: true
   };
-  return mapCreators.forestRiver(width, height, argument);
+  return mapCreators.village(width, height, argument);
 }
 
 export default {

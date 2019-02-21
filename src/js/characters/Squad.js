@@ -33,6 +33,12 @@ export default class Squad {
       .sort((l, r) => l.number - r.number);
   }
 
+  getBattleMembersByNumber() {
+    return this.members
+      .filter(member => member.inBattle)
+      .sort((l, r) => l.number - r.number);
+  }
+
   getPointman() {
     const members = this.members.filter(member => member.pointman);
     return members[0] || null;
@@ -64,7 +70,7 @@ export default class Squad {
     const member = this.getByNumber(number);
     member.alive = false;
     member.pointman = false;
-    
+
     this.inventory
       .getItemsByMemberNumber(member.number)
       .forEach(item => this.inventory.unassignItem(item.number));
@@ -75,6 +81,14 @@ export default class Squad {
     }
 
     console.log(member);
+  }
+
+  addMembersToBattle() {
+    this.getAliveMembers().forEach(member => member.inBattle = true);
+  }
+
+  removeMembersFromBattle() {
+    this.members.forEach(member => member.inBattle = false);
   }
 
   populate(text) {

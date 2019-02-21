@@ -2,6 +2,7 @@
 import State from './State';
 
 import JourneyState from '../states/JourneyState';
+import InterstitialState from '../states/InterstitialState';
 
 import BattleSystem from '../systems/BattleSystem';
 
@@ -38,6 +39,18 @@ export default class BattleState extends State {
     this.game.switchState(new JourneyState(this.game));
   }
 
+  endGame() {
+    const header = 'After Action Report:\n\n';
+    const memberStats = this.game.playState.squad.getMembersByNumber()
+      .map(member => `${member.rank} ${member.name}: Killed in action.`);
+    const memberStatsParagraph = memberStats.join('\n');
+    const endGameText = `${header}${memberStatsParagraph}`;
+
+    const journeyState = new JourneyState(this.game);
+    this.game.switchState(
+      new InterstitialState(this.game, endGameText, journeyState));
+  }
+
   showLoot(loot) {
     this.lootBox = new LootModal(
       this.game, this.battleSystem,
@@ -49,6 +62,20 @@ export default class BattleState extends State {
       },
       loot);
     this.windowManager.addWindow(this.lootBox);
+  }
+
+  showYouDiedBox() {
+    const title = null;
+    const text = 'All members of the squad have perished.';
+    this.youDiedBox = new Dialog(
+      this.game, 30, 10, title, text, 'Ok',
+      () => {
+        this.windowManager.removeWindow(this.youDiedBox);
+        this.youDiedBox = null;
+        this.game.refresh();
+        this.endGame();
+      });
+    this.windowManager.addWindow(this.youDiedBox);
   }
 
   showCantLeaveBox() {

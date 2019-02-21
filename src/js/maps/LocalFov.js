@@ -6,9 +6,11 @@ import Cache from '../util/Cache';
 import localTileDictionary from '../maps/data/localTileDictionary.json';
 
 export default class LocalFov {
-  constructor(map, members) {
+  constructor(map, members, threshold, field) {
     this.map = map;
     this.members = members;
+    this.threshold = threshold;
+    this.field = field || 'concealment';
     this.cache = new Cache();
 
     this.recalculate();
@@ -43,7 +45,7 @@ export default class LocalFov {
       .filter(tileLine => tileLine.length > 0)
       .forEach(tileLine => {
         let tileIndex = 0;
-        let totalConcealment = 0;
+        let totalValue = 0;
         let stillVisible = true;
         while (stillVisible) {
           const { x, y } = tileLine[tileIndex];
@@ -56,10 +58,10 @@ export default class LocalFov {
           // Accumulate sight line blockage until 100% blocked
           // The first two tiles only contribute to sight blockage
           // if they're 100% concealment
-          if ((tileIndex < 2 && tileDef.concealment === 100) ||
+          if ((tileIndex < 2 && tileDef[this.field] === this.threshold) ||
               tileIndex >= 2) {
-            totalConcealment += tileDef.concealment;
-            if (totalConcealment >= 100) {
+            totalValue += tileDef[this.field];
+            if (totalValue >= this.threshold) {
               stillVisible = false;
             }
           }
