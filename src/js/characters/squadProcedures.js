@@ -307,7 +307,7 @@ function tileRectForSide2(side, opposite, numMembers) {
   return { xFrom, yFrom, xTo, yTo };
 }
 
-function placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite) {
+function placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite, placeInVehicle) {
   const numMembers = squad.getAliveMembers().length;
   let eligibleRect;
   if (ambushState === 'No-Ambush') {
@@ -352,13 +352,15 @@ function placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite) {
 function placePlayerSquadInLocalMap(squad, map, ambushState, playerSide) {
   // Player squad does not go on the opposite of the player side
   const opposite = false;
-  return placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite);
+  const placeInVehicle = false;
+  return placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite, placeInVehicle);
 }
 
 function placeEnemySquadInLocalMap(squad, map, ambushState, playerSide) {
   // Enemy squad goes on the opposite of the player side
   const opposite = true;
-  return placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite);
+  const placeInVehicle = true;
+  return placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite, placeInVehicle);
 }
 
 function placeSingleEnemyInLocalMap(squad) {

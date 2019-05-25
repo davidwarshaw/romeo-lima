@@ -15,6 +15,8 @@ function tileNameForGlyph(glyph) {
 }
 
 function placeSampanInLocalMap(map, northSouth) {
+  const vehicles = [];
+
   const sampanName = northSouth ? 'North-South Sampan' : 'East-West Sampan';
   const vehicleDef = vehicleDictionary[sampanName];
 
@@ -53,11 +55,22 @@ function placeSampanInLocalMap(map, northSouth) {
       const vehicleGlyph = vehicleDef[vehicleRow][vehicleCol];
       const vehicleTileName = tileNameForGlyph(vehicleGlyph);
 
-      map[utils.keyFromXY(col, row)].name = vehicleTileName;
+      const tile = {
+        x: col,
+        y: row,
+        name: vehicleTileName,
+      };
+      vehicles[utils.keyFromXY(col, row)] = tile;
     }
   }
+
+  return vehicles;
+}
+
+function createVehicles(map) {
+  return placeSampanInLocalMap(map, true);
 }
 
 export default {
-  placeSampanInLocalMap
+  createVehicles,
 };

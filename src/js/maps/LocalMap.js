@@ -23,6 +23,8 @@ export default class LocalMap extends Window {
 
     this.enemySquad = battleSystem.enemySquad;
 
+    this.vehicles = battleSystem.vehicles;
+
     this.cache = new Cache();
   }
 
@@ -81,6 +83,9 @@ export default class LocalMap extends Window {
       display.draw(this.x + tile.x, this.y + tile.y, tileDef.glyph,
         fgAdjusted, bgDebugAdjusted);
     });
+
+    // this.vehicles.render(display, watchBrightness, this, this.x, this.y,
+    //   this.battleSystem.playerSquadLocalFov);
 
     this.renderTargetLine(display, watchBrightness);
     this.renderProjectile(display, watchBrightness);
