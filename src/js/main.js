@@ -21,9 +21,4 @@ window.onload = () => {
     const journeyState = new JourneyState(game);
     game.switchState(new InterstitialState(game, introText.text, journeyState));
   }
-
-  window.addEventListener('click', () => {
-    console.log('Fuck Yea');
-  });
-
 };

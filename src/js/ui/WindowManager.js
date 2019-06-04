@@ -25,7 +25,7 @@ export default class WindowManager {
     return this.windows[this.windows.length - 1];
   }
 
-  inputToWindow(input) {
+  inputToWindow(inputType, input) {
 
     // If there is a window with focus, pass it the input
     const focusWindow = this.focusWindow();

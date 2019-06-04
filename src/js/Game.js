@@ -25,13 +25,12 @@ export default class Game {
       border: properties.displayBorder
     });
 
-    let bindEventToState = (event) => {
-      window.addEventListener(event, (e) => {
-        this.currentState.handleInput(event, e);
+    // Register listners for the events we're interested in capturing
+    ['keydown', 'click', 'mouseover'].forEach((eventType) => {
+      window.addEventListener(eventType, (event) => {
+        this.currentState.handleInput(eventType, event);
       });
-    };
-
-    bindEventToState('keydown');
+    });
   }
 
 
