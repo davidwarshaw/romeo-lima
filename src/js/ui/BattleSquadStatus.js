@@ -84,4 +84,9 @@ export default class OverworldSquadStatus extends SquadStatus {
   inputHandler(input) {
     console.log(input);
   }
+
+  mouseHandler() {
+    // Nothing
+  }
+
 }

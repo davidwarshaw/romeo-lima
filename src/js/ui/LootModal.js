@@ -80,7 +80,7 @@ export default class LootModal extends Window {
 
   inputHandler(input) {
     const inventoryDisplayForm = this.inventory.getDisplayForm();
-    
+
     switch (input) {
       case 'UP':
         this.listIndex =
@@ -116,6 +116,10 @@ export default class LootModal extends Window {
 
     // Trigger a redraw
     this.game.refresh();
+  }
+
+  mouseHandler() {
+    // Nothing
   }
 
   getCommands() {

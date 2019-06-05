@@ -26,14 +26,10 @@ export default class State {
       const input = this.keyMap[inputData.keyCode] || null;
       this.windowManager.inputToWindow(inputType, input);
     }
-    else if (inputType === 'click') {
-      // Get the tile coordinates of the mouse click
-      const position = this.game.display.eventToPosition(event);
-      this.windowManager.inputToWindow(inputType, position);
-    }
-    else if (inputType === 'mouseover') {
-      // Get the tile coordinates of the mouseover
-      const position = this.game.display.eventToPosition(event);
+    else if (inputType === 'click' || inputType === 'mouseover') {
+      // Get the tile coordinates of the mouse
+      const coords = this.game.display.eventToPosition(event);
+      const position = { x: coords[0], y: coords[1] };
       this.windowManager.inputToWindow(inputType, position);
     }
   }

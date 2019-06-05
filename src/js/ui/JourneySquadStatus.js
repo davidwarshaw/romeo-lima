@@ -54,4 +54,9 @@ export default class JourneySquadStatus extends SquadStatus {
   inputHandler(input) {
     console.log(input);
   }
+
+  mouseHandler() {
+    // Nothing
+  }
+
 }

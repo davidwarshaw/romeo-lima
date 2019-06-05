@@ -66,4 +66,9 @@ export default class ActionReport extends Window {
   inputHandler(input) {
     console.log(input);
   }
+
+  mouseHandler() {
+    // Nothing
+  }
+
 }

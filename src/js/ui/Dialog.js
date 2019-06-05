@@ -135,6 +135,10 @@ export default class Dialog extends Window {
     this.game.refresh();
   }
 
+  mouseHandler() {
+    // Nothing
+  }
+
   getCommands() {
     const singleButtonCommands = [
       '[↵] Select'

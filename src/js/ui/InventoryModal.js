@@ -207,6 +207,10 @@ export default class InventoryModal extends Window {
     this.game.refresh();
   }
 
+  mouseHandler() {
+    // Nothing
+  }
+
   getCommands() {
     return [
       '[↑↓] Scroll',

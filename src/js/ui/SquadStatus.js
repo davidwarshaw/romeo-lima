@@ -67,4 +67,9 @@ export default class SquadStatus extends Window {
     // I should be overridden
     console.log(input);
   }
+
+  mouseHandler() {
+    // Nothing
+  }
+
 }
