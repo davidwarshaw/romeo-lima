@@ -53,13 +53,29 @@ export default class LocalMap extends Window {
 
       // Cache the adjusted colors for speediness
       const fgCacheKey = `${tileDef.fgColor}-${tileBrightness}`;
-      const fgAdjusted = this.cache.get(
+      const fgBrightnessAdjusted = this.cache.get(
         fgCacheKey,
         () => utils.adjustBrightness(tileDef.fgColor, tileBrightness));
       const bgCacheKey = `${tileDef.bgColor}-${tileBrightness}`;
-      const bgAdjusted = this.cache.get(
+      const bgBrightnessAdjusted = this.cache.get(
         bgCacheKey,
         () => utils.adjustBrightness(tileDef.bgColor, tileBrightness));
+
+      // Only render environment if the tile is visible
+      let fgAdjusted = fgBrightnessAdjusted;
+      let bgAdjusted = bgBrightnessAdjusted;
+      if (visibleTile) {
+        // Adjust colors again for enviroment effects. Smoke overwrites fire.
+        const fgSmokeAdjusted = utils.adjustFire(
+          tile, fgBrightnessAdjusted, this.battleSystem.environmentSystem, true);
+        const bgSmokeAdjusted = utils.adjustFire(
+          tile, bgBrightnessAdjusted, this.battleSystem.environmentSystem, false);
+
+        fgAdjusted = utils.adjustSmoke(
+          tile, fgSmokeAdjusted, this.battleSystem.environmentSystem);
+        bgAdjusted = utils.adjustSmoke(
+          tile, bgSmokeAdjusted, this.battleSystem.environmentSystem);
+      }
 
       // If we want to show the enemy FOV, query it and adjust the BG
       // color accordingly
@@ -83,7 +99,7 @@ export default class LocalMap extends Window {
     });
 
     this.renderTargetLine(display, watchBrightness);
-    this.renderProjectile(display, watchBrightness);
+    this.renderFiring(display, watchBrightness);
 
     this.enemySquad
       .renderSquadMembers(display, watchBrightness, this, this.x, this.y,
@@ -112,24 +128,61 @@ export default class LocalMap extends Window {
     });
   }
 
-  renderProjectile(display, watchBrightness) {
+  renderFiring(display, watchBrightness) {
     const { projectile } = this.battleSystem;
-    const roundInFlight = projectile.fireSequence[projectile.fireSequenceIndex];
-    if (!projectile.active || !roundInFlight) {
+    if (!projectile.active) {
+      return;
+    }
+    console.log(projectile);
+    const {
+      weaponType,
+      fireSequence,
+      fireSequenceIndex
+    } = projectile.fireAnimation;
+
+    const roundInFlight = fireSequence[fireSequenceIndex];
+    if (!roundInFlight) {
       return;
     }
 
+    switch (weaponType) {
+      case 'sidearm':
+      case 'rifle':
+      case 'automatic rifle':
+        this.renderSmallArmsFire(display, watchBrightness, projectile);
+        break;
+      case 'grenade':
+      case 'grenade launcher':
+      case 'rocket launcher':
+        this.renderExplosivesFire(display, watchBrightness, projectile);
+        break;
+      case 'flame thrower':
+        this.renderFlameFire(display, watchBrightness, projectile);
+        break;
+    }
+  }
+
+  renderSmallArmsFire(display, watchBrightness, projectile) {
+    const {
+      fireSequence,
+      fireSequenceIndex,
+      fireGlyph,
+      fireFgColor,
+      muzzleGlyph,
+      muzzleFgColor
+    } = projectile.fireAnimation;
+
     // Index of the actual projectile line is the number of true fire sequence
     // items at or before the current fire sequence index
-    const actualLinesIndex = projectile.fireSequence
-      .slice(0, projectile.fireSequenceIndex)
+    const effectAreasIndex = fireSequence
+      .slice(0, fireSequenceIndex)
       .filter(fireSequenceItem => fireSequenceItem)
       .length;
 
-    console.log(actualLinesIndex);
-    console.log(projectile.actualLines);
+    console.log(effectAreasIndex);
+    console.log(projectile.effectAreas);
 
-    projectile.actualLines[actualLinesIndex]
+    projectile.effectAreas[effectAreasIndex]
 
       // Only render visible points of the line
       .filter(point =>
@@ -138,15 +191,81 @@ export default class LocalMap extends Window {
         const tile = this.map[utils.keyFromXY(point.x, point.y)];
         const tileDef = localTileDictionary[tile.name];
         const brighterThanWatch = Math.round(watchBrightness / 3);
-        const glyph = i === 1 ?
-          projectile.muzzleGlyph :
-          projectile.glyph;
+        const glyph = i === 1 ? muzzleGlyph : fireGlyph;
         const bgAdjusted = i === 1 ?
-          projectile.muzzleFgColor :
+          muzzleFgColor :
           utils.adjustBrightness(tileDef.bgColor, brighterThanWatch);
-        display.draw(this.x + point.x, this.y + point.y, glyph,
-          projectile.fgColor, bgAdjusted);
+        display.draw(this.x + point.x, this.y + point.y, glyph, fireFgColor, bgAdjusted);
       });
+  }
+
+  renderExplosivesFire(display, watchBrightness, projectile) {
+    const {
+      fireSequence,
+      fireSequenceIndex,
+      fireGlyph,
+      fireFgColor,
+      muzzleGlyph,
+      muzzleFgColor
+    } = projectile.fireAnimation;
+
+    if (fireSequenceIndex === 1) {
+      const { x, y } = fireSequence[1];
+      display.draw(this.x + x, this.y + y, muzzleGlyph, fireFgColor, muzzleFgColor);
+    }
+    else if (fireSequenceIndex > 1) {
+      const { x, y } = fireSequence[fireSequenceIndex];
+
+      // Only render visible points of the line
+      if (!this.battleSystem.playerSquadLocalFov.isVisible(x, y)) {
+        return;
+      }
+      const tile = this.map[utils.keyFromXY(x, y)];
+      const tileDef = localTileDictionary[tile.name];
+      const brighterThanWatch = Math.round(watchBrightness / 3);
+      const bgAdjusted = utils.adjustBrightness(tileDef.bgColor, brighterThanWatch);
+      display.draw(this.x + x, this.y + y, fireGlyph, fireFgColor, bgAdjusted);
+    }
+    if (fireSequenceIndex >= fireSequence.length - 3) {
+      console.log(projectile.effectAreas[1]);
+      projectile.effectAreas[1]
+
+        // Only render visible points of the line
+        .filter(point => this.battleSystem.playerSquadLocalFov.isVisible(point.x, point.y))
+        .forEach((point) => {
+          const tile = this.map[utils.keyFromXY(point.x, point.y)];
+          const tileDef = localTileDictionary[tile.name];
+          const brighterThanWatch = Math.round(watchBrightness / 3);
+          const fgAdjusted = utils.adjustBrightness(tileDef.fgColor, brighterThanWatch);
+          const bgAdjusted = utils.adjustBrightness(tileDef.bgColor, brighterThanWatch);
+
+          // console.log(`blast: ${point.x}x${point.y}`);
+          display.draw(this.x + point.x, this.y + point.y, tileDef.glyph, bgAdjusted, fgAdjusted);
+        });
+    }
+  }
+
+  renderFlameFire(display, watchBrightness, projectile) {
+    const {
+      fireSequence,
+      fireSequenceIndex,
+      fireGlyph,
+      fireFgColor,
+      fireBgColor
+    } = projectile.fireAnimation;
+
+    fireSequence.slice(0, fireSequenceIndex)
+      .forEach(area =>
+        area
+
+          // Only render visible points of the line
+          .filter(point =>
+            this.battleSystem.playerSquadLocalFov.isVisible(point.x, point.y))
+          .forEach((point) => {
+            const brighterThanWatch = Math.round(watchBrightness / 3);
+            const bgAdjusted = utils.adjustBrightness(fireBgColor, brighterThanWatch);
+            display.draw(this.x + point.x, this.y + point.y, fireGlyph, fireFgColor, bgAdjusted);
+          }));
   }
 
   inputHandler(input) {
@@ -169,6 +288,7 @@ export default class LocalMap extends Window {
     const attackCommands = [
       '[←→↑↓] Move',
       '[↵] Fire',
+      '[D] Toggle Weapon',
       '[S] Next Target',
       '[A] Cancel'
     ];

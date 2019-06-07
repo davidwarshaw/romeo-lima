@@ -463,9 +463,9 @@ const mapCreators = {
 
     const forestMap = mapCreators.forest(width, height, { percentDense });
     const largeEllipse = TileMath
-      .tileEllipse(width / 2, height / 2, width / 4, height / 4);
+      .tileEllipseFilled(width / 2, height / 2, width / 4, height / 4);
     const smallEllipse = TileMath
-      .tileEllipse(width / 2, height / 2, width / 6, height / 6);
+      .tileEllipseFilled(width / 2, height / 2, width / 6, height / 6);
 
     Object.entries(forestMap)
       .forEach(tile => {

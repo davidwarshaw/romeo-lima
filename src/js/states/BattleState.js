@@ -91,4 +91,18 @@ export default class BattleState extends State {
       });
     this.windowManager.addWindow(this.cantLeaveBox);
   }
+
+  showEscapeBox() {
+    const title = null;
+    const text = 'You escape.';
+    this.escapeBox = new Dialog(
+      this.game, 30, 10, title, text, 'Ok',
+      () => {
+        this.windowManager.removeWindow(this.escapeBox);
+        this.escapeBox = null;
+        this.game.refresh();
+        this.endBattle();
+      });
+    this.windowManager.addWindow(this.escapeBox);
+  }
 }

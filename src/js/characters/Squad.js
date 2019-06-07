@@ -60,6 +60,14 @@ export default class Squad {
     return members[0] || null;
   }
 
+  getAliveByXY(x, y) {
+    const members = this.members
+      .filter(member => member.alive)
+      .filter(member => member.x === x && member.y === y);
+    return members[0] || null;
+  }
+
+
   numberOfAliveMembers() {
     return this.members
       .map(member => member.alive ? 1 : 0)

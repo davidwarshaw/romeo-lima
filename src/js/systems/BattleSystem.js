@@ -5,6 +5,7 @@ import TileMath from '../util/TileMath';
 import LocalFov from '../maps/LocalFov';
 
 import BallisticsSystem from './BallisticsSystem';
+import EnvironmentSystem from './EnvironmentSystem';
 
 import localMapCreation from '../maps/localMapCreation';
 import squadProcedures from '../characters/squadProcedures';
@@ -53,7 +54,14 @@ export default class BattleSystem {
     // Initialize the enemy squad cover map for the AI
     this.enemySquad.initCoverMap(this.map, this.playerSquad.members);
 
+    // Initialize the subsystems
     this.ballisticsSystem = new BallisticsSystem(
+      this.map,
+      this.playerSquad, this.playerSquadLocalFov,
+      this.enemySquad, this.enemySquadLocalFov,
+      this.playerSquad);
+
+    this.environmentSystem = new EnvironmentSystem(
       this.map,
       this.playerSquad, this.playerSquadLocalFov,
       this.enemySquad, this.enemySquadLocalFov,
@@ -89,8 +97,12 @@ export default class BattleSystem {
       line: []
     };
 
+    this.initProjectile();
+    this.initMovement();
+  }
+
+  initProjectile() {
     // The projectile
-    //
     this.projectile = {
       intervalId: null,
       active: false,
@@ -99,25 +111,30 @@ export default class BattleSystem {
         y: null
       },
       intendedLine: [],
-      actualLines: [],
-      fireSequence: [],
-      fireSequenceIndex: 0,
-      glyphOctants: ['-', '\\', '|', '/', '-', '\\', '|', '/'],
-      glyph: '-',
-      fgColor: '#FFFFFF',
-      muzzleGlyph: '*',
-      muzzleFgColor: '#FFAE19'
+      effectAreas: [],
+      smokeAreas: null,
+      fireAreas: null,
+      fireAnimation: null
     };
+  }
 
+  initMovement() {
     // Character movement
     this.movement = {
       intervalId: null,
+      active: false,
       line: [],
       index: 0
     };
   }
 
   nextCharacter() {
+    // console.log('nextCharacter:');
+    // console.log(this.characterIndex);
+    // console.log(this.characters);
+    // Update the environment
+    this.environmentSystem.update();
+
     // If there is nobody from the enemy squad, end the battle
     if (this.enemySquad.numberOfAliveMembers() <= 0) {
       this.enemySquad.alive = false;
@@ -165,10 +182,12 @@ export default class BattleSystem {
     // Select this character if in the player squad, otherwise AI exeutes turn
     if (this.currentCharacter.playerControlled) {
       this.currentCharacter.selected = true;
-      console.log('player turn');
+      console.log(`Player turn: ${this.currentCharacter.number}`);
+      console.log(this.currentCharacter);
     }
     else {
-      console.log('AI turn');
+      console.log(`AI turn: ${this.currentCharacter.number}`);
+      console.log(this.currentCharacter);
       const action = this.enemySquad.actionForTurn(
         this.currentCharacter,
         this.currentCharacterMoves,
@@ -181,6 +200,7 @@ export default class BattleSystem {
         this.nextCharacter();
       }
       else if (action.action === 'MOVE') {
+        this.movement.active = true;
         this.movement.line = action.moveLine;
         this.movement.index = 0;
         this.movement.intervalId = setInterval(
@@ -203,6 +223,11 @@ export default class BattleSystem {
   handleInput(input, local) {
     // Don't accept input while a projectile is in flight
     if (this.projectile.active) {
+      return;
+    }
+
+    // Don't accept input while a character is moving
+    if (this.movement.active) {
       return;
     }
     switch (input) {
@@ -312,6 +337,23 @@ export default class BattleSystem {
           this.setTarget(this.target.enemy);
         }
         break;
+      case 'TOGGLE WEAPON':
+        // Only toggle in target mode
+        if (!this.targetMode) {
+          break;
+        }
+
+        // If the primary weapon is selected and there's a secondary weapon, then
+        // select the secondary weapon
+        if (this.currentCharacter.primarySelected && this.currentCharacter.secondary) {
+          this.currentCharacter.primarySelected = false;
+
+        // Otherwise vice versa
+        }
+        else if (!this.currentCharacter.primarySelected && this.currentCharacter.weapon) {
+          this.currentCharacter.primarySelected = true;
+        }
+        break;
       case 'ENTER':
         // Only attack if not already moving
         if (this.targetMode) {
@@ -349,6 +391,10 @@ export default class BattleSystem {
           const outcome = { win: false, escape: true };
           this.endBattle(outcome);
         }
+        else if (this.squadOnBorder(local)) {
+          const outcome = { win: false, escape: true };
+          this.endBattle(outcome);
+        }
         else {
           console.log('this.state.showCantLeaveBox()');
           this.state.showCantLeaveBox();
@@ -364,21 +410,33 @@ export default class BattleSystem {
 
   shouldMove(local, nextX, nextY) {
     // Don't allow a move off the map
-    const inMap = (nextX >= 0) && (nextX < local.width) &&
-      (nextY >= 0) && (nextY < local.height);
+    if (nextX < 0 || nextX >= local.width || nextY < 0 || nextY >= local.height) {
+      return false;
+    }
 
     // Dont allow a move into a non-traversable tile
     const tile = local.getTile(nextX, nextY);
+    if (!tile.traversable) {
+      return false;
+    }
 
     // Dont allow a move into a tile with a squad member in it
     const playerSquadMemberInTile = this.playerSquad.getByXY(nextX, nextY);
     const enemySquadMemberInTile = this.enemySquad.getByXY(nextX, nextY);
-    return tile.traversable && inMap &&
-      !playerSquadMemberInTile && !enemySquadMemberInTile;
+    if (playerSquadMemberInTile || enemySquadMemberInTile) {
+      return false;
+    }
+
+    // Moving is OK
+    return true;
   }
 
   moveAnimationFrame() {
     this.game.refresh();
+
+    console.log('this.movement');
+    console.log(this.movement.line);
+    console.log(this.movement.index);
 
     const { x, y } = this.movement.line[this.movement.index];
     this.currentCharacter.x = x;
@@ -388,6 +446,8 @@ export default class BattleSystem {
     if (this.movement.index >=
       this.movement.line.length) {
       clearInterval(this.movement.intervalId);
+
+      this.initMovement();
 
       // Select the next character, and refresh the screen again
       this.nextCharacter();
@@ -405,68 +465,57 @@ export default class BattleSystem {
       () => this.fireAnimationFrame(),
       properties.projectileIntervalMillis);
 
+    const firedWeapon = this.currentCharacter.primarySelected ?
+      this.currentCharacter.weapon :
+      this.currentCharacter.secondary;
+
     const {
-      actualLines,
-      fireActions
+      effectAreas,
+      smokeAreas,
+      fireAreas,
+      attackActions
     } = this.ballisticsSystem
-      .effectFire(this.currentCharacter, this.projectile.intendedLine);
+      .effectFire(this.currentCharacter.stats, firedWeapon, this.projectile.intendedLine);
 
-    this.projectile.actualLines = actualLines;
+    this.projectile.effectAreas = effectAreas;
+    this.projectile.smokeAreas = smokeAreas;
+    this.projectile.fireAreas = fireAreas;
 
-    console.log(fireActions);
-    text.createFireMessages(fireActions)
+    console.log('attackActions');
+    console.log(attackActions);
+    text.createBattleMessages(attackActions)
       .forEach(message => this.messages.push(message));
 
-    this.projectile.fireSequenceIndex = 0;
-    this.projectile.fireSequence = this.generateFireSequence(
-      this.currentCharacter.weapon.bursts,
-      this.currentCharacter.weapon.roundsPerBurst);
-
-    // Use a glyph based on the angle of the firing line
-    const octant = TileMath.octantOfLine(this.projectile.intendedLine);
-    this.projectile.glyph = this.projectile.glyphOctants[octant];
+    this.projectile.fireAnimation = this.ballisticsSystem
+      .generateFireAnimation(firedWeapon, this.projectile.effectAreas);
+    console.log('this.projectile.fireAnimation');
+    console.log(this.projectile.fireAnimation);
   }
 
   fireAnimationFrame() {
+    console.log('fireAnimationFrame()');
     this.game.refresh();
 
-    this.projectile.fireSequenceIndex++;
+    const { fireAnimation } = this.projectile;
 
-    if (this.projectile.fireSequenceIndex >=
-      this.projectile.fireSequence.length) {
+    fireAnimation.fireSequenceIndex++;
+
+    if (fireAnimation.fireSequenceIndex >= fireAnimation.fireSequence.length) {
       this.projectile.active = false;
       clearInterval(this.projectile.intervalId);
+
+      // Add environmental effects
+      this.projectile.smokeAreas
+        .forEach(point => this.environmentSystem.addSmoke(point, point.amount));
+      this.projectile.fireAreas
+        .forEach(point => this.environmentSystem.addFire(point, point.amount));
+
+      this.initProjectile();
 
       // Select the next character, and refresh the screen again
       this.nextCharacter();
       this.game.refresh();
     }
-  }
-
-  generateFireSequence(bursts, roundsPerBurst) {
-    const roundsPattern =
-      Array(roundsPerBurst).fill('-true-');
-    const roundBreaksPattern =
-      Array(properties.projectileRoundBreakFrames).fill('-false-');
-    const roundsSequence = roundsPattern.join(roundBreaksPattern.join(''));
-
-    const burstsPattern = Array(bursts).fill(roundsSequence);
-    const burstBreaksPattern = '-false-'
-      .repeat(properties.projectileBurstBreakFrames);
-    const burstSequence = burstsPattern.join(burstBreaksPattern);
-
-    const sequence = burstSequence
-      .split('-')
-      .filter(token => token)
-      .map(token => token === 'true');
-
-    // For the animation timing to look nice, there has to be a beat
-    // at the begining and two beats at the end.
-    const initialFalse = [false];
-    sequence.push(false);
-    sequence.push(false);
-    initialFalse.push(...sequence);
-    return initialFalse;
   }
 
   targetClosestEnemy() {
@@ -537,6 +586,20 @@ export default class BattleSystem {
       this.target.x, this.target.y);
   }
 
+  squadOnBorder(local) {
+    const someNotOnBorder = this.playerSquad.getAliveMembers()
+      .some((member) => {
+        // Not on the border
+        if (member.x !== 0 && member.x !== local.width - 1 &&
+          member.y !== 0 && member.y !== local.height - 1) {
+          console.log(member);
+          return true;
+        }
+        return false;
+      });
+    return !someNotOnBorder;
+  }
+
   endBattle(outcome) {
     // Deselect the current character before switching states
     this.currentCharacter.selected = false;
@@ -556,6 +619,10 @@ export default class BattleSystem {
     else if (!outcome.win && !outcome.escape) {
       console.log('this.state.showYouDiedBox()');
       this.state.showYouDiedBox();
+    }
+    else {
+      console.log('this.state.showEscapeBox()');
+      this.state.showEscapeBox();
     }
   }
 }

@@ -24,8 +24,10 @@ export default class Window {
   }
 
   renderBorder(display) {
-    const { windowLeft, windowRight,
-      windowTop, windowBottom } = this.windowBorders();
+    const {
+      windowLeft, windowRight,
+      windowTop, windowBottom
+    } = this.windowBorders();
 
     // Draw Border
     for (let row = windowTop; row < windowBottom + 1; row++) {
@@ -101,7 +103,8 @@ export default class Window {
       windowLeft: this.x,
       windowRight: this.x + this.width,
       windowTop: this.y,
-      windowBottom: this.y + this.height };
+      windowBottom: this.y + this.height
+    };
   }
 
   inputHandler() {

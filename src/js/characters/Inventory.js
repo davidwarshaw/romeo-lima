@@ -19,12 +19,12 @@ export default class Inventory {
     // Only assign if item is assignable
     if (item.assignable) {
 
-      // If another item of the same type is already assigned
+      // If another item assignable to the same slot is already assigned
       // to this member, clear it
-      const assignType = item.type;
+      const itemSlot = item.slot;
       this.inventory
         .filter(item =>
-          item.assigned === memberNumber && item.type === assignType)
+          item.assigned === memberNumber && item.slot === itemSlot)
         .forEach(item => this.unassignItem(item.number));
 
       // Assign the item
@@ -75,14 +75,32 @@ export default class Inventory {
       // Attach iem type sort
       .map(item => {
         switch(item.type) {
-          case 'weapon':
+          case 'rifle':
             item.typeSort = 0;
             break;
-          case 'ammunition':
+          case 'automatic rifle':
             item.typeSort = 1;
             break;
-          case 'medical equipment':
+          case 'sidearm':
             item.typeSort = 2;
+            break;
+          case 'grenade':
+            item.typeSort = 3;
+            break;
+          case 'grenade launcher':
+            item.typeSort = 4;
+            break;
+          case 'rocket launcher':
+            item.typeSort = 5;
+            break;
+          case 'flame thrower':
+            item.typeSort = 6;
+            break;
+          case 'ammunition':
+            item.typeSort = 7;
+            break;
+          case 'medical equipment':
+            item.typeSort = 8;
             break;
           default:
             item.typeSort = 3;

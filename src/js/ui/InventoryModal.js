@@ -7,7 +7,7 @@ import Window from './Window';
 export default class InventoryModal extends Window {
   constructor(game, system, exitCb) {
     const width = 90;
-    const height = 16;
+    const height = 14;
     const x = Math.round((properties.width - width) / 2);
     const y = Math.round((properties.height - height) / 2) - 3;
     super(x, y, width, height, 'Inventory');
@@ -123,7 +123,7 @@ export default class InventoryModal extends Window {
 
     // Weapon body is blank for non weapons
     const weaponBody = item.type === 'weapon' ?
-      `Weapon Type: ${text.titleCase(item.class)}\n` +
+      `Weapon Type: ${text.titleCase(item.type)}\n` +
       `Ammunition: ${item.ammo}\n\n` +
       `${burstWord}: ${item.bursts}\n` +
       `Rounds per Burst: ${item.roundsPerBurst}\n` +
@@ -140,9 +140,15 @@ export default class InventoryModal extends Window {
   }
 
   tryToAssignItemToMember(itemNumber, memberNumber) {
-
     // console.log('tryToAssignToMember: ' +
     //   `itemNumber: ${itemNumber} memberNumber: ${memberNumber}`);
+    const item = this.squad.inventory.inventory[itemNumber];
+    const itemIsWeapon = item.type === 'weapon';
+
+    // Don't allow assignment if the item is not assignable
+    if (!item.assignable) {
+      return;
+    }
 
     const member = this.squad.getByNumber(memberNumber);
 
@@ -151,14 +157,40 @@ export default class InventoryModal extends Window {
       return;
     }
 
+    const currentlyAssignedNumber = item.assigned;
+    console.log('currentlyAssignedNumber');
+    console.log(currentlyAssignedNumber);
+    console.log('memberNumber');
+    console.log(memberNumber);
     // If the item is not assigned to the character, assign it
-    if (this.squad.inventory.inventory[itemNumber].assigned !== memberNumber) {
+    if (currentlyAssignedNumber !== memberNumber) {
+      console.log('not equal');
+      // If the item is assigned to someone else, unassign it
+      if (currentlyAssignedNumber) {
+        const currentlyAssigned = this.squad.getByNumber(currentlyAssignedNumber);
+        if (itemIsWeapon) {
+          currentlyAssigned.weapon = null;
+        } else {
+          currentlyAssigned.secondary = null;
+        }
+        this.squad.inventory.unassignItem(itemNumber);
+      }
       this.squad.inventory.assignItem(itemNumber, memberNumber);
+      if (itemIsWeapon) {
+        member.weapon = item;
+      } else {
+        member.secondary = item;
+      }
     }
 
     // Otherwise, unassign the item
     else {
       this.squad.inventory.unassignItem(itemNumber);
+      if (itemIsWeapon) {
+        member.weapon = null;
+      } else {
+        member.secondary = null;
+      }
     }
   }
 

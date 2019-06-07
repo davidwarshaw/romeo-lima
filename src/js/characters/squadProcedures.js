@@ -92,7 +92,7 @@ function weaponForMember(member, faction) {
 
   const rifles = Object.entries(weapons)
     .filter(weapon => weapon[1].faction === faction)
-    .filter(weapon => weapon[1].class === 'rifle');
+    .filter(weapon => weapon[1].type === 'rifle');
 
   const weaponEntry = roleWeapons.length > 0 ? roleWeapons[0] : rifles[0];
 
@@ -129,6 +129,8 @@ function createSquadMembers(definitions, playerControlled, faction) {
       injuries: 0,
       alive: true,
       weapon,
+      secondary: null,
+      primarySelected: true,
       inBattle: false,
       selected: false
     };

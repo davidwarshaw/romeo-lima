@@ -69,6 +69,4 @@ function createPlayState() {
   };
 }
 
-export default {
-  createPlayState
-};
+export default { createPlayState };

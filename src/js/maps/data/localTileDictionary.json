@@ -1,4 +1,26 @@
 {
+  "Burned Structure": {
+    "glyph": "።",
+    "fgColor": "#6f6f6f",
+    "bgColor": "#464646",
+    "description": "",
+    "height": 1,
+    "traversable": true,
+    "startable": true,
+    "concealment": 0,
+    "cover": 0
+  },
+  "Burned Ground": {
+    "glyph": ".",
+    "fgColor": "#6f6f6f",
+    "bgColor": "#464646",
+    "description": "",
+    "height": 1,
+    "traversable": true,
+    "startable": true,
+    "concealment": 0,
+    "cover": 0
+  },
   "Low Grass": {
     "glyph": ".",
     "fgColor": "#187E85",
