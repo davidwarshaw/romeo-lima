@@ -143,9 +143,7 @@ function assignBuildings(map) {
     )
 
     // Append a random number
-    .map(tile => ({
-      x: tile.x, y: tile.y, randomOrder: properties.rng.getUniform()
-    }))
+    .map(tile => ({ x: tile.x, y: tile.y, randomOrder: properties.rng.getUniform() }))
     .sort((l, r) => l.randomOrder - r.randomOrder)
 
     // Keep 5 sites

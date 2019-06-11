@@ -1,128 +1,139 @@
 {
   "M1911A1": {
-    "type": "weapon",
-    "class": "sidearm",
+    "type": "sidearm",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": ".45 ACP",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 80,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "Hi-Power": {
-    "type": "weapon",
-    "class": "sidearm",
+    "type": "sidearm",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": "9x19mm NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 20,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "Model 27": {
-    "type": "weapon",
-    "class": "sidearm",
+    "type": "sidearm",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": "9x19mm NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 20,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "M1917": {
-    "type": "weapon",
-    "class": "sidearm",
+    "type": "sidearm",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": ".45 ACP",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 80,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "MAC-10": {
-    "type": "weapon",
-    "class": "sidearm",
+    "type": "sidearm",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": "9x19mm NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 4,
     "power": 20,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "M14": {
-    "type": "weapon",
-    "class": "rifle",
+    "type": "rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": "7.62 NATO",
     "description": "",
     "bursts": 2,
     "roundsPerBurst": 1,
     "power": 60,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "M1A1": {
-    "type": "weapon",
-    "class": "rifle",
+    "type": "rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": "5.56 NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 40,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "M16E1": {
-    "type": "weapon",
-    "class": "rifle",
+    "type": "rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": "5.56 NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 3,
     "power": 40,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "M177": {
-    "type": "weapon",
-    "class": "rifle",
+    "type": "rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": "5.56 NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 3,
     "power": 40,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "M207": {
     "type": "weapon",
-    "class": "rifle",
+    "type": "rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": "5.56 NATO",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 3,
     "power": 40,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "M1C": {
-    "type": "weapon",
-    "class": "rifle",
+    "type": "rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": "7.62 NATO",
     "description": "",
@@ -130,12 +141,13 @@
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 60,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "M1903A4": {
-    "type": "weapon",
-    "class": "rifle",
+    "type": "rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": "7.62 NATO",
     "description": "",
@@ -143,12 +155,13 @@
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 60,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "M40": {
-    "type": "weapon",
-    "class": "rifle",
+    "type": "rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": "7.62 NATO",
     "description": "",
@@ -156,12 +169,13 @@
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 60,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "M60": {
-    "type": "weapon",
-    "class": "automatic rifle",
+    "type": "automatic rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": "7.62 NATO",
     "description": "",
@@ -169,12 +183,13 @@
     "bursts": 2,
     "roundsPerBurst": 4,
     "power": 60,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "M63A": {
-    "type": "weapon",
-    "class": "automatic rifle",
+    "type": "automatic rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": "5.56 NATO",
     "description": "",
@@ -182,12 +197,13 @@
     "bursts": 2,
     "roundsPerBurst": 5,
     "power": 40,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "M1918A2": {
-    "type": "weapon",
-    "class": "automatic rifle",
+    "type": "automatic rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "US",
     "ammo": ".45 ACP",
     "description": "",
@@ -195,24 +211,26 @@
     "bursts": 2,
     "roundsPerBurst": 4,
     "power": 80,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "P-64": {
-    "type": "weapon",
-    "class": "sidearm",
+    "type": "sidearm",
     "assignable": true,
+    "slot": "primary",
     "faction": "NVA",
     "ammo": ".45 ACP",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 80,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "MN-91": {
-    "type": "weapon",
-    "class": "rifle",
+    "type": "rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "NVA",
     "ammo": "7.62 WPC",
     "description": "",
@@ -220,48 +238,52 @@
     "bursts": 1,
     "roundsPerBurst": 1,
     "power": 60,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "AK-47": {
-    "type": "weapon",
-    "class": "rifle",
+    "type": "rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "NVA",
     "ammo": "5.45 WPC",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 3,
     "power": 40,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "AKM": {
-    "type": "weapon",
-    "class": "rifle",
+    "type": "rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "NVA",
     "ammo": "5.45 WPC",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 3,
     "power": 40,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "Type 56": {
-    "type": "weapon",
-    "class": "rifle",
+    "type": "rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "NVA",
     "ammo": "5.45 WPC",
     "description": "",
     "bursts": 1,
     "roundsPerBurst": 3,
     "power": 40,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   },
   "RPD": {
-    "type": "weapon",
-    "class": "automatic rifle",
+    "type": "automatic rifle",
     "assignable": true,
+    "slot": "primary",
     "faction": "NVA",
     "ammo": "7.62 WPC",
     "description": "",
@@ -269,6 +291,7 @@
     "bursts": 2,
     "roundsPerBurst": 4,
     "power": 60,
-    "accuracy": 100
+    "accuracy": 100,
+    "range": 500
   }
 }

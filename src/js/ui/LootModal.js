@@ -6,7 +6,7 @@ import Window from './Window';
 export default class LootModal extends Window {
   constructor(game, system, exitCb, inventory) {
     const width = 48;
-    const height = 16;
+    const height = 14;
     const x = Math.round((properties.width - width) / 2);
     const y = Math.round((properties.height - height) / 2) - 3;
     super(x, y, width, height, 'Scavenged');
@@ -80,7 +80,7 @@ export default class LootModal extends Window {
 
   inputHandler(input) {
     const inventoryDisplayForm = this.inventory.getDisplayForm();
-    
+
     switch (input) {
       case 'UP':
         this.listIndex =

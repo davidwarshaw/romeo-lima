@@ -92,6 +92,40 @@ function tileEllipse(xCenter, yCenter, xAxis, yAxis) {
   const xBound = Math.round(xAxis);
   const yBound = Math.round(yAxis);
   for (let y = -yBound; y <= yBound; y++) {
+    const rowPoints = [];
+    for (let x = -xBound; x <= xBound; x++) {
+      const row = Math.round(
+        (yAxis / xAxis) *
+        Math.sqrt(Math.pow(xAxis, 2) - Math.pow(x, 2)));
+
+      // console.log(`${x}, ${y}: row: +/- ${row}`);
+      if (y <= row && y >= -row) {
+        const mapX = Math.round(xCenter + x);
+        const mapY = Math.round(yCenter + y);
+        rowPoints.push(utils.keyFromXY(mapX, mapY));
+      }
+    }
+    
+    // Only pick the first and last (if it exists) tile in the row for the ellipse
+    if (rowPoints.length > 0) {
+      points[rowPoints[0]] = true;
+    }
+    if (rowPoints.length > 1) {
+      points[rowPoints[rowPoints.length - 1]] = true;
+    }
+  }
+  return points;
+}
+
+function tileCircle(xCenter, yCenter, radius) {
+  return tileEllipse(xCenter, yCenter, radius, radius);
+}
+
+function tileEllipseFilled(xCenter, yCenter, xAxis, yAxis) {
+  const points = {};
+  const xBound = Math.round(xAxis);
+  const yBound = Math.round(yAxis);
+  for (let y = -yBound; y <= yBound; y++) {
     for (let x = -xBound; x <= xBound; x++) {
       const row = Math.round(
         (yAxis / xAxis) *
@@ -108,8 +142,8 @@ function tileEllipse(xCenter, yCenter, xAxis, yAxis) {
   return points;
 }
 
-function tileCircle(xCenter, yCenter, radius) {
-  return tileEllipse(xCenter, yCenter, radius, radius);
+function tileCircleFilled(xCenter, yCenter, radius) {
+  return tileEllipseFilled(xCenter, yCenter, radius, radius);
 }
 
 function distance(x0, y0, x1, y1) {
@@ -124,5 +158,7 @@ export default {
   tileRay,
   tileEllipse,
   tileCircle,
+  tileEllipseFilled,
+  tileCircleFilled,
   distance
 };

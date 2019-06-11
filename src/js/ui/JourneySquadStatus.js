@@ -13,7 +13,7 @@ export default class JourneySquadStatus extends SquadStatus {
     // If member is alive show more detail
     if (member.alive) {
 
-    // Name
+      // Name
       let formattedText =
       `%c{${this.style.nameColor}}%b{${this.style.fieldBgColor}}` +
         `${pointIndicator}${member.rank} ${member.name}`;
@@ -26,13 +26,22 @@ export default class JourneySquadStatus extends SquadStatus {
       display.drawText(col, this.y + 2, formattedText, this.columnWidth);
 
       // Weapon
+      const weaponName = member.weapon ? member.weapon.name : 'Unarmed';
       formattedText =
       `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` +
-        `${member.weapon.name}`;
+        `${weaponName}`;
       display.drawText(col, this.y + 3, formattedText, this.columnWidth);
 
-      // Stats row is two lower than weapon row, to leve room for position
-      const statsRow = this.y + 5;
+      // Secondary
+      const secondaryName = member.secondary ? member.secondary.name : '';
+      formattedText =
+      `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` +
+        `${secondaryName}`;
+      display.drawText(col, this.y + 4, formattedText, this.columnWidth);
+
+
+      // Stats row is two lower than secondary row, to leave room for position
+      const statsRow = this.y + 6;
       super.renderStats(display, member, i, col, statsRow);
     }
     else {

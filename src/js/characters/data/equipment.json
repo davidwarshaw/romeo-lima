@@ -71,12 +71,43 @@
     "startWith": 0,
     "description": ""
   },
-  "PRC-25 (Inoperative)": {
+  "40x46mm Grenade": {
+    "type": "ammunition",
+    "faction": "US",
+    "startWith": 10,
+    "description": ""
+  },
+  "M28A2 HEAT Rocket": {
+    "type": "ammunition",
+    "faction": "US",
+    "startWith": 10,
+    "description": ""
+  },
+  "M590 AP Rocket": {
+    "type": "ammunition",
+    "faction": "US",
+    "startWith": 10,
+    "description": ""
+  },
+  "M72 Rocket": {
+    "type": "ammunition",
+    "faction": "US",
+    "startWith": 10,
+    "description": ""
+  },
+  "Napalm Cannister": {
+    "type": "ammunition",
+    "faction": "US",
+    "startWith": 10,
+    "description": ""
+  },
+  "PRC-25": {
     "type": "miscellaneous equipment",
     "assignable": true,
+    "slot": "secondary",
     "faction": "US",
     "startWith": 1,
-    "description": "A battery powered, man portable, two-way VHF radiotelephone with a range of 10 miles. The unit is mounted on a backpack harness and features a handset and 3' whip antenna.\n\nThe unit is damaged beyond repair."
+    "description": "Battery powered, man portable, two-way VHF radiotelephone with a range of 10 miles. The unit is mounted on a backpack harness and features a handset and 3' whip antenna.\n\nThe unit is damaged beyond repair."
   },
   "Death Cards": {
     "type": "miscellaneous equipment",
@@ -86,23 +117,142 @@
   },
   "M18 Grenade": {
     "type": "grenade",
-    "assignable": false,
+    "assignable": true,
+    "slot": "secondary",
     "faction": "US",
-    "startWith": 0,
-    "description": "Smoke grenade"
+    "startWith": 8,
+    "description": "Smoke grenade",
+    "impactPower": 50,
+    "blastRadius": 1,
+    "blastPower": 5,
+    "accuracy": 100,
+    "range": 10,
+    "smoke": 500,
+    "fire": 0
   },
   "Mk II Grenade": {
     "type": "grenade",
-    "assignable": false,
+    "assignable": true,
+    "slot": "secondary",
     "faction": "US",
-    "startWith": 0,
-    "description": "Fragmentation grenade"
+    "startWith": 8,
+    "description": "Fragmentation grenade",
+    "impactPower": 50,
+    "blastRadius": 4,
+    "blastPower": 50,
+    "accuracy": 100,
+    "range": 10,
+    "smoke": 75,
+    "fire": 0
   },
   "M26 Grenade": {
     "type": "grenade",
-    "assignable": false,
+    "assignable": true,
+    "slot": "secondary",
     "faction": "US",
-    "startWith": 0,
-    "description": "Fragmentation grenade"
+    "startWith": 8,
+    "description": "Fragmentation grenade",
+    "impactPower": 50,
+    "blastRadius": 8,
+    "blastPower": 25,
+    "accuracy": 100,
+    "range": 8,
+    "smoke": 20,
+    "fire": 0
+  },
+  "M79": {
+    "type": "grenade launcher",
+    "assignable": true,
+    "slot": "secondary",
+    "faction": "US",
+    "ammo": "40x46mm Grenade",
+    "startWith": 8,
+    "description": "Single shot, shoulder fired, break-action grenade launcher. A ladder sight mounted to the 15\" barrel provides sighting up to 375 meters at 40° with windage adjustments.\n\nFrequently referred to colloquially as \"The Thumper\", due to the distinctive noise of its firing.",
+    "impactPower": 80,
+    "blastRadius": 8,
+    "blastPower": 25,
+    "accuracy": 100,
+    "range": 20,
+    "smoke": 20,
+    "fire": 0
+  },
+  "China Lake": {
+    "type": "grenade launcher",
+    "assignable": true,
+    "slot": "secondary",
+    "faction": "US",
+    "ammo": "40x46mm Grenade",
+    "startWith": 8,
+    "description": "Pump action, shoulder fired grenade launcher.",
+    "impactPower": 60,
+    "blastRadius": 6,
+    "blastPower": 40,
+    "accuracy": 100,
+    "range": 16,
+    "smoke": 20,
+    "fire": 0
+  },
+  "M20": {
+    "type": "rocket launcher",
+    "assignable": true,
+    "slot": "secondary",
+    "faction": "US",
+    "ammo": "M28A2 HEAT Rocket",
+    "startWith": 8,
+    "description": "Man-portable, recoilless, anti-tank rocket launcher. The 90mm tube features a pistol grip with electric firing system and a skeletonized shoulder stock.\n\nFrequently referred to colloquially as \"The Super Bazooka\" due to its resemblance to musician Bob Burn's Bazooka Trumpet.",
+    "impactPower": 100,
+    "blastRadius": 3,
+    "blastPower": 25,
+    "accuracy": 100,
+    "range": 30,
+    "smoke": 50,
+    "fire": 0
+  },
+  "M67": {
+    "type": "rocket launcher",
+    "assignable": true,
+    "slot": "secondary",
+    "faction": "US",
+    "ammo": "M590 AP Rocket",
+    "startWith": 8,
+    "description": "Man-portable, recoilless, breach loading, anti-personnel rocket launcher. The 90mm tube features a horizontal grip and trigger, stadia rangefinder and collapsable bipod.",
+    "impactPower": 80,
+    "blastRadius": 10,
+    "blastPower": 50,
+    "accuracy": 100,
+    "range": 24,
+    "smoke": 100,
+    "fire": 0
+  },
+  "M72 LAW": {
+    "type": "rocket launcher",
+    "assignable": true,
+    "slot": "secondary",
+    "faction": "US",
+    "ammo": "M72 Rocket",
+    "startWith": 8,
+    "description": "Man-portable, recoilless, one-shot rocket launcher. The 66mm tube features a horizontal grip and trigger, stadia rangefinder and collapsable bipod.",
+    "impactPower": 100,
+    "blastRadius": 4,
+    "blastPower": 10,
+    "accuracy": 100,
+    "range": 20,
+    "smoke": 25,
+    "fire": 0
+  },
+  "M2A1-7": {
+    "type": "flame thrower",
+    "assignable": true,
+    "slot": "secondary",
+    "faction": "US",
+    "ammo": "Napalm Cannister",
+    "startWith": 8,
+    "description": "Man-portable, backpack mounted flamethrower. Two fuel cylinders and one propellant cylinder are mounted to the frame backpack. A 30\" hose leads from the cylinder gas cap to the gun element and into the igniter assembly.\n\nIt is very unlikely that a small arms fire or a shrapnel hit to the gas cylinders would result in an explosion.",
+    "power": 60,
+    "blastRadius": 3,
+    "accuracy": 100,
+    "range": 18,
+    "smoke": 80,
+    "fire": 200
   }
 }

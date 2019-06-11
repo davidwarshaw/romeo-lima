@@ -18,6 +18,11 @@ export default class OverworldSquadStatus extends SquadStatus {
     const bgColor = member.selected ?
       this.style.nameColor : this.style.fieldBgColor;
 
+    const primaryWeaponFgColor = member.primarySelected ?
+      this.style.fieldBgColor : this.style.textColor;
+    const primaryWeaponBgColor = member.primarySelected ?
+      this.style.textColor : this.style.fieldBgColor;
+
     // If member is alive show more detail
     if (member.alive) {
 
@@ -34,10 +39,18 @@ export default class OverworldSquadStatus extends SquadStatus {
       display.drawText(col, this.y + 2, formattedText, this.columnWidth);
 
       // Weapon
+      const weaponName = member.weapon ? member.weapon.name : 'Unarmed';
       formattedText =
-        `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` +
-          `${member.weapon.name}`;
+      `%c{${primaryWeaponFgColor}}%b{${primaryWeaponBgColor}}` +
+        `${weaponName}`;
       display.drawText(col, this.y + 3, formattedText, this.columnWidth);
+
+      // Secondary
+      const secondaryName = member.secondary ? member.secondary.name : '';
+      formattedText =
+      `%c{${primaryWeaponBgColor}}%b{${primaryWeaponFgColor}}` +
+        `${secondaryName}`;
+      display.drawText(col, this.y + 4, formattedText, this.columnWidth);
 
       // Position
       if (member.prone) {
@@ -45,7 +58,7 @@ export default class OverworldSquadStatus extends SquadStatus {
         formattedText =
           `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` +
           proneText;
-        display.drawText(col, this.y + 4, formattedText, this.columnWidth);
+        display.drawText(col, this.y + 5, formattedText, this.columnWidth);
       }
 
       // If this member is selected add text for moves left or attack mode
@@ -59,10 +72,10 @@ export default class OverworldSquadStatus extends SquadStatus {
         }
         formattedText =
         `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` + moveText;
-        display.drawText(col, this.y + 4, formattedText, this.columnWidth);
+        display.drawText(col, this.y + 5, formattedText, this.columnWidth);
       }
 
-      super.renderStats(display, member, i, col, this.y + 5);
+      super.renderStats(display, member, i, col, this.y + 6);
     }
     else {
 

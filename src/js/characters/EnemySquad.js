@@ -3,6 +3,7 @@ import utils from '../util/utils';
 import TileMath from '../util/TileMath';
 
 import LocalFov from '../maps/LocalFov';
+import AStar from '../maps/AStar';
 
 import Squad from './Squad';
 
@@ -73,6 +74,7 @@ export default class EnemySquad extends Squad {
     member, numberOfMoves, map, enemySquadOverworldFov, playerSquad) {
 
     this.coverMap.recalculate();
+    this.astar = new AStar(map, playerSquad, this);
 
     const waitAction = {
       action: 'WAIT',
@@ -97,24 +99,27 @@ export default class EnemySquad extends Squad {
     };
 
     const uncovered = this.coverMap.isVisible(member.x, member.y);
-    const coveredTilesByDistance = Object.values(map)
+    const coveredReachableTilesByDistance = Object.values(map)
       .filter(tile => !this.coverMap.isVisible(tile.x, tile.y))
+      .filter(tile => TileMath.tileLine(member.x, member.y, tile.x, tile.y).length <= numberOfMoves * 2)
       .map((tile) => {
-        const distance = TileMath.distance(member.x, member.y, tile.x, tile.y);
-        return { tile, distance };
+        const path = this.astar.findPath({ x: member.x, y: member.y }, { x: tile.x, y: tile.y })
+        return { tile, path };
       })
-      .sort((l, r) => l.distance - r.distance);
+      .filter(tilePath => tilePath.path.length > 0)
+      .sort((l, r) => l.path.length - r.path.length);
 
-    const closestCoveredTile = coveredTilesByDistance.length > 0 ?
-      coveredTilesByDistance.slice(0, 1)[0] :
+    console.log(coveredReachableTilesByDistance);
+
+    const closestCoveredTilePath = coveredReachableTilesByDistance.length > 0 ?
+      coveredReachableTilesByDistance.slice(0, 1)[0] :
       null;
 
-    if (uncovered && closestCoveredTile) {
-      const closestX = closestCoveredTile.tile.x;
-      const closestY = closestCoveredTile.tile.y;
-      const lineToClosest = TileMath.tileLine(
-        member.x, member.y, closestX, closestY);
-      moveAction.moveLine = lineToClosest.slice(1, numberOfMoves + 1);
+      console.log(closestCoveredTilePath);
+
+    if (uncovered && closestCoveredTilePath) {
+      console.log(closestCoveredTilePath.path);
+      moveAction.moveLine = closestCoveredTilePath.path.slice(1, numberOfMoves + 1);
       return moveAction;
     }
 
