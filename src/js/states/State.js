@@ -24,7 +24,13 @@ export default class State {
     if (inputType === 'keydown') {
       // Get the string input code and pass to the window manager
       const input = this.keyMap[inputData.keyCode] || null;
-      this.windowManager.inputToWindow(input);
+      this.windowManager.inputToWindow(inputType, input);
+    }
+    else if (inputType === 'click' || inputType === 'mouseover') {
+      // Get the tile coordinates of the mouse
+      const coords = this.game.display.eventToPosition(event);
+      const position = { x: coords[0], y: coords[1] };
+      this.windowManager.inputToWindow(inputType, position);
     }
   }
 

@@ -25,12 +25,25 @@ export default class WindowManager {
     return this.windows[this.windows.length - 1];
   }
 
-  inputToWindow(input) {
+  inputToWindow(inputType, input) {
 
     // If there is a window with focus, pass it the input
     const focusWindow = this.focusWindow();
     if (focusWindow) {
-      focusWindow.inputHandler(input);
+      if (inputType === 'keydown') {
+        focusWindow.inputHandler(input);
+      }
+      else {
+        const touchedWindows = this.windows.slice()
+          .reverse()
+          .filter(window =>
+            input.x >= window.x && input.x < window.x + window.width &&
+            input.y >= window.y && input.y < window.y + window.height)
+          .slice(0, 1);
+        if (touchedWindows.length > 0) {
+          touchedWindows[0].mouseHandler(inputType, input);
+        }
+      }
     }
   }
 

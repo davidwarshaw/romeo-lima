@@ -178,4 +178,9 @@ export default class OrdersModal extends Window {
     // Trigger a redraw
     this.game.refresh();
   }
+
+  mouseHandler() {
+    // Nothing
+  }
+
 }

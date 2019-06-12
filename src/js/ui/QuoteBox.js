@@ -29,4 +29,8 @@ export default class QuoteBox {
     }
   }
 
+  mouseHandler() {
+    // Nothing
+  }
+
 }

@@ -111,6 +111,10 @@ export default class Window {
     // Override me
   }
 
+  mouseHandler() {
+    // Override me
+  }
+
   getCommands() {
     // Override me
   }

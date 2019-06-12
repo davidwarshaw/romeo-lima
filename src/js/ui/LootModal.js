@@ -118,6 +118,10 @@ export default class LootModal extends Window {
     this.game.refresh();
   }
 
+  mouseHandler() {
+    // Nothing
+  }
+
   getCommands() {
     return [
       '[↑↓] Scroll',

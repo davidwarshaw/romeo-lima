@@ -12,6 +12,8 @@ export default class ContextCommands extends Window {
       'Commands');
     this.game = game;
     this.windowManager = windowManager;
+
+    this.commandWidth = 20;
   }
 
   render(display) {
@@ -23,10 +25,9 @@ export default class ContextCommands extends Window {
   }
 
   renderCommands(display) {
-    const commandWidth = 20;
     this.windowManager.getWindowCommands()
       .forEach((command, i) => {
-        const col = this.x + (commandWidth * i) + 1;
+        const col = this.x + (this.commandWidth * i) + 1;
         const row = this.y + 1;
         const commandText =
           `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}${command}`;
@@ -34,8 +35,19 @@ export default class ContextCommands extends Window {
       });
   }
 
-  inputHandler(input) {
-    // I should be overridden
-    console.log(input);
+  inputHandler() {
+    // Nothing
+  }
+
+  mouseHandler(inputType, position) {
+    const commands = this.windowManager.getWindowCommands();
+    commands.forEach((command, i) => {
+      const col = this.x + (this.commandWidth * i) + 1;
+      const row = this.y + 1;
+      if (position.x >= col && position.x <= col + this.commandWidth &&
+        position.y === row) {
+        console.log(command);
+      }
+    });
   }
 }
