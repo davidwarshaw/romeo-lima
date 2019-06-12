@@ -80,45 +80,41 @@ export default class EnemySquad extends Squad {
       action: 'WAIT',
       message: {
         name: member.name,
-        text: 'waits.'
+        text: 'waits'
       }
     };
     const attackAction = {
       action: 'ATTACK',
       message: {
         name: member.name,
-        text: 'attacks.'
+        text: 'attacks'
       }
     };
     const moveAction = {
       action: 'MOVE',
       message: {
         name: member.name,
-        text: 'moves.'
+        text: 'moves'
       }
     };
 
     const uncovered = this.coverMap.isVisible(member.x, member.y);
     const coveredReachableTilesByDistance = Object.values(map)
       .filter(tile => !this.coverMap.isVisible(tile.x, tile.y))
-      .filter(tile => TileMath.tileLine(member.x, member.y, tile.x, tile.y).length <= numberOfMoves * 2)
+      .filter(tile =>
+        TileMath.tileLine(member.x, member.y, tile.x, tile.y).length <= numberOfMoves * 2)
       .map((tile) => {
-        const path = this.astar.findPath({ x: member.x, y: member.y }, { x: tile.x, y: tile.y })
+        const path = this.astar.findPath({ x: member.x, y: member.y }, { x: tile.x, y: tile.y });
         return { tile, path };
       })
       .filter(tilePath => tilePath.path.length > 0)
       .sort((l, r) => l.path.length - r.path.length);
 
-    console.log(coveredReachableTilesByDistance);
-
     const closestCoveredTilePath = coveredReachableTilesByDistance.length > 0 ?
       coveredReachableTilesByDistance.slice(0, 1)[0] :
       null;
 
-      console.log(closestCoveredTilePath);
-
     if (uncovered && closestCoveredTilePath) {
-      console.log(closestCoveredTilePath.path);
       moveAction.moveLine = closestCoveredTilePath.path.slice(1, numberOfMoves + 1);
       return moveAction;
     }

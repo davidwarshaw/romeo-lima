@@ -1,4 +1,196 @@
 {
+  "Helicopter - Blade": {
+    "glyph": "╲",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Blade Center": {
+    "glyph": "╳",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Tail": {
+    "glyph": "║",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Tail Tee": {
+    "glyph": "╩",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Tail Edge": {
+    "glyph": "/",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Tail End": {
+    "glyph": "╓",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Bend Up": {
+    "glyph": "╮",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Bend Down": {
+    "glyph": "╯",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Window Right": {
+    "glyph": "⌦",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Window Left": {
+    "glyph": "⌫",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Double": {
+    "glyph": "ᆖ",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Straight Up Broken": {
+    "glyph": "ཟ",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Straight Across Broken": {
+    "glyph": "෴",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Angle Broken": {
+    "glyph": "⍀",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Straight Up": {
+    "glyph": "│",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Helicopter - Straight Across": {
+    "glyph": "─",
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "description": "",
+    "height": 1,
+    "traversable": false,
+    "startable": false,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 10
+  },
   "Burned Structure": {
     "glyph": "።",
     "fgColor": "#6f6f6f",
@@ -7,6 +199,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": false,
     "concealment": 0,
     "cover": 0
   },
@@ -18,6 +211,43 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 0
+  },
+  "Highway": {
+    "glyph": " ",
+    "fgColor": "#E2F004",
+    "bgColor": "#747171",
+    "description": "",
+    "height": 1,
+    "traversable": true,
+    "startable": true,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 0
+  },
+  "Highway Edge": {
+    "glyph": "│",
+    "fgColor": "#ffffff",
+    "bgColor": "#747171",
+    "description": "",
+    "height": 1,
+    "traversable": true,
+    "startable": true,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 0
+  },
+  "Highway Center": {
+    "glyph": "║",
+    "fgColor": "#E2F004",
+    "bgColor": "#747171",
+    "description": "",
+    "height": 1,
+    "traversable": true,
+    "startable": true,
+    "flammable": false,
     "concealment": 0,
     "cover": 0
   },
@@ -29,6 +259,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": true,
     "concealment": 0,
     "cover": 0
   },
@@ -40,41 +271,9 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": true,
     "concealment": 0,
     "cover": 0
-  },
-  "North-South Sampan Bow": {
-    "glyph": "ᐼ",
-    "fgColor": "#7D7672",
-    "bgColor": "#68625E",
-    "description": "",
-    "height": 1,
-    "traversable": false,
-    "startable": false,
-    "concealment": 0,
-    "cover": 10
-  },
-  "North-South Sampan Hull": {
-    "glyph": "ዘ",
-    "fgColor": "#7D7672",
-    "bgColor": "#68625E",
-    "description": "",
-    "height": 1,
-    "traversable": false,
-    "startable": false,
-    "concealment": 0,
-    "cover": 10
-  },
-  "North-South Sampan Stern": {
-    "glyph": "ᐺ",
-    "fgColor": "#7D7672",
-    "bgColor": "#68625E",
-    "description": "",
-    "height": 1,
-    "traversable": false,
-    "startable": false,
-    "concealment": 0,
-    "cover": 10
   },
   "Path": {
     "glyph": ".",
@@ -84,6 +283,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": true,
     "concealment": 0,
     "cover": 0
   },
@@ -95,6 +295,7 @@
     "height": 1,
     "traversable": false,
     "startable": false,
+    "flammable": true,
     "concealment": 0,
     "cover": 10
   },
@@ -106,6 +307,7 @@
     "height": 1,
     "traversable": true,
     "startable": false,
+    "flammable": true,
     "concealment": 0,
     "cover": 0
   },
@@ -117,6 +319,7 @@
     "height": 1,
     "traversable": true,
     "startable": false,
+    "flammable": true,
     "concealment": 100,
     "cover": 70
   },
@@ -128,6 +331,7 @@
     "height": 1,
     "traversable": false,
     "startable": false,
+    "flammable": true,
     "concealment": 10,
     "cover": 5
   },
@@ -139,6 +343,7 @@
     "height": 1,
     "traversable": false,
     "startable": false,
+    "flammable": true,
     "concealment": 100,
     "cover": 80
   },
@@ -150,6 +355,7 @@
     "height": 1,
     "traversable": false,
     "startable": false,
+    "flammable": false,
     "concealment": 0,
     "cover": 0
   },
@@ -161,6 +367,7 @@
     "height": 1,
     "traversable": true,
     "startable": false,
+    "flammable": false,
     "concealment": 0,
     "cover": 0
   },
@@ -172,6 +379,7 @@
     "height": 1,
     "traversable": false,
     "startable": false,
+    "flammable": false,
     "concealment": 0,
     "cover": 0
   },
@@ -183,6 +391,7 @@
     "height": 1,
     "traversable": false,
     "startable": false,
+    "flammable": false,
     "concealment": 10,
     "cover": 10
   },
@@ -194,6 +403,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": false,
     "concealment": 35,
     "cover": 35
   },
@@ -205,6 +415,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": false,
     "concealment": 35,
     "cover": 35
   },
@@ -216,6 +427,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": false,
     "concealment": 0,
     "cover": 0
   },
@@ -227,6 +439,7 @@
     "height": 1,
     "traversable": true,
     "startable": false,
+    "flammable": false,
     "concealment": 0,
     "cover": 0
   },
@@ -238,6 +451,7 @@
     "height": 1,
     "traversable": true,
     "startable": false,
+    "flammable": false,
     "concealment": 0,
     "cover": 0
   },
@@ -249,6 +463,7 @@
     "height": 1,
     "traversable": true,
     "startable": false,
+    "flammable": false,
     "concealment": 0,
     "cover": 0
   },
@@ -260,6 +475,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": true,
     "concealment": 10,
     "cover": 10
   },
@@ -271,6 +487,7 @@
     "height": 1,
     "traversable": false,
     "startable": false,
+    "flammable": true,
     "concealment": 99,
     "cover": 100
   },
@@ -282,6 +499,7 @@
     "height": 1,
     "traversable": false,
     "startable": false,
+    "flammable": true,
     "concealment": 99,
     "cover": 100
   },
@@ -293,6 +511,7 @@
     "height": 1,
     "traversable": false,
     "startable": false,
+    "flammable": true,
     "concealment": 99,
     "cover": 100
   },
@@ -304,6 +523,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": true,
     "concealment": 25,
     "cover": 25
   },
@@ -315,6 +535,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": true,
     "concealment": 25,
     "cover": 25
   },
@@ -326,6 +547,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": true,
     "concealment": 25,
     "cover": 25
   },
@@ -337,6 +559,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": true,
     "concealment": 25,
     "cover": 25
   },
@@ -348,6 +571,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": true,
     "concealment": 25,
     "cover": 25
   },
@@ -359,6 +583,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": true,
     "concealment": 15,
     "cover": 15
   },
@@ -370,6 +595,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": true,
     "concealment": 15,
     "cover": 15
   },
@@ -381,6 +607,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": true,
     "concealment": 10,
     "cover": 10
   },
@@ -392,6 +619,7 @@
     "height": 1,
     "traversable": true,
     "startable": true,
+    "flammable": true,
     "concealment": 10,
     "cover": 10
   }

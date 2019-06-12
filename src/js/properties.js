@@ -52,7 +52,7 @@ export default {
   xOverworldEnemyProb: 0.75,
   southernOverworldEnemyHeight: 5,
   southernOverworldEnemyProb: 0.99,
-  localStartingDepth: 5,
+  localStartingDepth: 50,
   lootDropsPerEnemyMember: 5,
   projectileIntervalMillis: 100,
   projectileRoundBreakFrames: 1,

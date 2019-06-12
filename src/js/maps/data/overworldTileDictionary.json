@@ -17,6 +17,15 @@
     "height": 1,
     "traversable": true
   },
+  "Crash Site": {
+    "glyph": "╳",
+    "enemySpawn": false,
+    "fgColor": "#ffffff",
+    "bgColor": "#11737A",
+    "description": "",
+    "height": 1,
+    "traversable": true
+  },
   "Large Palm Trees": {
     "glyph": "Ϫ",
     "enemySpawn": true,

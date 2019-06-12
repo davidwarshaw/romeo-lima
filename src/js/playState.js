@@ -30,6 +30,9 @@ function createPlayState() {
   const squadStartX = 5;
   const squadStartY = utils.clamp(heightOffset, 5, overworldHeight - 5);
 
+  // Place the crash site at the overworld starting position
+  overworldMapCreation.placeCrashSite(map, squadStartX, squadStartY);
+
   // Squad
   const squadMembers = squadProcedures.createPlayerSquadMembers();
   const squadInventory = new Inventory();
@@ -64,9 +67,8 @@ function createPlayState() {
     squad,
     enemies,
 
-    // Local map and vehicles are populated in the battle system
-    localMap: null,
-    vehicles: null
+    // Local map is populated in the battle system
+    localMap: null
   };
 }
 

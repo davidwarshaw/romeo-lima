@@ -1,7 +1,10 @@
 import properties from '../properties';
 import utils from '../util/utils';
 
+import TileMath from '../util/TileMath';
+
 import Inventory from './Inventory';
+import Character from './Character';
 
 import surnames from './data/surnames.json';
 import playerSquadDefinition from './data/playerSquadDefinition.json';
@@ -34,6 +37,13 @@ function weaponReport() {
       console.log(`${bursts} x ${roundsPerBurst} x ${power} x ${accuracy}` +
         ` => ${score}`);
     });
+}
+
+function nameCharacter(faction, role) {
+  if (faction === 'US') {
+    return properties.rng.getWeightedValue(surnames);
+  }
+  return `${faction} ${role}`;
 }
 
 function populateInventory(members, inventory, startWithEquipment) {
@@ -74,16 +84,6 @@ function populateEnemyInventory(members, inventory) {
   return populateInventory(members, inventory, startWithEquipment);
 }
 
-function rollStats() {
-  const initiative = Math.round(properties.rng.getNormal(50, 10));
-  const aggression = Math.round(properties.rng.getNormal(50, 10));
-  const patience = Math.round(properties.rng.getNormal(50, 10));
-  const resilience = Math.round(properties.rng.getNormal(50, 10));
-  const presence = Math.round(properties.rng.getNormal(50, 10));
-  const perception = Math.round(properties.rng.getNormal(50, 10));
-  return { initiative, aggression, patience, resilience, presence, perception };
-}
-
 function weaponForMember(member, faction) {
 
   const roleWeapons = Object.entries(weapons)
@@ -111,30 +111,17 @@ function createPlayerSquadMembers() {
 function createSquadMembers(definitions, playerControlled, faction) {
   const members = definitions.map((definition, i) => {
     const number = i + 1;
-
-    // Make a copy of the weapon
-    const weapon = weaponForMember(definition, faction);
-
-    const member = {
+    const memberDefinition = {
       playerControlled,
       faction,
       rank: definition.rank,
       role: definition.role,
       marchingOrder: definition.marchingOrder,
-      number,
-      name: properties.rng.getWeightedValue(surnames),
-      pointman: definition.pointman,
-      prone: false,
-      stats: rollStats(),
-      injuries: 0,
-      alive: true,
-      weapon,
-      secondary: null,
-      primarySelected: true,
-      inBattle: false,
-      selected: false
+      pointman: definition.pointman
     };
-    return member;
+    const weapon = weaponForMember(definition, faction);
+
+    return new Character(number, memberDefinition, weapon);
   });
   return members;
 }
@@ -150,7 +137,8 @@ function getOverworldEnemyLocations(map) {
       const {
         overworldWidth, overworldHeight,
         baseOverworldEnemyProb, xOverworldEnemyProb,
-        southernOverworldEnemyHeight, southernOverworldEnemyProb } = properties;
+        southernOverworldEnemyHeight, southernOverworldEnemyProb
+      } = properties;
       const xProb =
         (1 - ((overworldWidth - x) / overworldWidth))
         * xOverworldEnemyProb;
@@ -159,12 +147,6 @@ function getOverworldEnemyLocations(map) {
       const tileProb = Math.max(xProb, yProb);
       const difficulty = utils.clamp(~~(1 + (10 * tileProb)), 1, 10);
       const enemyProb = ~~(100 * tileProb * baseOverworldEnemyProb);
-
-      //
-      // if (yProb > 0.90) {
-      //   console.log(`${x}-${y}`);
-      //   console.log(`${tileProb} ${difficulty} ${enemyProb}`);
-      // }
       const roll = properties.rng.getPercentage();
       if (roll < enemyProb) {
         return { x, y, difficulty };
@@ -186,160 +168,92 @@ function selectEnemyDefinition(difficulty) {
   return definition;
 }
 
-function createEnemyMembers(definition, faction) {
-  const members = [];
-  definition.members.forEach((memberDefinition, i) => {
-    const number = i + 1;
+function tileRectForSide(map, side, opposite, numMembers) {
+  const localStartingWidth = numMembers;
+  const centerY = Math.round(properties.localHeight / 2);
 
-    // Make a copy of the weapon
-    const weapon = weaponForMember(memberDefinition, faction);
+  const top = utils.clamp(centerY - localStartingWidth, 0, properties.localHeight);
+  const bottom = utils.clamp(centerY + localStartingWidth, 0, properties.localHeight);
 
-    const member = {
-      playerControlled: false,
-      faction,
-      rank: memberDefinition.rank,
-      role: memberDefinition.role,
-      marchingOrder: i,
-      number,
-      name: properties.rng.getWeightedValue(surnames),
-      pointman: false,
-      prone: false,
-      stats: rollStats(),
-      injuries: 0,
-      alive: true,
-      weapon,
-      inBattle: false,
-      selected: false
-    };
-
-    // Add copies of the member if more than one are specified
-    for (let i = 0; i < definition.count; i++) {
-      members.push(Object.assign({}, member));
-    }
-  });
-
-  return members;
-}
-
-function tileRectForSide(side, opposite, numMembers) {
-  const localStartingWidth = numMembers * 2;
-
-  let xFrom;
-  let yFrom;
-  let xTo;
-  let yTo;
-  if ((!opposite && side === 'TOP') || (opposite && side === 'BOTTOM')) {
-    const borderBuffer = 1;
-    const localStartingSideOffset =
-      Math.round((properties.localWidth - localStartingWidth) / 2);
-
-    xFrom = localStartingSideOffset;
-    yFrom = borderBuffer;
-    xTo = properties.localWidth - 1 - localStartingSideOffset;
-    yTo = borderBuffer + properties.localStartingDepth;
-  }
-  else if ((!opposite && side === 'BOTTOM') || (opposite && side === 'TOP')) {
-    const borderBuffer = 1;
-    const localStartingSideOffset =
-      Math.round((properties.localWidth - localStartingWidth) / 2);
-
-    xFrom = localStartingSideOffset;
-    yFrom = properties.localHeight - 1 -
-      borderBuffer - properties.localStartingDepth;
-    xTo = properties.localWidth - 1 - localStartingSideOffset;
-    yTo = properties.localHeight - 1 - borderBuffer;
+  if ((!opposite && side === 'LEFT') || (opposite && side === 'RIGHT')) {
+    const left = properties.localStartingDepth;
+    const right = properties.localStartingDepth + localStartingWidth;
+    return Object.entries(map)
+      .filter(tile => {
+        const { x, y } = tile[1];
+        return x >= left && x <= right && y >= top && y <= bottom;
+      });
   }
   else if ((!opposite && side === 'RIGHT') || (opposite && side === 'LEFT')) {
-    const borderBuffer =
-      Math.round((properties.localWidth - properties.localHeight) / 2);
-    const localStartingSideOffset =
-      Math.round((properties.localHeight - localStartingWidth) / 2);
-
-    xFrom = properties.localWidth - 1 -
-      borderBuffer - properties.localStartingDepth;
-    yFrom = localStartingSideOffset;
-    xTo = properties.localWidth - 1 - borderBuffer;
-    yTo = properties.localHeight - 1 - localStartingSideOffset;
+    const left = properties.localWidth - properties.localStartingDepth - localStartingWidth;
+    const right = properties.localWidth - properties.localStartingDepth;
+    return Object.entries(map)
+      .filter(tile => {
+        const { x, y } = tile[1];
+        return x >= left && x <= right && y >= top && y <= bottom;
+      });
   }
-  else if ((!opposite && side === 'LEFT') || (opposite && side === 'RIGHT')) {
-    const borderBuffer =
-      Math.round((properties.localWidth - properties.localHeight) / 2);
-    const localStartingSideOffset =
-      Math.round((properties.localHeight - localStartingWidth) / 2);
-
-    xFrom = borderBuffer;
-    yFrom = localStartingSideOffset;
-    xTo = borderBuffer + properties.localStartingDepth;
-    yTo = properties.localHeight - 1 - localStartingSideOffset;
-  }
-  return { xFrom, yFrom, xTo, yTo };
 }
 
-function tileRectForSide2(side, opposite, numMembers) {
-  const localStartingWidth = numMembers * 2;
+function tileRectSurround(map, side, opposite) {
+  const xCenter = Math.round(properties.localWidth / 2);
+  const yCenter = Math.round(properties.localHeight / 2);
+  const smallRadius = Math.round(5);
+  const mediumRadius = Math.round(15);
+  const largeRadius = Math.round(20);
 
-  let xFrom;
-  let yFrom;
-  let xTo;
-  let yTo;
-  if ((!opposite && side === 'RIGHT') || (opposite && side === 'LEFT')) {
-    const borderBuffer =
-      Math.round((properties.localWidth - properties.localHeight) / 2);
-    const localStartingSideOffset =
-      Math.round((properties.localHeight - localStartingWidth) / 2);
+  const smallCircle = TileMath.tileCircleFilled(xCenter, yCenter, smallRadius);
+  const mediumCircle = TileMath.tileCircleFilled(xCenter, yCenter, mediumRadius);
+  const largeCircle = TileMath.tileCircleFilled(xCenter, yCenter, largeRadius);
 
-    xFrom = properties.localWidth - 1 -
-      borderBuffer - properties.localStartingDepth;
-    xTo = properties.localWidth - 1 - borderBuffer;
+  if ((!opposite && side === 'Player-Ambushed') || (opposite && side === 'Enemy-Ambushed')) {
 
-    yFrom = localStartingSideOffset;
-    yTo = properties.localHeight - 1 - localStartingSideOffset;
+    // Ambushee
+    console.log(`first one side: ${side}`);
+    return Object.entries(map)
+      .filter(tile => {
+        const { x, y } = tile[1];
+        return smallCircle[utils.keyFromXY(x, y)];
+      });
   }
-  else if ((!opposite && side === 'LEFT') || (opposite && side === 'RIGHT')) {
-    const borderBuffer =
-      Math.round((properties.localWidth - properties.localHeight) / 2);
-    const localStartingSideOffset =
-      Math.round((properties.localHeight - localStartingWidth) / 2);
+  else if ((!opposite && side === 'Enemy-Ambushed') || (opposite && side === 'Player-Ambushed')) {
+    console.log(`second one side: ${side}`);
 
-    xFrom = borderBuffer;
-    yFrom = localStartingSideOffset;
-    xTo = borderBuffer + properties.localStartingDepth;
-    yTo = properties.localHeight - 1 - localStartingSideOffset;
+    // Ambusher
+    return Object.entries(map)
+      .filter(tile => {
+        const { x, y } = tile[1];
+        return largeCircle[utils.keyFromXY(x, y)] && !mediumCircle[utils.keyFromXY(x, y)];
+      });
   }
-  return { xFrom, yFrom, xTo, yTo };
 }
 
-function placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite, placeInVehicle) {
+function placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite) {
   const numMembers = squad.getAliveMembers().length;
-  let eligibleRect;
+  console.log(`ambushState: ${ambushState} playerSide: ${playerSide} opposite: ${opposite}`);
+  let candidateTiles;
   if (ambushState === 'No-Ambush') {
-    eligibleRect = tileRectForSide(playerSide, opposite, numMembers);
+    candidateTiles = tileRectForSide(map, playerSide, opposite, numMembers);
   }
-  else if (ambushState === 'Player-Ambushed') {
-    eligibleRect = tileRectForSide(playerSide, opposite, numMembers);
+  else if (ambushState === 'Player-Ambushed' || ambushState === 'Enemy-Ambushed') {
+    candidateTiles = tileRectSurround(map, ambushState, opposite, numMembers);
   }
-  else if (ambushState === 'Enemy-Ambushed') {
-    eligibleRect = tileRectForSide(playerSide, opposite, numMembers);
-  }
-  const eligibleTiles = Object.values(map)
+  const eligibleTiles = candidateTiles
 
     // Only place members on a startable tiles
     .filter(tile => {
-      const tileDef = localTileDictionary[tile.name];
+      const tileDef = localTileDictionary[tile[1].name];
       return tileDef.startable;
     })
 
-    // Only place members in the starting rectangle
-    .filter(tile => {
-      const { x, y } = tile;
-      const { xFrom, yFrom, xTo, yTo } = eligibleRect;
-      return x >= xFrom && x <= xTo && y >= yFrom && y <= yTo;
-    })
-
     // Randomize order
-    .map(tile => ({
-      x: tile.x, y: tile.y, randomOrder: properties.rng.getUniform()
-    }))
+    .map(tile => {
+      return {
+        x: tile[1].x,
+        y: tile[1].y,
+        randomOrder: properties.rng.getUniform()
+      };
+    })
     .sort((l, r) => l.randomOrder - r.randomOrder);
 
   // Get a tile for each squad member
@@ -354,15 +268,13 @@ function placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite, pla
 function placePlayerSquadInLocalMap(squad, map, ambushState, playerSide) {
   // Player squad does not go on the opposite of the player side
   const opposite = false;
-  const placeInVehicle = false;
-  return placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite, placeInVehicle);
+  return placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite);
 }
 
 function placeEnemySquadInLocalMap(squad, map, ambushState, playerSide) {
   // Enemy squad goes on the opposite of the player side
   const opposite = true;
-  const placeInVehicle = true;
-  return placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite, placeInVehicle);
+  return placeSquadInLocalMap(squad, map, ambushState, playerSide, opposite);
 }
 
 function placeSingleEnemyInLocalMap(squad) {
@@ -406,15 +318,12 @@ function getLootByEnemySquad(members, inventory) {
 function getAllMembersByTurnOrder(squad, enemySquad) {
   return squad.getBattleMembersByNumber()
     .concat(enemySquad.getBattleMembersByNumber())
-    .sort((l, r) => l.stats.initiative - r.stats.initiative);
-}
-
-function getMovesForMember(member) {
-  return Math.round(member.stats.aggression / 10) * 2;
+    .sort((l, r) => l.getTurnOrder() - r.getTurnOrder());
 }
 
 export default {
   weaponReport,
+  nameCharacter,
   populatePlayerInventory,
   populateEnemyInventory,
   createPlayerSquadMembers,
@@ -422,11 +331,9 @@ export default {
   placePlayerSquadInLocalMap,
   getOverworldEnemyLocations,
   selectEnemyDefinition,
-  createEnemyMembers,
   placeEnemySquadInLocalMap,
   placeSingleEnemyInLocalMap,
   getEnemySquadByOverworldXY,
   getLootByEnemySquad,
-  getAllMembersByTurnOrder,
-  getMovesForMember
+  getAllMembersByTurnOrder
 };

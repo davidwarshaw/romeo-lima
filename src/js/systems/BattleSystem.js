@@ -8,7 +8,6 @@ import BallisticsSystem from './BallisticsSystem';
 import EnvironmentSystem from './EnvironmentSystem';
 
 import localMapCreation from '../maps/localMapCreation';
-import vehicleCreation from '../maps/vehicleCreation';
 
 import squadProcedures from '../characters/squadProcedures';
 
@@ -36,10 +35,6 @@ export default class BattleSystem {
       this.overworldTile,
       properties.localWidth, properties.localHeight);
     this.map = game.playState.localMap;
-
-    // game.playState.vehicles = vehicleCreation.createVehicles(
-    //   game.playState.localMap);
-    // this.vehicles = game.playState.vehicles;
 
     // Add the participating squad members to the battle and place them
     // in the map
@@ -77,12 +72,6 @@ export default class BattleSystem {
     this.characters = squadProcedures
       .getAllMembersByTurnOrder(this.playerSquad, this.enemySquad);
 
-    // Character index is bumped at the begining, so start it at -1
-    this.characterIndex = -1;
-
-    // Initialize the selected character
-    this.nextCharacter();
-
     // Targeting
     //
     // We're either in attack mode or move mode
@@ -105,6 +94,12 @@ export default class BattleSystem {
 
     this.initProjectile();
     this.initMovement();
+
+    // Character index is bumped at the begining, so start it at -1
+    this.characterIndex = -1;
+
+    // Initialize the selected character
+    this.nextCharacter();
   }
 
   initProjectile() {
@@ -182,8 +177,7 @@ export default class BattleSystem {
 
     // Fill the available moves
     this.characterIsMoving = false;
-    this.currentCharacterMoves = squadProcedures
-      .getMovesForMember(this.currentCharacter);
+    this.currentCharacterMoves = this.currentCharacter.getNumberOfMoves();
 
     // Select this character if in the player squad, otherwise AI exeutes turn
     if (this.currentCharacter.playerControlled) {
@@ -206,6 +200,7 @@ export default class BattleSystem {
         this.nextCharacter();
       }
       else if (action.action === 'MOVE') {
+        console.log(this.movement);
         this.movement.active = true;
         this.movement.line = action.moveLine;
         this.movement.index = 0;
@@ -221,6 +216,7 @@ export default class BattleSystem {
         this.clearTarget();
       }
 
+      // Log the AI message
       this.messages.push(action.message);
     }
 
@@ -317,7 +313,7 @@ export default class BattleSystem {
         this.clearTarget();
 
         this.messages.push(
-          { name: this.currentCharacter.name, text: 'waits.' });
+          { name: this.currentCharacter.name, text: 'waits' });
         break;
       case 'ATTACK':
         // Only attack if not already moving
@@ -369,10 +365,6 @@ export default class BattleSystem {
           // Turn off target mode
           this.targetMode = false;
           this.clearTarget();
-
-          // TODO don't do this for firing
-          // Firing uses up a character's turn
-          //this.currentCharacterMoves = 0;
         }
         break;
       case 'PRONE':
@@ -387,8 +379,8 @@ export default class BattleSystem {
           this.clearTarget();
 
           const message = this.currentCharacter.prone ?
-            { name: this.currentCharacter.name, text: 'goes prone.' } :
-            { name: this.currentCharacter.name, text: 'stands.' };
+            { name: this.currentCharacter.name, text: 'goes prone' } :
+            { name: this.currentCharacter.name, text: 'stands' };
           this.messages.push(message);
         }
         break;
@@ -426,10 +418,35 @@ export default class BattleSystem {
       return false;
     }
 
-    // Dont allow a move into a tile with a squad member in it
-    const playerSquadMemberInTile = this.playerSquad.getByXY(nextX, nextY);
-    const enemySquadMemberInTile = this.enemySquad.getByXY(nextX, nextY);
-    if (playerSquadMemberInTile || enemySquadMemberInTile) {
+    const playerSquadMemberInTile = this.playerSquad.getAliveByXY(nextX, nextY);
+    const enemySquadMemberInTile = this.enemySquad.getAliveByXY(nextX, nextY);
+
+    if ((this.currentCharacter.playerControlled && playerSquadMemberInTile) ||
+      (!this.currentCharacter.playerControlled && enemySquadMemberInTile)) {
+
+      // Dont allow a move into a tile with a live squad member of the same controller in it
+      return false;
+    }
+    else if ((this.currentCharacter.playerControlled && enemySquadMemberInTile) ||
+      (!this.currentCharacter.playerControlled && playerSquadMemberInTile)) {
+
+      // Moving into the square of an opposing character is a melee attack
+      const defendingCharacter = playerSquadMemberInTile || enemySquadMemberInTile;
+      const attackActions = this.ballisticsSystem
+        .effectMelee(this.currentCharacter, defendingCharacter);
+
+      // Log the melee action
+      this.messages.push(text.createMeleeMessage(this.currentCharacter));
+
+      // Log the effects from firing
+      // console.log(`melee: attackActions: ${JSON.stringify(attackActions)}`);
+      text.createBattleMessages(attackActions)
+        .forEach(message => this.messages.push(message));
+
+      // Melee uses all character moves
+      this.currentCharacterMoves = 0;
+
+      // No matter what happens with the attack, don't move into the tile
       return false;
     }
 
@@ -481,25 +498,32 @@ export default class BattleSystem {
       fireAreas,
       attackActions
     } = this.ballisticsSystem
-      .effectFire(this.currentCharacter.stats, firedWeapon, this.projectile.intendedLine);
+      .effectFire(this.currentCharacter, firedWeapon, this.projectile.intendedLine);
 
     this.projectile.effectAreas = effectAreas;
     this.projectile.smokeAreas = smokeAreas;
     this.projectile.fireAreas = fireAreas;
 
-    console.log('attackActions');
-    console.log(attackActions);
+    // console.log('attackActions');
+    // console.log(attackActions);
+
+    // Log the firing action
+    this.messages.push(text.createFireMessage(this.currentCharacter, firedWeapon));
+
+    // Log the effects from firing
+    // console.log(`firing: attackActions: ${JSON.stringify(attackActions)}`);
     text.createBattleMessages(attackActions)
       .forEach(message => this.messages.push(message));
 
     this.projectile.fireAnimation = this.ballisticsSystem
       .generateFireAnimation(firedWeapon, this.projectile.effectAreas);
-    console.log('this.projectile.fireAnimation');
-    console.log(this.projectile.fireAnimation);
+
+    // console.log('this.projectile.fireAnimation');
+    // console.log(this.projectile.fireAnimation);
   }
 
   fireAnimationFrame() {
-    console.log('fireAnimationFrame()');
+    // console.log('fireAnimationFrame()');
     this.game.refresh();
 
     const { fireAnimation } = this.projectile;

@@ -1,20 +1,45 @@
 {
-  "North-South Sampan": [
-    ["ᐼ"],
-    ["ዘ"],
-    ["ዘ"],
-    ["ዘ"],
-    ["ᐺ"]
-  ],
-  "East-West Sampan": [
-    ["ᑄ", "Ꮖ", "Ꮖ", "Ꮖ", "ᑁ"]
-  ],
-  "Crashed Helicopter": [
-    ["x"]
-  ],
-  "BRT": [
-    ["x", "x"],
-    ["x", "x"],
-    ["x", "x"]
-  ]
+  "Sampan": {
+    "xOffset": 0,
+    "yOffset": 0,
+    "fgColor": "#ffffff",
+    "bgColor": "#000000",
+    "traversableTiles" : [
+      "Rapid Water",
+      "Shallow Marsh Water",
+      "Deep Marsh Water",
+      "Shallow River Water",
+      "Deep River Water"
+    ],
+    "tiles": {
+      "North-South": [
+        ["ᐼ"],
+        ["ዘ"],
+        ["ዘ"],
+        ["ዘ"],
+        ["ᐺ"]
+      ],
+      "West-East": [
+        ["ᑄ", "Ꮖ", "Ꮖ", "Ꮖ", "ᑁ"]
+      ]
+    },
+    "hasTurret": false
+  },
+  "BRT": {
+    "xOffset": -1,
+    "yOffset": -1,
+    "fgColor": "#000000",
+    "bgColor": "#dd0000",
+    "traversableTiles": [
+      "Highway",
+      "Highway Edge",
+      "Highway Center"
+    ],
+    "tiles": [
+      ["╓", "─", "╖"],
+      ["║", "۝", "║"],
+      ["╙", "─", "╜"]
+    ],
+    "hasTurret": true
+  }
 }

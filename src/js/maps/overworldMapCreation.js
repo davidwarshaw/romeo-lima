@@ -287,11 +287,16 @@ function developLandscape(map) {
     .forEach(tile => tile.name = 'River Water');
 }
 
+function placeCrashSite(map, x, y) {
+  map[utils.keyFromXY(x, y)].name = 'Crash Site';
+}
+
 export default {
   createBaseOverworldMap,
   assignSea,
   assignRivers,
   assignBuildings,
   assignRoads,
-  developLandscape
+  developLandscape,
+  placeCrashSite
 };

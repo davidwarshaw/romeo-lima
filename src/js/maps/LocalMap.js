@@ -23,8 +23,6 @@ export default class LocalMap extends Window {
 
     this.enemySquad = battleSystem.enemySquad;
 
-    this.vehicles = battleSystem.vehicles;
-
     this.cache = new Cache();
   }
 
@@ -100,9 +98,6 @@ export default class LocalMap extends Window {
         fgAdjusted, bgDebugAdjusted);
     });
 
-    // this.vehicles.render(display, watchBrightness, this, this.x, this.y,
-    //   this.battleSystem.playerSquadLocalFov);
-
     this.renderTargetLine(display, watchBrightness);
     this.renderFiring(display, watchBrightness);
 
@@ -138,7 +133,6 @@ export default class LocalMap extends Window {
     if (!projectile.active) {
       return;
     }
-    console.log(projectile);
     const {
       weaponType,
       fireSequence,
@@ -184,8 +178,8 @@ export default class LocalMap extends Window {
       .filter(fireSequenceItem => fireSequenceItem)
       .length;
 
-    console.log(effectAreasIndex);
-    console.log(projectile.effectAreas);
+    // console.log(effectAreasIndex);
+    // console.log(projectile.effectAreas);
 
     projectile.effectAreas[effectAreasIndex]
 
@@ -232,7 +226,6 @@ export default class LocalMap extends Window {
       display.draw(this.x + x, this.y + y, fireGlyph, fireFgColor, bgAdjusted);
     }
     if (fireSequenceIndex >= fireSequence.length - 3) {
-      console.log(projectile.effectAreas[1]);
       projectile.effectAreas[1]
 
         // Only render visible points of the line
