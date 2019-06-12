@@ -100,8 +100,10 @@ export default class LocalMap extends Window {
         fgAdjusted, bgDebugAdjusted);
     });
 
-    // this.vehicles.render(display, watchBrightness, this, this.x, this.y,
-    //   this.battleSystem.playerSquadLocalFov);
+    this.vehicles
+      .forEach(vehicle =>
+        vehicle.render(
+          display, watchBrightness, this, this.x, this.y, this.battleSystem.playerSquadLocalFov));
 
     this.renderTargetLine(display, watchBrightness);
     this.renderFiring(display, watchBrightness);

@@ -1,20 +1,44 @@
 {
-  "North-South Sampan": [
-    ["ᐼ"],
-    ["ዘ"],
-    ["ዘ"],
-    ["ዘ"],
-    ["ᐺ"]
-  ],
-  "East-West Sampan": [
-    ["ᑄ", "Ꮖ", "Ꮖ", "Ꮖ", "ᑁ"]
-  ],
-  "Crashed Helicopter": [
-    ["x"]
-  ],
-  "BRT": [
-    ["x", "x"],
-    ["x", "x"],
-    ["x", "x"]
-  ]
+  "Sampan": {
+    "xOffset": 0,
+    "yOffset": 0,
+    "fgColor": "#ffffff",
+    "bgColor": "#000000",
+    "tiles": {
+      "North-South": [
+        ["ᐼ"],
+        ["ዘ"],
+        ["ዘ"],
+        ["ዘ"],
+        ["ᐺ"]
+      ],
+      "West-East": [
+        ["ᑄ", "Ꮖ", "Ꮖ", "Ꮖ", "ᑁ"]
+      ]
+    }
+  },
+  "Crashed Helicopter 1": {
+    "xOffset": 0,
+    "yOffset": 0,
+    "fgColor": "#ffffff",
+    "bgColor": "#000000",
+    "tiles": [
+      ["\\", "─", "╮"],
+      ["│", "╳", "│"],
+      ["╲", " ", "\\"],
+      [" ", "║", " "],
+      [" ", "╩", " "]
+    ]
+  },
+  "BRT": {
+    "xOffset": -1,
+    "yOffset": -1,
+    "fgColor": "#ff0000",
+    "bgColor": "#364624",
+    "tiles": [
+      ["╓", "|", "╖"],
+      ["║", "۝", "║"],
+      ["╙", "─", "╜"]
+    ]
+  }
 }

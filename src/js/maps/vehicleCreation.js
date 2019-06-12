@@ -1,6 +1,8 @@
 import properties from '../properties';
 import utils from '../util/utils';
 
+import Vehicle from '../characters/Vehicle';
+
 import vehicleDictionary from './data/vehicleDictionary';
 import localTileDictionary from './data/localTileDictionary';
 
@@ -67,8 +69,20 @@ function placeSampanInLocalMap(map, northSouth) {
   return vehicles;
 }
 
+function placeBrtInLocalMap() {
+  return [new Vehicle(50, 12, vehicleDictionary['BRT'])];
+}
+
+function placeHelicoptersInLocalMap() {
+  return [
+    new Vehicle(64, 12, vehicleDictionary['Crashed Helicopter 1']),
+    new Vehicle(40, 12, vehicleDictionary['Crashed Helicopter 1'])
+  ];
+}
+
+
 function createVehicles(map) {
-  return placeSampanInLocalMap(map, true);
+  return placeHelicoptersInLocalMap();
 }
 
 export default {

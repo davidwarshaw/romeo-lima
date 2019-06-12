@@ -37,9 +37,9 @@ export default class BattleSystem {
       properties.localWidth, properties.localHeight);
     this.map = game.playState.localMap;
 
-    // game.playState.vehicles = vehicleCreation.createVehicles(
-    //   game.playState.localMap);
-    // this.vehicles = game.playState.vehicles;
+    game.playState.vehicles = vehicleCreation.createVehicles(
+      game.playState.localMap);
+    this.vehicles = game.playState.vehicles;
 
     // Add the participating squad members to the battle and place them
     // in the map
