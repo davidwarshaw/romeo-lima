@@ -60,7 +60,7 @@ function placeSampanInLocalMap(map, northSouth) {
       const tile = {
         x: col,
         y: row,
-        name: vehicleTileName,
+        name: vehicleTileName
       };
       vehicles[utils.keyFromXY(col, row)] = tile;
     }
@@ -69,14 +69,14 @@ function placeSampanInLocalMap(map, northSouth) {
   return vehicles;
 }
 
-function placeBrtInLocalMap() {
-  return [new Vehicle(50, 12, vehicleDictionary['BRT'])];
+function placeBrtInLocalMap(map) {
+  return [new Vehicle(50, 12, vehicleDictionary['BRT'], map)];
 }
 
-function placeHelicoptersInLocalMap() {
+function placeHelicoptersInLocalMap(map) {
   return [
-    new Vehicle(64, 12, vehicleDictionary['Crashed Helicopter 1']),
-    new Vehicle(40, 12, vehicleDictionary['Crashed Helicopter 1'])
+    new Vehicle(64, 6, vehicleDictionary['Crashed Helicopter 1'], map),
+    new Vehicle(40, 10, vehicleDictionary['Crashed Helicopter 2'], map)
   ];
 }
 
@@ -85,6 +85,4 @@ function createVehicles(map) {
   return placeHelicoptersInLocalMap();
 }
 
-export default {
-  createVehicles,
-};
+export default { createVehicles };

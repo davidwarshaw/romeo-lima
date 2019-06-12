@@ -4,6 +4,13 @@
     "yOffset": 0,
     "fgColor": "#ffffff",
     "bgColor": "#000000",
+    "traversableTiles" : [
+      "Rapid Water",
+      "Shallow Marsh Water",
+      "Deep Marsh Water",
+      "Shallow River Water",
+      "Deep River Water"
+    ],
     "tiles": {
       "North-South": [
         ["ᐼ"],
@@ -21,13 +28,31 @@
     "xOffset": 0,
     "yOffset": 0,
     "fgColor": "#ffffff",
-    "bgColor": "#000000",
+    "bgColor": "#125459",
+    "traversableTiles": [],
     "tiles": [
-      ["╲", "─", "╮"],
-      ["│", "╳", "│"],
-      ["\\", " ", "╲"],
-      [" ", "║", " "],
-      [" ", "╩", " "]
+      ["╲", "", "", "", ""],
+      ["", "╲", "─", "╮", ""],
+      ["", "ཟ", "╳", "│", ""],
+      ["", "ᚨ", " ", "╲", ""],
+      ["", "⍀", "ᆖ", "/", "╲"],
+      ["", "", "║", "", ""],
+      ["", "", "║", "", ""],
+      ["", "", "╩", "", ""]
+    ]
+  },
+  "Crashed Helicopter 2": {
+    "xOffset": 0,
+    "yOffset": 0,
+    "fgColor": "#ffffff",
+    "bgColor": "#125459",
+    "traversableTiles": [],
+    "tiles": [
+      ["╓", "╳", "", "", "", "", "", "", "", ""],
+      ["║", "/", "", "", "", "", "", "", "", ""],
+      ["║", "", "", "─", "─", "─", "─", "─", "─", "─"],
+      ["", "", "෴", "═", "⌫", "⌫", "╨", "⌦", "╮", ""],
+      ["", "", "", "▝", "─", "─", "─", "─", "╯", ""]
     ]
   },
   "BRT": {
@@ -35,10 +60,18 @@
     "yOffset": -1,
     "fgColor": "#ff0000",
     "bgColor": "#364624",
+    "traversableTiles": [
+      "Highway",
+      "Highway Edge",
+      "Highway Center"
+    ],
     "tiles": [
-      ["╓", "|", "╖"],
+      ["╓", "─", "╖"],
       ["║", "۝", "║"],
       ["╙", "─", "╜"]
+    ],
+    "rotation": [
+      "\\", "|", "/", "─", "\\", "|", "/", "─"
     ]
   }
 }
