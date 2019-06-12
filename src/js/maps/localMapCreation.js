@@ -3,7 +3,6 @@ import utils from '../util/utils';
 import TileMath from '../util/TileMath';
 
 import buildingCreation from './buildingCreation';
-import vehicleCreation from './vehicleCreation';
 import mapProcedures from './mapProcedures';
 
 const mapCreators = {
@@ -51,6 +50,7 @@ const mapCreators = {
     mapProcedures.tilesWithNeighbors(map, 'Low Grass',
       ['Medium Grass 1', 'Medium Grass 2'], 2)
       .forEach(tile => tile.name = 'Medium Grass 1');
+
     return map;
   },
 
@@ -73,9 +73,9 @@ const mapCreators = {
       isos.push({ radius, xNoise, yNoise });
     }
 
-    const forestMap = mapCreators.forest(width, height, { percentDense });
+    const map = mapCreators.forest(width, height, { percentDense });
 
-    Object.entries(forestMap)
+    Object.entries(map)
       .forEach(tile => {
         const x = tile[1].x - edgeTile.x;
         const y = tile[1].y - edgeTile.y;
@@ -91,7 +91,8 @@ const mapCreators = {
           }
         });
       });
-    return forestMap;
+
+    return map;
   },
 
   marsh(width, height, argument) {
@@ -178,9 +179,9 @@ const mapCreators = {
     const x1 = Math.round(x0 + (radius * Math.cos(angle)));
     const y1 = Math.round(y0 + (radius * Math.sin(angle)));
 
-    const forestMap = mapCreators.forest(width, height, { percentDense });
+    const map = mapCreators.forest(width, height, { percentDense });
 
-    Object.entries(forestMap)
+    Object.entries(map)
       .forEach(tile => {
         const x = tile[1].x - x1;
         const y = tile[1].y - y1;
@@ -208,42 +209,39 @@ const mapCreators = {
 
     // Consolidate water
     mapProcedures
-      .tilesWithNeighbors(forestMap, forestTiles, 'Deep River Water', 3)
+      .tilesWithNeighbors(map, forestTiles, 'Deep River Water', 3)
       .forEach(tile => tile.name = 'Deep River Water');
     mapProcedures
-      .tilesWithNeighbors(forestMap, 'Deep River Water', forestTiles, 5)
+      .tilesWithNeighbors(map, 'Deep River Water', forestTiles, 5)
       .forEach(tile => tile.name = 'Low Grass');
 
     // Add shalllows
     mapProcedures
-      .tilesWithNeighbors(forestMap, 'Deep River Water', forestTiles, 2)
+      .tilesWithNeighbors(map, 'Deep River Water', forestTiles, 2)
       .forEach(tile => tile.name = 'Shallow River Water');
     mapProcedures
-      .tilesWithNeighbors(forestMap,
+      .tilesWithNeighbors(map,
         'Deep River Water', 'Shallow River Water', 2)
       .forEach(tile => tile.name = 'Shallow River Water');
     mapProcedures
-      .tilesWithNeighbors(forestMap,
+      .tilesWithNeighbors(map,
         'Deep River Water', 'Shallow River Water', 3)
       .forEach(tile => tile.name = 'Shallow River Water');
 
     // Add shore line marshes
     mapProcedures
-      .tilesWithNeighbors(forestMap, marshGrassTiles, 'Shallow River Water', 1)
+      .tilesWithNeighbors(map, marshGrassTiles, 'Shallow River Water', 1)
       .forEach(tile => tile.name = 'Medium Grass 2');
     mapProcedures
-      .tilesWithNeighbors(forestMap, marshGrassTiles, 'Marsh Grass', 3)
+      .tilesWithNeighbors(map, marshGrassTiles, 'Marsh Grass', 3)
       .forEach(tile => tile.name = 'Medium Grass 1');
 
     // Add mud grass
     mapProcedures
-      .tilesByChance(forestMap, 'Shallow River Water', 20)
+      .tilesByChance(map, 'Shallow River Water', 20)
       .forEach(tile => tile.name = 'Mud Grass');
 
-    // Add sampan
-    //vehicleCreation.placeSampanInLocalMap(forestMap, true);
-
-    return forestMap;
+    return map;
   },
 
   waterfall(width, height, argument) {
@@ -268,13 +266,13 @@ const mapCreators = {
     const x1 = Math.round(x0 + (cliffRadius * Math.cos(cliffAngle)));
     const y1 = Math.round(y0 + (cliffRadius * Math.sin(cliffAngle)));
 
-    const forestRiver = mapCreators.forestRiver(width, height,
+    const map = mapCreators.map(width, height,
       { percentDense,
         angle: riverAngle,
         radius: riverRadius,
         noiseStd: riverNoiseStd});
 
-    Object.entries(forestRiver)
+    Object.entries(map)
       .forEach(tile => {
         const x = tile[1].x - x1;
         const y = tile[1].y - y1;
@@ -309,48 +307,48 @@ const mapCreators = {
 
     // Add to rapids
     mapProcedures
-      .tilesWithNeighbors(forestRiver, 'Deep River Water', 'Rapid Water', 1)
+      .tilesWithNeighbors(map, 'Deep River Water', 'Rapid Water', 1)
       .forEach(tile => tile.name = 'Rapid Water');
     mapProcedures
-      .tilesWithNeighbors(forestRiver, 'Deep River Water', 'Rapid Water', 2)
+      .tilesWithNeighbors(map, 'Deep River Water', 'Rapid Water', 2)
       .forEach(tile => tile.name = 'Rapid Water');
     mapProcedures
-      .tilesWithNeighbors(forestRiver, 'Deep River Water', 'Rapid Water', 2)
+      .tilesWithNeighbors(map, 'Deep River Water', 'Rapid Water', 2)
       .forEach(tile => tile.name = 'Rapid Water');
     mapProcedures
-      .tilesWithNeighbors(forestRiver, 'Shallow River Water', 'Rapid Water', 2)
+      .tilesWithNeighbors(map, 'Shallow River Water', 'Rapid Water', 2)
       .forEach(tile => tile.name = 'Rapid Water');
 
     // Add to churning
     mapProcedures
-      .tilesWithNeighbors(forestRiver, 'Deep River Water', 'Churning Water', 1)
+      .tilesWithNeighbors(map, 'Deep River Water', 'Churning Water', 1)
       .forEach(tile => tile.name = 'Churning Water');
     mapProcedures
-      .tilesWithNeighbors(forestRiver, 'Deep River Water', 'Churning Water', 2)
+      .tilesWithNeighbors(map, 'Deep River Water', 'Churning Water', 2)
       .forEach(tile => tile.name = 'Churning Water');
     mapProcedures
-      .tilesWithNeighbors(forestRiver, 'Deep River Water', 'Churning Water', 2)
+      .tilesWithNeighbors(map, 'Deep River Water', 'Churning Water', 2)
       .forEach(tile => tile.name = 'Churning Water');
     mapProcedures
-      .tilesWithNeighbors(forestRiver,
+      .tilesWithNeighbors(map,
         'Shallow River Water', 'Churning Water', 2)
       .forEach(tile => tile.name = 'Churning Water');
 
     // Make the top and bottom shallower
     mapProcedures
-      .tilesWithNeighbors(forestRiver, 'Deep River Water',
+      .tilesWithNeighbors(map, 'Deep River Water',
         ['Rapid Water', 'Churning Water'], 1)
       .forEach(tile => tile.name = 'Shallow River Water');
     mapProcedures
-      .tilesWithNeighbors(forestRiver, 'Deep River Water',
+      .tilesWithNeighbors(map, 'Deep River Water',
         'Shallow River Water', 2)
       .forEach(tile => tile.name = 'Shallow River Water');
     mapProcedures
-      .tilesWithNeighbors(forestRiver, 'Deep River Water',
+      .tilesWithNeighbors(map, 'Deep River Water',
         'Shallow River Water', 2)
       .forEach(tile => tile.name = 'Shallow River Water');
 
-    return forestRiver;
+    return map;
   },
 
   village(width, height, argument) {
@@ -461,13 +459,13 @@ const mapCreators = {
     const largeEllipseChance = 45;
     const smallEllipseChance = 65;
 
-    const forestMap = mapCreators.forest(width, height, { percentDense });
+    const map = mapCreators.forest(width, height, { percentDense });
     const largeEllipse = TileMath
       .tileEllipseFilled(width / 2, height / 2, width / 4, height / 4);
     const smallEllipse = TileMath
       .tileEllipseFilled(width / 2, height / 2, width / 6, height / 6);
 
-    Object.entries(forestMap)
+    Object.entries(map)
       .forEach(tile => {
         const inLargeEllipse =
           largeEllipse[utils.keyFromXY(tile[1].x, tile[1].y)];
@@ -487,7 +485,7 @@ const mapCreators = {
         }
       });
 
-    return forestMap;
+    return map;
   }
 };
 
@@ -505,7 +503,9 @@ function createLocalMap(seedTile, width, height) {
     noiseStd: 3,
     southBend: true
   };
-  return mapCreators.village(width, height, argument);
+
+  //return mapCreators.village(width, height, argument);
+  return mapCreators.forestRiver(width, height, argument);
 }
 
 export default {

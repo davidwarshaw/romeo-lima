@@ -8,6 +8,8 @@ import BallisticsSystem from './BallisticsSystem';
 import EnvironmentSystem from './EnvironmentSystem';
 
 import localMapCreation from '../maps/localMapCreation';
+import vehicleCreation from '../maps/vehicleCreation';
+
 import squadProcedures from '../characters/squadProcedures';
 
 export default class BattleSystem {
@@ -29,11 +31,15 @@ export default class BattleSystem {
     this.overworldTile = overworld
       .getTile(this.playerSquad.x, this.playerSquad.y);
 
+    // Create the local map and any vehicles
     game.playState.localMap = localMapCreation.createLocalMap(
       this.overworldTile,
       properties.localWidth, properties.localHeight);
     this.map = game.playState.localMap;
 
+    // game.playState.vehicles = vehicleCreation.createVehicles(
+    //   game.playState.localMap);
+    // this.vehicles = game.playState.vehicles;
 
     // Add the participating squad members to the battle and place them
     // in the map

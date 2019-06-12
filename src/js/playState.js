@@ -64,8 +64,9 @@ function createPlayState() {
     squad,
     enemies,
 
-    // Local map is populated in the battle system
-    localMap: null
+    // Local map and vehicles are populated in the battle system
+    localMap: null,
+    vehicles: null
   };
 }
 
