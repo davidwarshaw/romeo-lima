@@ -22,7 +22,8 @@
       "West-East": [
         ["ᑄ", "Ꮖ", "Ꮖ", "Ꮖ", "ᑁ"]
       ]
-    }
+    },
+    "hasTurret": false
   },
   "Crashed Helicopter 1": {
     "xOffset": 0,
@@ -39,7 +40,8 @@
       ["", "", "║", "", ""],
       ["", "", "║", "", ""],
       ["", "", "╩", "", ""]
-    ]
+    ],
+    "hasTurret": false
   },
   "Crashed Helicopter 2": {
     "xOffset": 0,
@@ -53,13 +55,14 @@
       ["║", "", "", "─", "─", "─", "─", "─", "─", "─"],
       ["", "", "෴", "═", "⌫", "⌫", "╨", "⌦", "╮", ""],
       ["", "", "", "▝", "─", "─", "─", "─", "╯", ""]
-    ]
+    ],
+    "hasTurret": false
   },
   "BRT": {
     "xOffset": -1,
     "yOffset": -1,
-    "fgColor": "#ff0000",
-    "bgColor": "#364624",
+    "fgColor": "#000000",
+    "bgColor": "#dd0000",
     "traversableTiles": [
       "Highway",
       "Highway Edge",
@@ -70,8 +73,6 @@
       ["║", "۝", "║"],
       ["╙", "─", "╜"]
     ],
-    "rotation": [
-      "\\", "|", "/", "─", "\\", "|", "/", "─"
-    ]
+    "hasTurret": true
   }
 }

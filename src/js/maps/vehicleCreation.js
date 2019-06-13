@@ -82,7 +82,7 @@ function placeHelicoptersInLocalMap(map) {
 
 
 function createVehicles(map) {
-  return placeHelicoptersInLocalMap();
+  return placeBrtInLocalMap(map);
 }
 
 export default { createVehicles };

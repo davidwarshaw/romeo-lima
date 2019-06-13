@@ -20,6 +20,18 @@ export default class Vehicle {
     if (this.traversableTiles.length > 0) {
       this.placeInMap(map);
     }
+
+    this.turretRotations = [
+      { x: 1, y: 0, glyph: "─" },
+      { x: 1, y: -1, glyph: "/" },
+      { x: 0, y: -1, glyph: "|" },
+      { x: -1, y: -1, glyph: "\\" },
+      { x: -1, y: 0, glyph: "─" },
+      { x: -1, y: 1, glyph: "/" },
+      { x: 0, y: 1, glyph: "|" },
+      { x: 1, y: 1, glyph: "\\" }
+    ];
+    this.turretFacing = 2;
   }
 
   placeInMap(map) {
@@ -31,7 +43,7 @@ export default class Vehicle {
         const tileType = localTileDictionary[tile.name];
 
         // If this tile isn't traversable for the vehicle, don't pick it
-        if (!this.traversableTiles.contains(tileType)) {
+        if (!this.traversableTiles.includes(tileType)) {
           return false;
         }
 
@@ -46,7 +58,7 @@ export default class Vehicle {
             }
 
             // If this tile isn't traversable for the vehicle, don't pick it
-            if (!this.traversableTiles.contains(vehicleTile)) {
+            if (!this.traversableTiles.includes(vehicleTile)) {
               return false;
             }
           }
@@ -90,6 +102,14 @@ export default class Vehicle {
           display.draw(xOffset + mapX, yOffset + mapY, glyph, this.fgColor, this.bgColor);
         }
       }
+    }
+
+    // If the vehicle has a turret draw it at the correct offset for the facing
+    if (this.hasTurret) {
+      const turret = this.turretRotations[this.turretFacing];
+      const mapX = this.x + turret.x;
+      const mapY = this.y + turret.y;
+      display.draw(xOffset + mapX, yOffset + mapY, turret.glyph, this.fgColor, this.bgColor);
     }
   }
 
