@@ -105,6 +105,7 @@ export default class BattleSystem {
 
     this.initProjectile();
     this.initMovement();
+    this.initVehicleAction();
   }
 
   initProjectile() {
@@ -132,6 +133,13 @@ export default class BattleSystem {
       line: [],
       index: 0
     };
+  }
+
+  initVehicleAction() {
+    this.vehicleAction = {
+      intervalId: null,
+      active: false
+    }
   }
 
   nextCharacter() {
@@ -167,6 +175,10 @@ export default class BattleSystem {
     // Bump the character index and assign the next character
     this.characterIndex++;
     if (this.characterIndex >= this.characters.length) {
+
+      // After all characters have had a turn, process the vehicles
+      this.vehicles.
+
       this.characterIndex = 0;
     }
 
@@ -426,9 +438,9 @@ export default class BattleSystem {
       return false;
     }
 
-    // Dont allow a move into a tile with a squad member in it
-    const playerSquadMemberInTile = this.playerSquad.getByXY(nextX, nextY);
-    const enemySquadMemberInTile = this.enemySquad.getByXY(nextX, nextY);
+    // Dont allow a move into a tile with a live squad member in it
+    const playerSquadMemberInTile = this.playerSquad.getAliveByXY(nextX, nextY);
+    const enemySquadMemberInTile = this.enemySquad.getAliveByXY(nextX, nextY);
     if (playerSquadMemberInTile || enemySquadMemberInTile) {
       return false;
     }
@@ -517,6 +529,23 @@ export default class BattleSystem {
         .forEach(point => this.environmentSystem.addFire(point, point.amount));
 
       this.initProjectile();
+
+      // Select the next character, and refresh the screen again
+      this.nextCharacter();
+      this.game.refresh();
+    }
+  }
+
+  vehicleActionAnimationFrame() {
+    this.game.refresh();
+
+    const animationsComplete = this.vehicles
+      .map(vehicle => vehicle.animationFrame());
+
+    if (animationsComplete.every(complete => complete)) {
+      clearInterval(this.vehicleAction.intervalId);
+
+      this.initVehicleAction();
 
       // Select the next character, and refresh the screen again
       this.nextCharacter();

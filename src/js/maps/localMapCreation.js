@@ -5,6 +5,19 @@ import TileMath from '../util/TileMath';
 import buildingCreation from './buildingCreation';
 import mapProcedures from './mapProcedures';
 
+const forestTiles = [
+  'Low Grass',
+  'Medium Grass 1', 'Medium Grass 2',
+  'Tall Grass 1', 'Tall Grass 2',
+  'Medium Tree 1', 'Medium Tree 2', 'Medium Tree 3',
+  'Bush 1', 'Bush 2', 'Bush 3'];
+
+const marshGrassTiles = [
+  'Low Grass',
+  'Medium Grass 1', 'Medium Grass 2',
+  'Tall Grass 1', 'Tall Grass 2'
+];
+
 const mapCreators = {
   forest(width, height, argument) {
     const { percentDense } = argument;
@@ -193,19 +206,6 @@ const mapCreators = {
           tile[1].name = 'Deep River Water';
         }
       });
-
-    const forestTiles = [
-      'Low Grass',
-      'Medium Grass 1', 'Medium Grass 2',
-      'Tall Grass 1', 'Tall Grass 2',
-      'Medium Tree 1', 'Medium Tree 2', 'Medium Tree 3',
-      'Bush 1', 'Bush 2', 'Bush 3'];
-    const marshGrassTiles = [
-      'Low Grass',
-      'Medium Grass 1', 'Medium Grass 2',
-      'Tall Grass 1', 'Tall Grass 2'
-    ];
-
 
     // Consolidate water
     mapProcedures
@@ -432,13 +432,11 @@ const mapCreators = {
     buildingCreation.placePathsInLocalMap(map);
 
     // Smooth out the path
-    const grasses = ['Low Grass', 'Medium Grass 1', 'Medium Grass 2',
-      'Tall Grass 1', 'Tall Grass 2'];
-    mapProcedures.tilesWithNeighbors(map, grasses, 'Path', 1)
+    mapProcedures.tilesWithNeighbors(map, marshGrassTiles, 'Path', 1)
       .forEach(tile => tile.name = 'Path');
-    mapProcedures.tilesWithNeighbors(map, grasses, 'Path', 1)
+    mapProcedures.tilesWithNeighbors(map, marshGrassTiles, 'Path', 1)
       .forEach(tile => tile.name = 'Path');
-    mapProcedures.tilesWithNeighbors(map, grasses, 'Path', 1)
+    mapProcedures.tilesWithNeighbors(map, marshGrassTiles, 'Path', 1)
       .forEach(tile => tile.name = 'Path');
 
     // Add some grass with mud
@@ -486,9 +484,56 @@ const mapCreators = {
       });
 
     return map;
+  },
+
+  highway(width, height, argument) {
+    const percentDense = 25;
+    const map = mapCreators.forest(width, height, { percentDense });
+    const centerOffset = Math.round((properties.rng.getPercentage() - 50) / 4);
+    const roadXCenter = Math.round((width * 0.75) + centerOffset);
+    const roadHalfWidth = 6;
+    let roadDriftX = roadXCenter;
+
+    for (let y = 0; y < height; y++) {
+
+      const chance = properties.rng.getPercentage();
+      let roadDriftAmount = 0;
+      if (chance <= 15) {
+        roadDriftAmount = -1;
+      } else if (chance >= 85) {
+        roadDriftAmount = 1;
+      }
+      roadDriftX = roadDriftX + roadDriftAmount;
+
+      // console.log(`roadDriftX: ${roadDriftX} roadDriftAmount: ${roadDriftAmount}`);
+      for (let x = roadDriftX - roadHalfWidth; x <= roadDriftX + roadHalfWidth; x++) {
+        const terrainHeight = 0;
+        const secondPass = false;
+        let name = 'Highway';
+        if (x === roadDriftX - roadHalfWidth || x === roadDriftX + roadHalfWidth) {
+          name = 'Highway Edge'
+        } else if (x === roadDriftX) {
+          name = 'Highway Center'
+        }
+        map[utils.keyFromXY(x, y)] = { name, x, y, terrainHeight, secondPass };
+      }
+    }
+
+    mapProcedures.tilesWithNeighbors(map, forestTiles, 'Highway Edge', 1)
+      .forEach(tile => tile.name = 'Path');
+    mapProcedures.tilesWithNeighbors(map, forestTiles, 'Path', 2)
+      .forEach(tile => {
+        const chance = properties.rng.getPercentage();
+        if (chance <= 50) {
+          tile.name = 'Path'
+        }
+      });
+    mapProcedures.tilesWithNeighbors(map, forestTiles, 'Path', 2)
+      .forEach(tile => tile.name = 'Medium Grass 1');
+
+    return map;
   }
 };
-
 
 function createLocalMap(seedTile, width, height) {
   // const createFunction = seedTile.localMapCreationFunction;
@@ -505,7 +550,7 @@ function createLocalMap(seedTile, width, height) {
   };
 
   //return mapCreators.village(width, height, argument);
-  return mapCreators.forestRiver(width, height, argument);
+  return mapCreators.highway(width, height, argument);
 }
 
 export default {

@@ -9,6 +9,10 @@ export default class Vehicle {
     this.x = x;
     this.y = y;
 
+    this.actionActive = false;
+    this.actionSequence = [];
+    this.actionSequenceIndex = 0;
+
     // Copy props to vehicle
     Object.entries(vehicleDefinition)
       .forEach(entry => this[entry[0]] = entry[1]);
@@ -16,6 +20,8 @@ export default class Vehicle {
     // Set height and width from tiles (must be rectangular)
     this.height = this.tiles.length;
     this.width = this.tiles[0].length;
+
+    console.log(this);
 
     if (this.traversableTiles.length > 0) {
       this.placeInMap(map);
@@ -40,17 +46,18 @@ export default class Vehicle {
       .filter((entry) => {
         const point = utils.xyFromKey(entry[0]);
         const tile = entry[1];
-        const tileType = localTileDictionary[tile.name];
 
         // If this tile isn't traversable for the vehicle, don't pick it
-        if (!this.traversableTiles.includes(tileType)) {
+        if (!this.traversableTiles.includes(tile.name)) {
           return false;
         }
 
         // Check if the other vehicle tiles will fit
         for (let col = 0; col < this.height; col++) {
           for (let row = 0; row < this.width; row++) {
-            const vehicleTile = map[utils.keyFromXY(point.x + col, point.y + row)];
+            const mapX = point.x + this.xOffset + col;
+            const mapY = point.y + this.yOffset + row;
+            const vehicleTile = map[utils.keyFromXY(mapX, mapY)];
 
             // If the vehicleTile is not on the map, don't pick this tile
             if (!vehicleTile) {
@@ -58,7 +65,7 @@ export default class Vehicle {
             }
 
             // If this tile isn't traversable for the vehicle, don't pick it
-            if (!this.traversableTiles.includes(vehicleTile)) {
+            if (!this.traversableTiles.includes(vehicleTile.name)) {
               return false;
             }
           }
@@ -79,9 +86,13 @@ export default class Vehicle {
 
     // If there's a good starting place, then place the tile
     if (startingTiles.length > 0) {
-      this.x = startingTiles.x;
-      this.y = startingTiles.y;
+      this.x = startingTiles[0].x;
+      this.y = startingTiles[0].y;
     }
+  }
+
+  animationFrame() {
+
   }
 
   render(display, watchBrightness, map, xOffset, yOffset,
