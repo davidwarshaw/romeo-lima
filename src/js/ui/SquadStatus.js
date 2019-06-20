@@ -43,15 +43,10 @@ export default class SquadStatus extends Window {
   }
 
   renderStats(display, member, i, col, row) {
-    this.renderBar(display, col, row, '♠  ', 2, '♠  ', 2);
-    this.renderBar(display, col, row + 1, '♥  ', 2, '♥  ', 2);
-    this.renderBar(display, col, row + 2, '♣  ', 2, '♧  ', 2);
-    this.renderBar(display, col, row + 3, '♦  ', 2, '♢  ', 2);
-
-    // this.renderBar(display, col, row, '♠  ', 2, '♤  ', 2);
-    // this.renderBar(display, col, row + 1, '♥  ', 2, '♡  ', 2);
-    // this.renderBar(display, col, row + 2, '♣  ', 2, '♧  ', 2);
-    // this.renderBar(display, col, row + 3, '♦  ', 2, '♢  ', 2);
+    this.renderBar(display, col, row, '♠', 10, '♠', 3);
+    this.renderBar(display, col, row + 1, '♥', 13, '♥', 0);
+    this.renderBar(display, col, row + 2, '♣', 13, '♣', 0);
+    this.renderBar(display, col, row + 3, '♦', 13, '♦', 0);
   }
 
   renderBar(display, col, row, full, fullValue, empty, emptyValue) {

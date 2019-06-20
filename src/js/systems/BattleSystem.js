@@ -175,10 +175,6 @@ export default class BattleSystem {
     // Bump the character index and assign the next character
     this.characterIndex++;
     if (this.characterIndex >= this.characters.length) {
-
-      // After all characters have had a turn, process the vehicles
-      this.vehicles.
-
       this.characterIndex = 0;
     }
 

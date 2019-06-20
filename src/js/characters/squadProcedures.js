@@ -36,6 +36,13 @@ function weaponReport() {
     });
 }
 
+function nameCharacter(faction, role) {
+  if (faction === 'US') {
+    return properties.rng.getWeightedValue(surnames);
+  }
+  return `${faction} ${role}`;
+}
+
 function populateInventory(members, inventory, startWithEquipment) {
 
   // Add starting equipment
@@ -415,8 +422,10 @@ function getMovesForMember(member) {
 
 export default {
   weaponReport,
+  nameCharacter,
   populatePlayerInventory,
   populateEnemyInventory,
+  rollStats,
   createPlayerSquadMembers,
   createSquadMembers,
   placePlayerSquadInLocalMap,

@@ -395,6 +395,7 @@ const mapCreators = {
         .getWeightedValue(buildingCreation.buildingWeights);
       const buildingHeight = Number(stringDim.split('x')[0]);
       const buildingWidth = Number(stringDim.split('x')[1]);
+      const justHutTiles = true;
 
       if (yMax < buildingHeight) {
         yMax = buildingHeight + 2;
@@ -410,7 +411,7 @@ const mapCreators = {
         frontToSouth = false;
       }
       yGlobalMax = Math.max(yGlobalMax, yMax + buildingHeight);
-      return { x, y, stringDim, buildingWidth, buildingHeight, frontToSouth };
+      return { x, y, stringDim, buildingWidth, buildingHeight, frontToSouth, justHutTiles };
     });
 
     // Add groves around trees
@@ -532,9 +533,33 @@ const mapCreators = {
       .forEach(tile => tile.name = 'Medium Grass 1');
 
     return map;
-  }
-};
+  },
 
+  crashSite(width, height, argument) {
+    const { percentDense } = argument;
+    // The crash site is a clearing with the crashed helicopters
+    const map = mapCreators.clearing(width, height, argument);
+    const helicopterVertical = {
+      x: 60, y: 3,
+      stringDim: "Crashed Helicopter Vertical",
+      buildingWidth: 5, buildingHeight: 8,
+      frontToSouth: true,
+      justHutTiles: false
+    };
+    buildingCreation.placeBuildingInLocalMap(map, helicopterVertical)
+    const helicopterHorizontal = {
+      x: 30, y: 8,
+      stringDim: "Crashed Helicopter Horizontal",
+      buildingWidth: 10, buildingHeight: 5,
+      frontToSouth: true,
+      justHutTiles: false
+    };
+    buildingCreation.placeBuildingInLocalMap(map, helicopterHorizontal)
+    console.log(map);
+    return map;
+  }
+
+};
 function createLocalMap(seedTile, width, height) {
   // const createFunction = seedTile.localMapCreationFunction;
   // const createArgument = JSON.parse(seedTile.localMapCreationArgument);
@@ -550,7 +575,8 @@ function createLocalMap(seedTile, width, height) {
   };
 
   //return mapCreators.village(width, height, argument);
-  return mapCreators.highway(width, height, argument);
+  //return mapCreators.highway(width, height, argument);
+  return mapCreators.crashSite(width, height, argument);
 }
 
 export default {

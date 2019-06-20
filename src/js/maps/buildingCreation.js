@@ -17,10 +17,11 @@ const buildingWeights = {
 const hutTiles = [
   'Hut Floor', 'Hut Door', 'Hut Wall', 'Hut Window', 'Hut Furniture'];
 
-function tileNameForGlyph(glyph) {
+function tileNameForGlyph(glyph, justHutTiles) {
   const tileName = Object.entries(localTileDictionary)
     .map(entry => ({ name: entry[0], glyph: entry[1].glyph}))
-    .filter(tile => tile.glyph === glyph && tile.name.startsWith('Hut'));
+    .filter(tile => tile.glyph === glyph)
+    .filter(tile => justHutTiles ? tile.name.startsWith('Hut') : true);
   if (tileName.length > 0) {
     return tileName[0].name;
   }
@@ -54,7 +55,8 @@ function placeBuildingInLocalMap(map, building) {
     x, y,
     stringDim,
     buildingWidth, buildingHeight,
-    frontToSouth
+    frontToSouth,
+    justHutTiles
   } = building;
 
   const buildingDef = buildingDictionary[stringDim];
@@ -66,9 +68,12 @@ function placeBuildingInLocalMap(map, building) {
         (buildingHeight - 1) - (row - y);
       const buildingCol = col - x;
       const buildingGlyph = buildingDef[buildingRow][buildingCol];
-      const buildingTileName = tileNameForGlyph(buildingGlyph);
+      const buildingTileName = tileNameForGlyph(buildingGlyph, justHutTiles);
 
-      map[utils.keyFromXY(col, row)].name = buildingTileName;
+      if (buildingTileName.length > 0) {
+        console.log(buildingTileName);
+        map[utils.keyFromXY(col, row)].name = buildingTileName;
+      }
     }
   }
 }

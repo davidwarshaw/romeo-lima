@@ -146,7 +146,7 @@ export default class EnvironmentSystem {
             if (!tile) {
               continue;
             }
-
+            
             // If the tile is already distributed, don't distribute
             const neighbor = this.smoke[utils.keyFromXY(col, row)];
             if (neighbor.distributed) {
@@ -198,6 +198,12 @@ export default class EnvironmentSystem {
             // If the tile is not on the map, don't distribute fire
             const tile = this.map[utils.keyFromXY(col, row)];
             if (!tile) {
+              continue;
+            }
+
+            // If the tile is not flammable, don't
+            const tileType = localTileDictionary[tile.name];
+            if (!tileType.flammable) {
               continue;
             }
 
