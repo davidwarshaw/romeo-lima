@@ -3,16 +3,25 @@ function titleCase(lower) {
   return lower.replace(/\b\w/, c => c.toUpperCase());
 }
 
-function createBattleMessages(fireActions) {
-  const messages = Object.entries(fireActions)
+function createMeleeMessage(character) {
+  return { name: character.name, text: 'engages in hand-to-hand combat' };
+}
+
+function createFireMessage(character, weapon) {
+  return { name: character.name, text: `fires his ${weapon.name}` };
+}
+
+function createBattleMessages(actions) {
+  // console.log(`createBattleMessages: actions: ${JSON.stringify(actions)}`);
+  const messages = Object.entries(actions)
     .map(action => {
       const name = action[0];
       const { hits, killed } = action[1];
-      const hitsWords = timesWords(hits);
+      const luckImpact = `(-${hits} ♦)`;
       if (killed) {
-        return { name, text: `was hit${hitsWords} and killed.` };
+        return { name, text: `was hit and killed: ${luckImpact}` };
       }
-      return { name, text: `was hit${hitsWords}.` };
+      return { name, text: `was almost hit: ${luckImpact}` };
     });
   return messages;
 }
@@ -41,6 +50,8 @@ function truncateAndCenterText(text, left, width) {
 
 export default {
   titleCase,
+  createMeleeMessage,
+  createFireMessage,
   createBattleMessages,
   timesWords,
   truncateAndCenterText

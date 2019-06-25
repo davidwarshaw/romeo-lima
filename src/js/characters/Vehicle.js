@@ -1,8 +1,6 @@
 import properties from '../properties';
 import utils from '../util/utils';
 
-import localTileDictionary from '../maps/data/localTileDictionary.json';
-
 export default class Vehicle {
 
   constructor(x, y, vehicleDefinition, map) {
@@ -28,14 +26,14 @@ export default class Vehicle {
     }
 
     this.turretRotations = [
-      { x: 1, y: 0, glyph: "─" },
-      { x: 1, y: -1, glyph: "/" },
-      { x: 0, y: -1, glyph: "|" },
-      { x: -1, y: -1, glyph: "\\" },
-      { x: -1, y: 0, glyph: "─" },
-      { x: -1, y: 1, glyph: "/" },
-      { x: 0, y: 1, glyph: "|" },
-      { x: 1, y: 1, glyph: "\\" }
+      { x: 1, y: 0, glyph: '─' },
+      { x: 1, y: -1, glyph: '/' },
+      { x: 0, y: -1, glyph: '|' },
+      { x: -1, y: -1, glyph: '\\' },
+      { x: -1, y: 0, glyph: '─' },
+      { x: -1, y: 1, glyph: '/' },
+      { x: 0, y: 1, glyph: '|' },
+      { x: 1, y: 1, glyph: '\\' }
     ];
     this.turretFacing = 2;
   }

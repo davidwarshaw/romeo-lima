@@ -88,7 +88,7 @@ export default class InventoryModal extends Window {
 
         // If the item is assignable, show who, if anyone, it's assigned to
         if (item.assignable) {
-          let assignment = 'unassigned';
+          let assignment = 'assign';
 
           // Cast to integer
           const assignedNumber = Number(item.assigned);
@@ -158,19 +158,17 @@ export default class InventoryModal extends Window {
     }
 
     const currentlyAssignedNumber = item.assigned;
-    console.log('currentlyAssignedNumber');
-    console.log(currentlyAssignedNumber);
-    console.log('memberNumber');
-    console.log(memberNumber);
+
     // If the item is not assigned to the character, assign it
     if (currentlyAssignedNumber !== memberNumber) {
-      console.log('not equal');
+
       // If the item is assigned to someone else, unassign it
       if (currentlyAssignedNumber) {
         const currentlyAssigned = this.squad.getByNumber(currentlyAssignedNumber);
         if (itemIsWeapon) {
           currentlyAssigned.weapon = null;
-        } else {
+        }
+        else {
           currentlyAssigned.secondary = null;
         }
         this.squad.inventory.unassignItem(itemNumber);
@@ -178,7 +176,8 @@ export default class InventoryModal extends Window {
       this.squad.inventory.assignItem(itemNumber, memberNumber);
       if (itemIsWeapon) {
         member.weapon = item;
-      } else {
+      }
+      else {
         member.secondary = item;
       }
     }
@@ -188,7 +187,8 @@ export default class InventoryModal extends Window {
       this.squad.inventory.unassignItem(itemNumber);
       if (itemIsWeapon) {
         member.weapon = null;
-      } else {
+      }
+      else {
         member.secondary = null;
       }
     }
@@ -246,7 +246,7 @@ export default class InventoryModal extends Window {
   getCommands() {
     return [
       '[↑↓] Scroll',
-      '[1..8] Assign',
+      '[1..8] Assign/Use',
       '[I] Close'
     ];
   }

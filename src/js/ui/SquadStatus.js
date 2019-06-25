@@ -20,6 +20,13 @@ export default class SquadStatus extends Window {
     this.columnPadding = 3;
 
     this.pointmanGlyph = 'ᐃ';
+
+    this.stats = [
+      ['aggression', '♠'],
+      ['resilience', '♥'],
+      ['presence', '♣'],
+      ['luck', '♦']
+    ];
   }
 
   render(display) {
@@ -43,10 +50,14 @@ export default class SquadStatus extends Window {
   }
 
   renderStats(display, member, i, col, row) {
-    this.renderBar(display, col, row, '♠', 10, '♠', 3);
-    this.renderBar(display, col, row + 1, '♥', 13, '♥', 0);
-    this.renderBar(display, col, row + 2, '♣', 13, '♣', 0);
-    this.renderBar(display, col, row + 3, '♦', 13, '♦', 0);
+    const maxlevel = 13;
+    this.stats.forEach((stat, i) => {
+      const name = stat[0];
+      const glyph = stat[1];
+      const statLevel = member.getStatDisplayLevel(name);
+      const remainingLevel = maxlevel - statLevel;
+      this.renderBar(display, col, row + i, glyph, statLevel, glyph, remainingLevel);
+    });
   }
 
   renderBar(display, col, row, full, fullValue, empty, emptyValue) {

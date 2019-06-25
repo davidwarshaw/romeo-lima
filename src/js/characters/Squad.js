@@ -56,14 +56,14 @@ export default class Squad {
 
   getByXY(x, y) {
     const members = this.members
-      .filter(member => member.x === x && member.y === y);
+      .filter(member => member.isAtXY(x, y));
     return members[0] || null;
   }
 
   getAliveByXY(x, y) {
     const members = this.members
       .filter(member => member.alive)
-      .filter(member => member.x === x && member.y === y);
+      .filter(member => member.isAtXY(x, y));
     return members[0] || null;
   }
 
@@ -74,10 +74,20 @@ export default class Squad {
       .reduce((acc, l) => acc + l);
   }
 
-  killMemberByNumber(number) {
+  hitMemberByNumber(number) {
+    console.log(`hitMemberByNumber: ${number}`);
     const member = this.getByNumber(number);
-    member.alive = false;
-    member.pointman = false;
+    const killed = member.hit();
+
+    if (killed) {
+      this.killMemberByNumber(number);
+    }
+  }
+
+  killMemberByNumber(number) {
+    console.log(`killMemberByNumber: ${number}`);
+    const member = this.getByNumber(number);
+    member.kill();
 
     this.inventory
       .getItemsByMemberNumber(member.number)

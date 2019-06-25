@@ -146,7 +146,7 @@ export default class EnvironmentSystem {
             if (!tile) {
               continue;
             }
-            
+
             // If the tile is already distributed, don't distribute
             const neighbor = this.smoke[utils.keyFromXY(col, row)];
             if (neighbor.distributed) {
@@ -174,8 +174,6 @@ export default class EnvironmentSystem {
           deltas.push({ x: neighbor.x, y: neighbor.y, d: smokeDelta });
         });
       });
-    console.log('updateSmoke: deltas');
-    console.log(deltas);
     deltas.forEach(delta => this.addSmoke(delta, delta.d));
   }
 
@@ -218,7 +216,7 @@ export default class EnvironmentSystem {
         }
       });
 
-    console.log(`neighborKeysNotOnFire: ${neighborKeysNotOnFire.length}`);
+    // console.log(`neighborKeysNotOnFire: ${neighborKeysNotOnFire.length}`);
 
     // Tiles not on fire catch fire if they're adjacent to 3 tiles with fire greater
     // than the threshold.
@@ -245,7 +243,6 @@ export default class EnvironmentSystem {
     });
 
     // Decrease each fire by the consumption rate and add smoke
-    console.log('updateFire: fireConsumption');
     Object.entries(this.fire)
       .filter(entry => entry[1].onFire)
       .forEach((entry) => {

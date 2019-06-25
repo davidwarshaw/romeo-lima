@@ -267,10 +267,12 @@ const mapCreators = {
     const y1 = Math.round(y0 + (cliffRadius * Math.sin(cliffAngle)));
 
     const map = mapCreators.map(width, height,
-      { percentDense,
+      {
+        percentDense,
         angle: riverAngle,
         radius: riverRadius,
-        noiseStd: riverNoiseStd});
+        noiseStd: riverNoiseStd
+      });
 
     Object.entries(map)
       .forEach(tile => {
@@ -487,7 +489,7 @@ const mapCreators = {
     return map;
   },
 
-  highway(width, height, argument) {
+  highway(width, height) {
     const percentDense = 25;
     const map = mapCreators.forest(width, height, { percentDense });
     const centerOffset = Math.round((properties.rng.getPercentage() - 50) / 4);
@@ -501,7 +503,8 @@ const mapCreators = {
       let roadDriftAmount = 0;
       if (chance <= 15) {
         roadDriftAmount = -1;
-      } else if (chance >= 85) {
+      }
+      else if (chance >= 85) {
         roadDriftAmount = 1;
       }
       roadDriftX = roadDriftX + roadDriftAmount;
@@ -512,9 +515,10 @@ const mapCreators = {
         const secondPass = false;
         let name = 'Highway';
         if (x === roadDriftX - roadHalfWidth || x === roadDriftX + roadHalfWidth) {
-          name = 'Highway Edge'
-        } else if (x === roadDriftX) {
-          name = 'Highway Center'
+          name = 'Highway Edge';
+        }
+        else if (x === roadDriftX) {
+          name = 'Highway Center';
         }
         map[utils.keyFromXY(x, y)] = { name, x, y, terrainHeight, secondPass };
       }
@@ -526,7 +530,7 @@ const mapCreators = {
       .forEach(tile => {
         const chance = properties.rng.getPercentage();
         if (chance <= 50) {
-          tile.name = 'Path'
+          tile.name = 'Path';
         }
       });
     mapProcedures.tilesWithNeighbors(map, forestTiles, 'Path', 2)
@@ -536,25 +540,24 @@ const mapCreators = {
   },
 
   crashSite(width, height, argument) {
-    const { percentDense } = argument;
     // The crash site is a clearing with the crashed helicopters
     const map = mapCreators.clearing(width, height, argument);
     const helicopterVertical = {
       x: 60, y: 3,
-      stringDim: "Crashed Helicopter Vertical",
+      stringDim: 'Crashed Helicopter Vertical',
       buildingWidth: 5, buildingHeight: 8,
       frontToSouth: true,
       justHutTiles: false
     };
-    buildingCreation.placeBuildingInLocalMap(map, helicopterVertical)
+    buildingCreation.placeBuildingInLocalMap(map, helicopterVertical);
     const helicopterHorizontal = {
       x: 30, y: 8,
-      stringDim: "Crashed Helicopter Horizontal",
+      stringDim: 'Crashed Helicopter Horizontal',
       buildingWidth: 10, buildingHeight: 5,
       frontToSouth: true,
       justHutTiles: false
     };
-    buildingCreation.placeBuildingInLocalMap(map, helicopterHorizontal)
+    buildingCreation.placeBuildingInLocalMap(map, helicopterHorizontal);
     console.log(map);
     return map;
   }
@@ -579,6 +582,4 @@ function createLocalMap(seedTile, width, height) {
   return mapCreators.crashSite(width, height, argument);
 }
 
-export default {
-  createLocalMap
-};
+export default { createLocalMap };

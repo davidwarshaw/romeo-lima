@@ -17,24 +17,24 @@ export default class BallisticsSystem {
     this.enemySquadLocalFov = enemySquadLocalFov;
   }
 
-  effectFire(characterStats, weapon, intendedLine) {
-    console.log('effectFire');
-    console.log(weapon);
+  effectFire(character, weapon, intendedLine) {
+    // console.log('effectFire');
+    // console.log(weapon);
     switch (weapon.type) {
       case 'sidearm':
       case 'rifle':
       case 'automatic rifle':
-        return this.effectSmallArmsFire(characterStats, weapon, intendedLine);
+        return this.effectSmallArmsFire(character, weapon, intendedLine);
       case 'grenade':
       case 'grenade launcher':
       case 'rocket launcher':
-        return this.effectExplosives(characterStats, weapon, intendedLine);
+        return this.effectExplosives(character, weapon, intendedLine);
       case 'flame thrower':
-        return this.effectFlame(characterStats, weapon, intendedLine);
+        return this.effectFlame(character, weapon, intendedLine);
     }
   }
 
-  effectFlame(characterStats, weapon, intendedLine) {
+  effectFlame(character, weapon, intendedLine) {
     const { power, blastRadius, accuracy, range } = weapon;
     const attackActions = {};
     const effectAreas = [];
@@ -56,7 +56,7 @@ export default class BallisticsSystem {
 
         // We only want each point affected by the flame to be included once, so add them to a map
         const flameLine = this.simulateProjectile(
-          power, accuracy, range, flameShotLine, characterStats, false, attackActions);
+          power, accuracy, range, flameShotLine, character, false, attackActions);
 
         // If the flame is long enough separate smoke and fire
         if (flameLine.length >= 4) {
@@ -96,7 +96,7 @@ export default class BallisticsSystem {
     return { effectAreas, smokeAreas, fireAreas, attackActions };
   }
 
-  effectExplosives(characterStats, weapon, intendedLine) {
+  effectExplosives(character, weapon, intendedLine) {
     const { impactPower, blastRadius, blastPower, accuracy, range } = weapon;
     const attackActions = {};
     const effectAreas = [];
@@ -105,7 +105,7 @@ export default class BallisticsSystem {
 
     // First simulate the impact of the explosive itself
     const impactLine = this.simulateProjectile(
-      impactPower, accuracy, range, intendedLine, characterStats, false, attackActions);
+      impactPower, accuracy, range, intendedLine, character, false, attackActions);
 
     // Now the impact point of the explosive becomes the center of the blast
     const center = impactLine[impactLine.length - 1];
@@ -113,7 +113,6 @@ export default class BallisticsSystem {
 
     // For each point on the blast radius simulate shrapnel
     const blastPoints = {};
-    console.log(blastRing);
     Object.keys(blastRing)
 
       // Convert map of keys to points
@@ -123,7 +122,7 @@ export default class BallisticsSystem {
 
         // We only want each point affected by the blast to be included once, so add them to a map
         this.simulateProjectile(
-          blastPower, accuracy, range, shrapnelLine, characterStats, true, attackActions)
+          blastPower, accuracy, range, shrapnelLine, character, true, attackActions)
           .forEach(point =>
             blastPoints[utils.keyFromXY(point.x, point.y)] = { x: point.x, y: point.y });
       });
@@ -157,22 +156,23 @@ export default class BallisticsSystem {
   }
 
   effectMelee(attacker, defender) {
-    // const meleeActions = {};
+    const attackActions = {};
+    const defenderSquad = attacker.playerControlled ? this.enemySquad : this.playerSquad;
     const roll = properties.rng.getPercentage();
-    const chanceToHit = this.chanceForMeleeToHit(attacker.stats, defender.stats);
+    const chanceToHit = this.chanceForMeleeToHit(attacker, defender);
     if (roll <= chanceToHit) {
-      //this.hitCharacter(characterSquad, defender, meleeActions);
+      [...Array(attacker.getNumberOfMeleeAttacs()).keys()]
+        .forEach(() => this.hitCharacter(defenderSquad, defender, attackActions));
     }
+    return attackActions;
   }
 
-  chanceForMeleeToHit(attackerStats, defenderStats) {
-    const characterAttack = attackerStats.patience / 100;
-    const targetVulnerability = (100 - defenderStats.presence) / 100;
-    const chance = (characterAttack * targetVulnerability) * 100;
+  chanceForMeleeToHit(attacker, defender) {
+    const chance = (attacker.getMeleeAttackChance() * defender.getMeleeVulnerableChance()) * 100;
     return chance;
   }
 
-  effectSmallArmsFire(characterStats, weapon, intendedLine) {
+  effectSmallArmsFire(character, weapon, intendedLine) {
     const { roundsPerBurst, bursts, power, accuracy, range } = weapon;
     const attackActions = {};
     const effectAreas = [];
@@ -183,14 +183,14 @@ export default class BallisticsSystem {
     const roundsToSimulate = roundsPerBurst * bursts;
     for (let round = 0; round < roundsToSimulate; round++) {
       effectAreas.push(this.simulateProjectile(
-        power, accuracy, range, intendedLine, characterStats, false, attackActions));
+        power, accuracy, range, intendedLine, character, false, attackActions));
     }
     return { effectAreas, smokeAreas, fireAreas, attackActions };
   }
 
   simulateProjectile(
     projectilePower, projectileAccuracy, projectileRange, intendedLine,
-    firingStats, impactsOrigin, attackActions) {
+    firingCharacter, impactsOrigin, attackActions) {
     let roundTraveling = true;
     let remainingPower = projectilePower;
 
@@ -241,7 +241,7 @@ export default class BallisticsSystem {
           // TODO: remove this!!!
           const roll = 0;
           const chanceToHit = this.chanceForFireToHit(
-            firingStats, projectileAccuracy, characterToHit.stats, tileDef);
+            firingCharacter, projectileAccuracy, characterToHit);
 
           // console.log(`${x}x${y}: ${roll} <= ${chanceToHit}` +
           //   `: ${characterToHit.name}`);
@@ -285,21 +285,20 @@ export default class BallisticsSystem {
     return actualProjectileLine;
   }
 
-  chanceForFireToHit(firingStats, projectileAccuracy, targetStats) {
-    const characterAttack = firingStats.patience / 100;
+  chanceForFireToHit(firingCharacter, projectileAccuracy, targetedCharacter) {
+    const attackChance = firingCharacter.getWeaponAttackChance();
     const accuracy = projectileAccuracy / 100;
-    const targetVulnerability = (100 - targetStats.presence) / 100;
-    const chance = (characterAttack * accuracy * targetVulnerability) * 100;
+    const vulnerableChance = targetedCharacter.getWeaponVulnerableChance();
+    const chance = (attackChance * accuracy * vulnerableChance) * 100;
     return chance;
   }
 
   hitCharacter(characterSquad, characterToHit, attackActions) {
     this.addHitAction(characterToHit, attackActions);
 
-    characterToHit.injuries++;
-    if (characterToHit.injuries > properties.maxInjuries) {
+    characterSquad.hitMemberByNumber(characterToHit.number);
+    if (!characterToHit.alive) {
       characterSquad.killMemberByNumber(characterToHit.number);
-
       this.addKillAction(characterToHit, attackActions);
     }
   }
@@ -391,8 +390,8 @@ export default class BallisticsSystem {
       muzzleFgColor: '#ffae19'
     };
 
-    console.log('generateFireAnimation(weapon)');
-    console.log(weapon);
+    // console.log('generateFireAnimation(weapon)');
+    // console.log(weapon);
     switch (fireAnimation.weaponType) {
       case 'sidearm':
       case 'rifle':

@@ -124,10 +124,10 @@ export default class JourneySystem {
     let playerSide;
     switch(playerMoveDirection) {
       case 'UP':
-        playerSide = 'BOTTOM';
+        playerSide = 'RIGHT';
         break;
       case 'DOWN':
-        playerSide = 'TOP';
+        playerSide = 'LEFT';
         break;
       case 'LEFT':
         playerSide = 'RIGHT';
