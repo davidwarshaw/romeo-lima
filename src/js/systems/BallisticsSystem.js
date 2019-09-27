@@ -41,6 +41,8 @@ export default class BallisticsSystem {
     const smokeAreas = [];
     const fireAreas = [];
 
+    const xpStatNames = ['aggresion', 'presence'];
+
     // One flame shot to every tile in the blast ring
     const origin = intendedLine[0];
     const center = intendedLine[intendedLine.length - 1];
@@ -56,7 +58,8 @@ export default class BallisticsSystem {
 
         // We only want each point affected by the flame to be included once, so add them to a map
         const flameLine = this.simulateProjectile(
-          power, accuracy, range, flameShotLine, character, false, attackActions);
+          power, accuracy, range, flameShotLine, character,
+          false, xpStatNames, attackActions);
 
         // If the flame is long enough separate smoke and fire
         if (flameLine.length >= 4) {
@@ -103,9 +106,12 @@ export default class BallisticsSystem {
     const smokeAreas = [];
     const fireAreas = [];
 
+    const xpStatNames = ['resilience'];
+
     // First simulate the impact of the explosive itself
     const impactLine = this.simulateProjectile(
-      impactPower, accuracy, range, intendedLine, character, false, attackActions);
+      impactPower, accuracy, range, intendedLine, character,
+      false, xpStatNames, attackActions);
 
     // Now the impact point of the explosive becomes the center of the blast
     const center = impactLine[impactLine.length - 1];
@@ -122,7 +128,8 @@ export default class BallisticsSystem {
 
         // We only want each point affected by the blast to be included once, so add them to a map
         this.simulateProjectile(
-          blastPower, accuracy, range, shrapnelLine, character, true, attackActions)
+          blastPower, accuracy, range, shrapnelLine, character,
+          true, xpStatNames, attackActions)
           .forEach(point =>
             blastPoints[utils.keyFromXY(point.x, point.y)] = { x: point.x, y: point.y });
       });
@@ -161,7 +168,10 @@ export default class BallisticsSystem {
     const roll = properties.rng.getPercentage();
     const chanceToHit = this.chanceForMeleeToHit(attacker, defender);
     if (roll <= chanceToHit) {
-      [...Array(attacker.getNumberOfMeleeAttacs()).keys()]
+      // Melee hits add aggresion xp
+      attacker.xp('aggression');
+      
+      [...Array(attacker.getNumberOfMeleeAttacks()).keys()]
         .forEach(() => this.hitCharacter(defenderSquad, defender, attackActions));
     }
     return attackActions;
@@ -179,18 +189,21 @@ export default class BallisticsSystem {
     const smokeAreas = [];
     const fireAreas = [];
 
+    const xpStatNames = ['presence'];
+
     // Simulate each round from each burst
     const roundsToSimulate = roundsPerBurst * bursts;
     for (let round = 0; round < roundsToSimulate; round++) {
       effectAreas.push(this.simulateProjectile(
-        power, accuracy, range, intendedLine, character, false, attackActions));
+        power, accuracy, range, intendedLine, character,
+        false, xpStatNames, attackActions));
     }
     return { effectAreas, smokeAreas, fireAreas, attackActions };
   }
 
   simulateProjectile(
     projectilePower, projectileAccuracy, projectileRange, intendedLine,
-    firingCharacter, impactsOrigin, attackActions) {
+    firingCharacter, impactsOrigin, xpStatNames, attackActions) {
     let roundTraveling = true;
     let remainingPower = projectilePower;
 
@@ -246,6 +259,9 @@ export default class BallisticsSystem {
           // console.log(`${x}x${y}: ${roll} <= ${chanceToHit}` +
           //   `: ${characterToHit.name}`);
           if (roll <= chanceToHit) {
+            // Successful hits add xp for each relevant stat
+            xpStatNames.forEach(name => firingCharacter.xp(name));
+
             this.hitCharacter(characterSquad, characterToHit, attackActions);
 
             // Hitting a character decreases power by a constant

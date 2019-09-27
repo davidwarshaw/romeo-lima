@@ -197,9 +197,15 @@ export default class BattleSystem {
       console.log(action);
 
       if (action.action === 'WAIT') {
+        // Log the action message
+        this.messages.push(action.message);
+
         this.nextCharacter();
       }
       else if (action.action === 'MOVE') {
+        // Log the action message
+        this.messages.push(action.message);
+
         console.log(this.movement);
         this.movement.active = true;
         this.movement.line = action.moveLine;
@@ -215,9 +221,6 @@ export default class BattleSystem {
         this.targetMode = false;
         this.clearTarget();
       }
-
-      // Log the AI message
-      this.messages.push(action.message);
     }
 
   }
@@ -639,12 +642,28 @@ export default class BattleSystem {
     this.enemySquad.removeMembersFromBattle();
 
     if (outcome.win) {
+
+      // Check to see if any members have leveled up
+      const leveledUps = this.playerSquad.levelUp();
+      console.log('leveledUps');
+      console.log(leveledUps);
+
       // Create the loot and then show the loot window
       const loot = squadProcedures
         .getLootByEnemySquad(
           this.enemySquad.members, this.enemySquad.inventory);
-      console.log('this.state.showLoot(loot)');
-      this.state.showLoot(loot);
+
+      // If someone has leveled up, show this menu first. Otherwise, go right to the loot.
+      if (leveledUps) {
+        const leveledUpsText = text.createLevelUpMessages(leveledUps);
+        console.log('this.state.showLevelUp(loot)');
+        this.state.showLevelUp(leveledUpsText, loot);
+      }
+      else {
+        console.log('this.state.showLoot(loot)');
+        this.state.showLoot(loot);
+      }
+
     }
     else if (!outcome.win && !outcome.escape) {
       console.log('this.state.showYouDiedBox()');

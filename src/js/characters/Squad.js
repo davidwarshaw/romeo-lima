@@ -17,6 +17,8 @@ export default class Squad {
     this.deadGlyph = '%';
     this.fgColor = '#FFFFFF';
     this.bgColor = null;
+
+    this.stats = ['aggression', 'resilience', 'presence', 'luck'];
   }
 
   getAliveMembers() {
@@ -72,6 +74,18 @@ export default class Squad {
     return this.members
       .map(member => member.alive ? 1 : 0)
       .reduce((acc, l) => acc + l);
+  }
+
+  levelUp() {
+    const leveledUps = this.members
+      .map(member => this.stats
+        .map(name => member.levelUp(name))
+        .filter(leveledUp => leveledUp))
+      .filter(leveledUps => leveledUps.length > 0);
+    if (leveledUps.length > 0) {
+      return leveledUps;
+    }
+    return null;
   }
 
   hitMemberByNumber(number) {

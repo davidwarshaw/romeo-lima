@@ -1,4 +1,5 @@
 import properties from '../properties';
+import textUtils from '../util/text';
 
 import Window from './Window';
 
@@ -20,13 +21,7 @@ export default class SquadStatus extends Window {
     this.columnPadding = 3;
 
     this.pointmanGlyph = 'ᐃ';
-
-    this.stats = [
-      ['aggression', '♠'],
-      ['resilience', '♥'],
-      ['presence', '♣'],
-      ['luck', '♦']
-    ];
+    this.stats = ['aggression', 'resilience', 'presence', 'luck'];
   }
 
   render(display) {
@@ -49,18 +44,21 @@ export default class SquadStatus extends Window {
     console.log(i);
   }
 
-  renderStats(display, member, i, col, row) {
+  renderStats(display, member, col, row) {
     const maxlevel = 13;
-    this.stats.forEach((stat, i) => {
-      const name = stat[0];
-      const glyph = stat[1];
+    this.stats.forEach((name, i) => {
+      const glyph = textUtils.glyphForName(name);
       const statLevel = member.getStatDisplayLevel(name);
       const remainingLevel = maxlevel - statLevel;
+      console.log(`name: ${name}`);
+      console.log(`i: ${i}`);
+      console.log(`row: ${row}`);
       this.renderBar(display, col, row + i, glyph, statLevel, glyph, remainingLevel);
     });
   }
 
   renderBar(display, col, row, full, fullValue, empty, emptyValue) {
+    console.log(`col: ${col} row: ${row}`);
     const fullBar = full.repeat(fullValue);
     const emptyBar = empty.repeat(emptyValue);
     let formattedText =

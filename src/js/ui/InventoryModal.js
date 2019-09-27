@@ -7,7 +7,7 @@ import Window from './Window';
 export default class InventoryModal extends Window {
   constructor(game, system, exitCb) {
     const width = 90;
-    const height = 14;
+    const height = 15;
     const x = Math.round((properties.width - width) / 2);
     const y = Math.round((properties.height - height) / 2) - 3;
     super(x, y, width, height, 'Inventory');

@@ -2,10 +2,7 @@ import ROT from 'rot-js';
 
 import Game from './Game.js';
 
-import JourneyState from './states/JourneyState';
-import InterstitialState from './states/InterstitialState';
-
-import introText from './systems/data/introText.json';
+import MenuState from './states/MenuState';
 
 window.onload = () => {
   if (!ROT.isSupported()) {
@@ -18,7 +15,6 @@ window.onload = () => {
       .querySelector('#game-container')
       .appendChild(game.display.getContainer());
 
-    const journeyState = new JourneyState(game);
-    game.switchState(new InterstitialState(game, introText.text, journeyState));
+    game.switchState(new MenuState(game));
   }
 };

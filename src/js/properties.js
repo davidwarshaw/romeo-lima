@@ -1,6 +1,6 @@
 import ROT from 'rot-js';
 
-ROT.RNG.setSeed(200);
+ROT.RNG.setSeed(100);
 ROT.Display.Rect.cache = true;
 
 export default {
@@ -61,5 +61,6 @@ export default {
   maxInjuries: 2,
   hitCharacterPowerLoss: 40,
   fovConcealmentThreshold: 100,
-  fovCoverThreshold: 75
+  fovCoverThreshold: 75,
+  animationIntervalMillis: 100
 };

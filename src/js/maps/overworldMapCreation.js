@@ -166,7 +166,7 @@ function assignBuildings(map) {
 function assignRoads(map, width, height) {
   const roadMean = width * (3 / 4);
 
-  let roadX = Math.round(properties.rng.getNormal(roadMean, 15));
+  let roadX = Math.round(properties.rng.getNormal(roadMean, 5));
   let roadY = 0;
   let roadName = 'North-South Highway';
   let roadComplete = false;
@@ -182,7 +182,8 @@ function assignRoads(map, width, height) {
       .filter(tile =>
         [
           'Low Grasses', 'Medium Grasses',
-          'River Water', 'River Rapids'
+          'River Water', 'River Rapids',
+          'Shallow Water', 'Deep Water'
         ].includes(tile.name))
 
       // First, take tiles that go south

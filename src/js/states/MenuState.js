@@ -1,15 +1,33 @@
+import properties from '../properties';
+
 import State from './State';
 
-import Window from '../ui/Window';
+import ImageBox from '../ui/ImageBox';
+import ImageAnimation from '../ui/animation/ImageAnimation';
+import Menu from '../ui/Menu';
+
+import SplashState from '../states/SplashState';
+import JourneyState from '../states/JourneyState';
+
+import sunset from '../systems/data/images/sunset.unipaint.json';
+import title from '../systems/data/images/title.unipaint.json';
 
 export default class MenuState extends State {
   constructor(game) {
     super(game);
 
-    const menu1 = new Window(game, 5, 5, 20, 12, 'Menu 1');
-    const menu2 = new Window(game, 7, 7, 22, 16, 'Menu 2');
-    this.windowManager.addWindow(menu1);
-    this.windowManager.addWindow(menu2);
-  }
+    const titleTop = 2;
+    const titleLeft = Math.round((properties.width - title[0].length) / 2);
 
+    const menuStates = [
+      new JourneyState(this.game),
+      new SplashState(this.game),
+      new JourneyState(this.game)
+    ];
+
+    this.windowManager.addWindow(new ImageBox(null, sunset, []));
+    this.windowManager.addWindow(new ImageAnimation(
+      titleLeft, titleTop, () => {}, [title], sunset));
+    this.windowManager.addWindow(new Menu(game, menuStates));
+  }
 }

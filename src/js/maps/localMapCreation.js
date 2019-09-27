@@ -539,6 +539,56 @@ const mapCreators = {
     return map;
   },
 
+  ricePaddy(width, height, argument) {
+    const { percentDense } = argument;
+
+    const map = mapCreators.forest(width, height, { percentDense: 5 });
+
+    const numRows = Math.round(properties.rng.getNormal(1, 1)) + 1;
+    const numCols = Math.round(properties.rng.getNormal(4, 1)) + 1;
+    const rowSpacing = 1;
+    const colSpacing = 2;
+    const borderSize = Math.max(Math.round(properties.rng.getNormal(2, 2)) + 1, 1);
+    console.log(`numRows: ${numRows} numCols: ${numCols} borderSize: ${borderSize}`);
+
+
+    const rowheight = Math.round(
+      (height - (2 * borderSize) - ((numRows - 1) * rowSpacing)) / numRows);
+    const colWidth = Math.round(
+      (width - (2 * borderSize) - ((numCols - 1) * colSpacing)) / numCols);
+    console.log(rowheight);
+    console.log(colWidth);
+
+    const rowRanges = [...Array(numRows).keys()]
+      .map(i => {
+        console.log(i);
+        const start = borderSize + (i * (rowheight + rowSpacing));
+        const stop = start + rowheight;
+        return { start, stop };
+      });
+    const colRanges = [...Array(numCols).keys()]
+      .map(i => {
+        console.log(i);
+        const start = borderSize + (i * (colWidth + colSpacing));
+        const stop = start + colWidth;
+        return { start, stop };
+      });
+    console.log(rowRanges);
+    console.log(colRanges);
+
+    Object.entries(map)
+      .filter(tile => {
+        const inRowRange = rowRanges.some(range => tile[1].y >= range.start && tile[1].y < range.stop);
+        const inColRange = colRanges.some(range => tile[1].x >= range.start && tile[1].x < range.stop);
+        return inRowRange && inColRange;
+      })
+      .forEach(tile => {
+        tile[1].name = 'Rice Paddy';
+      });
+
+    return map;
+  },
+
   crashSite(width, height, argument) {
     // The crash site is a clearing with the crashed helicopters
     const map = mapCreators.clearing(width, height, argument);
@@ -564,9 +614,9 @@ const mapCreators = {
 
 };
 function createLocalMap(seedTile, width, height) {
-  // const createFunction = seedTile.localMapCreationFunction;
-  // const createArgument = JSON.parse(seedTile.localMapCreationArgument);
-  // return mapCreators[createFunction](width, height, createArgument);
+  const createFunction = seedTile.localMapCreationFunction;
+  const createArgument = JSON.parse(seedTile.localMapCreationArgument);
+  return mapCreators[createFunction](width, height, createArgument);
 
   // const argument = { percentDense: 50 };
   const argument = {
@@ -576,10 +626,11 @@ function createLocalMap(seedTile, width, height) {
     noiseStd: 3,
     southBend: true
   };
-
-  //return mapCreators.village(width, height, argument);
-  //return mapCreators.highway(width, height, argument);
-  return mapCreators.crashSite(width, height, argument);
+  //
+  // return mapCreators.village(width, height, argument);
+  // return mapCreators.highway(width, height, argument);
+  // return mapCreators.crashSite(width, height, argument);
+  return mapCreators.ricePaddy(width, height, argument);
 }
 
 export default { createLocalMap };

@@ -3,6 +3,25 @@ function titleCase(lower) {
   return lower.replace(/\b\w/, c => c.toUpperCase());
 }
 
+function glyphForName(name) {
+  const lookup = {
+    aggression: '♠',
+    resilience: '♥',
+    presence: '♣',
+    luck: '♦'
+  };
+  return lookup[name];
+}
+
+function createLevelUpMessages(levelUps) {
+  return levelUps.map(values => {
+    const delta = values.newValue - values.value;
+    const glyph = glyphForName(values.name);
+    const impact = `(+${delta} ${glyph})`;
+    return { name: values.name, text: `Leveled Up: ${impact}` };
+  });
+}
+
 function createMeleeMessage(character) {
   return { name: character.name, text: 'engages in hand-to-hand combat' };
 }
@@ -17,11 +36,11 @@ function createBattleMessages(actions) {
     .map(action => {
       const name = action[0];
       const { hits, killed } = action[1];
-      const luckImpact = `(-${hits} ♦)`;
+      const impact = `(-${hits} ♦)`;
       if (killed) {
-        return { name, text: `was hit and killed: ${luckImpact}` };
+        return { name, text: `was hit and killed: ${impact}` };
       }
-      return { name, text: `was almost hit: ${luckImpact}` };
+      return { name, text: `was almost hit: ${impact}` };
     });
   return messages;
 }
@@ -50,6 +69,8 @@ function truncateAndCenterText(text, left, width) {
 
 export default {
   titleCase,
+  glyphForName,
+  createLevelUpMessages,
   createMeleeMessage,
   createFireMessage,
   createBattleMessages,

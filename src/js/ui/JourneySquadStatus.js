@@ -42,7 +42,7 @@ export default class JourneySquadStatus extends SquadStatus {
 
       // Stats row is two lower than secondary row, to leave room for position
       const statsRow = this.y + 6;
-      super.renderStats(display, member, i, col, statsRow);
+      super.renderStats(display, member, col, statsRow);
     }
     else {
 

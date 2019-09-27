@@ -1,4 +1,3 @@
-
 import State from './State';
 
 import JourneyState from '../states/JourneyState';
@@ -49,6 +48,26 @@ export default class BattleState extends State {
     const journeyState = new JourneyState(this.game);
     this.game.switchState(
       new InterstitialState(this.game, endGameText, journeyState));
+  }
+
+  showLevelUp(text, loot) {
+    const title = 'Squad Promotions';
+    this.escapeBox = new Dialog(
+      this.game, 30, 10, title, text, 'Ok',
+      () => {
+        this.windowManager.removeWindow(this.escapeBox);
+        this.escapeBox = null;
+        this.game.refresh();
+
+        if (loot) {
+          console.log('this.state.showLoot(loot)');
+          this.showLoot(loot);
+        }
+        else {
+          this.endBattle();
+        }
+      });
+    this.windowManager.addWindow(this.escapeBox);
   }
 
   showLoot(loot) {

@@ -25,7 +25,7 @@ export default class Game {
       border: properties.displayBorder
     });
 
-    // Register listners for the events we're interested in capturing
+    // Register listeners for the events we're interested in capturing
     ['keydown', 'click', 'mouseover'].forEach((eventType) => {
       window.addEventListener(eventType, (event) => {
         this.currentState.handleInput(eventType, event);

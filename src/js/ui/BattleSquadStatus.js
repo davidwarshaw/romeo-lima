@@ -75,7 +75,7 @@ export default class OverworldSquadStatus extends SquadStatus {
         display.drawText(col, this.y + 5, formattedText, this.columnWidth);
       }
 
-      super.renderStats(display, member, i, col, this.y + 6);
+      super.renderStats(display, member, col, this.y + 6);
     }
     else {
 

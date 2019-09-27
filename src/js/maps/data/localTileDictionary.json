@@ -477,7 +477,19 @@
     "startable": true,
     "flammable": true,
     "concealment": 10,
-    "cover": 10
+    "cover": 5
+  },
+  "Rice Paddy": {
+    "glyph": ",",
+    "fgColor": "#BEF481",
+    "bgColor": "#1D97C1",
+    "description": "",
+    "height": 1,
+    "traversable": true,
+    "startable": true,
+    "flammable": true,
+    "concealment": 10,
+    "cover": 5
   },
   "Medium Tree 1": {
     "glyph": "ሦ",
@@ -525,7 +537,7 @@
     "startable": true,
     "flammable": true,
     "concealment": 25,
-    "cover": 25
+    "cover": 15
   },
   "Bush 2": {
     "glyph": "ጬ",
@@ -537,7 +549,7 @@
     "startable": true,
     "flammable": true,
     "concealment": 25,
-    "cover": 25
+    "cover": 15
   },
   "Bush 3": {
     "glyph": "ጫ",
@@ -549,7 +561,7 @@
     "startable": true,
     "flammable": true,
     "concealment": 25,
-    "cover": 25
+    "cover": 15
   },
   "Bush 4": {
     "glyph": "ጭ",
@@ -561,7 +573,7 @@
     "startable": true,
     "flammable": true,
     "concealment": 25,
-    "cover": 25
+    "cover": 15
   },
   "Bush 5": {
     "glyph": "⍵",
@@ -573,7 +585,7 @@
     "startable": true,
     "flammable": true,
     "concealment": 25,
-    "cover": 25
+    "cover": 15
   },
   "Tall Grass 1": {
     "glyph": "ᖗ",
@@ -585,7 +597,7 @@
     "startable": true,
     "flammable": true,
     "concealment": 15,
-    "cover": 15
+    "cover": 10
   },
   "Tall Grass 2": {
     "glyph": "ঀ",
@@ -597,7 +609,7 @@
     "startable": true,
     "flammable": true,
     "concealment": 15,
-    "cover": 15
+    "cover": 10
   },
   "Medium Grass 1": {
     "glyph": ",",
@@ -609,7 +621,7 @@
     "startable": true,
     "flammable": true,
     "concealment": 10,
-    "cover": 10
+    "cover": 5
   },
   "Medium Grass 2": {
     "glyph": ";",
@@ -621,6 +633,6 @@
     "startable": true,
     "flammable": true,
     "concealment": 10,
-    "cover": 10
+    "cover": 5
   }
 }

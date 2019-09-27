@@ -63,7 +63,7 @@ export default class ActionReport extends Window {
   renderMessages(display) {
     let textY = this.y + 1;
     const fullText = this.formatMessages()
-      .slice(-1 * (this.height - 2))
+      .slice(-1 * this.height)
       .map(message => {
         const formattedText =
         `%c{${this.style.nameColor}}%b{${this.style.fieldBgColor}}` +

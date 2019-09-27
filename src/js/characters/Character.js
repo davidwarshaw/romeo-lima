@@ -35,10 +35,11 @@ export default class Character {
 
   rollStats() {
     this.stats = {};
-    this.stats.aggression = this.rollStat();
-    this.stats.resilience = this.rollStat();
-    this.stats.presence = this.rollStat();
-    this.stats.luck = this.rollStat();
+    ['aggression', 'resilience', 'presence', 'luck']
+      .forEach(name => {
+        const roll = this.rollStat();
+        this.stats[name] = { max: roll, value: roll, xp: 0, level: 0 };
+      });
   }
 
   rollStat() {
@@ -46,46 +47,61 @@ export default class Character {
     return utils.clamp(raw, 0, this.statMax);
   }
 
+  xp(stat) {
+    this.stats[stat].xp += 1;
+  }
+
+  levelUp(stat) {
+    const { value, xp } = this.stats[stat];
+    const newValue = Math.floor(Math.log(xp + 1) * 2.5);
+    if (newValue > value) {
+      this.stats[stat].value = newValue;
+      this.stats.luck.value = this.stats.luck.max;
+      return { name: this.name, stat, value, newValue };
+    }
+    return null;
+  }
+
   isAtXY(x, y) {
     return x === this.x && y === this.y;
   }
 
   getTurnOrder() {
-    return this.stats.presence;
+    return this.stats.presence.value;
   }
 
   getNumberOfMoves() {
-    return Math.round(this.stats.aggression / this.statFactor);
+    return Math.round(this.stats.aggression.value / this.statFactor);
   }
 
-  getNumberOfMeleeAttacs() {
-    return Math.round(this.stats.presence / this.statFactor);
+  getNumberOfMeleeAttacks() {
+    return Math.round(this.stats.presence.value / this.statFactor);
   }
 
   getMeleeAttackChance() {
-    const chance = this.stats.aggression / this.statMax;
+    const chance = this.stats.aggression.value / this.statMax;
     return chance;
   }
 
   getMeleeVulnerableChance() {
-    const chance = (this.statMax - this.stats.resilience) / this.statMax;
+    const chance = (this.statMax - this.stats.resilience.value) / this.statMax;
     return chance;
   }
 
   getWeaponAttackChance() {
-    const chance = this.stats.presence / this.statMax;
+    const chance = this.stats.presence.value / this.statMax;
     return chance;
   }
 
   getWeaponVulnerableChance() {
-    const presenceChance = (this.statMax - this.stats.presence) / this.statMax;
-    const resilienceChance = (this.statMax - this.stats.resilience) / this.statMax;
+    const presenceChance = (this.statMax - this.stats.presence.value) / this.statMax;
+    const resilienceChance = (this.statMax - this.stats.resilience.value) / this.statMax;
     const chance = (presenceChance + resilienceChance) / 2;
     return chance;
   }
 
   getStatDisplayLevel(stat) {
-    return Math.round(this.stats[stat] / this.statFactor);
+    return Math.round(this.stats[stat].value / this.statFactor);
   }
 
   hit() {
@@ -93,9 +109,9 @@ export default class Character {
     console.log(this.stats);
     let killed = false;
 
-    this.stats.luck -= this.statFactor;
-    if (this.stats.luck <= 0) {
-      this.stats.luck = 0;
+    this.stats.luck.value -= this.statFactor;
+    if (this.stats.luck.value <= 0) {
+      this.stats.luck.value = 0;
       killed = true;
     }
 

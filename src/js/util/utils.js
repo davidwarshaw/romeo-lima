@@ -21,6 +21,16 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
+function wrap(value, min, max) {
+  if (value > max) {
+    return min;
+  }
+  else if (value < min) {
+    return max;
+  }
+  return value;
+}
+
 function highlight(colorHex, value) {
   const colorString = ROT.Color.fromString(colorHex);
   const adjustedColor = ROT.Color.add(colorString, [0, value, value]);
@@ -75,6 +85,7 @@ export default {
   xyFromKey,
   groupBy,
   clamp,
+  wrap,
   highlight,
   adjustBrightness,
   adjustSmoke,
