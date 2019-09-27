@@ -12,6 +12,10 @@ const forestTiles = [
   'Medium Tree 1', 'Medium Tree 2', 'Medium Tree 3',
   'Bush 1', 'Bush 2', 'Bush 3'];
 
+const treesAndBushesTiles = [
+  'Medium Tree 1', 'Medium Tree 2', 'Medium Tree 3',
+  'Bush 1', 'Bush 2', 'Bush 3'];
+
 const marshGrassTiles = [
   'Low Grass',
   'Medium Grass 1', 'Medium Grass 2',
@@ -542,7 +546,7 @@ const mapCreators = {
   ricePaddy(width, height, argument) {
     const { percentDense } = argument;
 
-    const map = mapCreators.forest(width, height, { percentDense: 5 });
+    const map = mapCreators.forest(width, height, { percentDense });
 
     const numRows = Math.round(properties.rng.getNormal(1, 1)) + 1;
     const numCols = Math.round(properties.rng.getNormal(4, 1)) + 1;
@@ -578,13 +582,86 @@ const mapCreators = {
 
     Object.entries(map)
       .filter(tile => {
-        const inRowRange = rowRanges.some(range => tile[1].y >= range.start && tile[1].y < range.stop);
-        const inColRange = colRanges.some(range => tile[1].x >= range.start && tile[1].x < range.stop);
+        const inRowRange = rowRanges
+          .some(range => tile[1].y >= range.start && tile[1].y < range.stop);
+        const inColRange = colRanges
+          .some(range => tile[1].x >= range.start && tile[1].x < range.stop);
         return inRowRange && inColRange;
       })
       .forEach(tile => {
-        tile[1].name = 'Rice Paddy';
+        const chance = properties.rng.getPercentage();
+        tile[1].name = 'Rice Paddy 1';
+        if (chance <= 50) {
+          tile[1].name = 'Rice Paddy 2';
+        }
       });
+
+    mapProcedures.tilesWithNeighbors(map, forestTiles, 'Rice Paddy 1', 3)
+      .forEach(tile => tile.name = 'Marsh Grass');
+
+    mapProcedures.tilesWithNeighbors(map, 'Rice Paddy 1', forestTiles, 5)
+      .forEach(tile => {
+        const chance = properties.rng.getPercentage();
+        if (chance <= 20) {
+          tile.name = 'Shallow Marsh Water';
+        }
+        else if (chance <= 60) {
+          tile.name = 'Marsh Grass';
+        }
+      });
+
+    return map;
+  },
+
+  beach(width, height) {
+    const percentDense = 25;
+
+    const map = mapCreators.forest(width, height, { percentDense });
+
+    const centerOffset = Math.round((properties.rng.getPercentage() - 50) / 4);
+    const beachHigh = Math.round((width * 0.50) + centerOffset);
+
+    const dryWidth = Math.round(properties.rng.getNormal(10, 3)) + 1;
+    const wetWidth = Math.round(properties.rng.getNormal(5, 2)) + 1;
+    const surfWidth = Math.round(properties.rng.getNormal(1, 1)) + 1;
+
+    let beachDrift = beachHigh;
+
+    for (let y = 0; y < height; y++) {
+
+      const chance = properties.rng.getPercentage();
+      let driftAmount = 0;
+      if (chance <= 20) {
+        driftAmount = -1;
+      }
+      else if (chance >= 80) {
+        driftAmount = 1;
+      }
+      beachDrift = beachDrift + driftAmount;
+
+      for (let x = beachDrift; x < width; x++) {
+        const terrainHeight = 0;
+        const secondPass = false;
+        let name = 'Dry Sand';
+        if (x > beachDrift + dryWidth + wetWidth + surfWidth) {
+          name = 'Deep River Water';
+        }
+        else if (x > beachDrift + dryWidth + wetWidth) {
+          name = 'Churning Water';
+        }
+        else if (x > beachDrift + dryWidth) {
+          name = 'Wet Sand';
+        }
+        map[utils.keyFromXY(x, y)] = { name, x, y, terrainHeight, secondPass };
+      }
+    }
+
+    mapProcedures.tilesWithNeighbors(map, forestTiles, 'Dry Sand', 3)
+      .forEach(tile => tile.name = 'Medium Grass 2');
+    mapProcedures.tilesWithNeighbors(map, forestTiles, 'Medium Grass 2', 3)
+      .forEach(tile => tile.name = 'Medium Grass 2');
+    mapProcedures.tilesWithNeighbors(map, treesAndBushesTiles, 'Medium Grass 2', 3)
+      .forEach(tile => tile.name = 'Medium Grass 1');
 
     return map;
   },
@@ -614,23 +691,28 @@ const mapCreators = {
 
 };
 function createLocalMap(seedTile, width, height) {
-  const createFunction = seedTile.localMapCreationFunction;
-  const createArgument = JSON.parse(seedTile.localMapCreationArgument);
-  return mapCreators[createFunction](width, height, createArgument);
+  // const createFunction = seedTile.localMapCreationFunction;
+  // const createArgument = JSON.parse(seedTile.localMapCreationArgument);
+  // return mapCreators[createFunction](width, height, createArgument);
 
   // const argument = { percentDense: 50 };
   const argument = {
-    percentDense: 50,
+    percentDense: 60,
     angle: 0.75,
     radius: 60,
     noiseStd: 3,
     southBend: true
   };
-  //
+
+  //return mapCreators.forest(width, height, argument);
+
   // return mapCreators.village(width, height, argument);
-  // return mapCreators.highway(width, height, argument);
-  // return mapCreators.crashSite(width, height, argument);
-  return mapCreators.ricePaddy(width, height, argument);
+  //return mapCreators.highway(width, height, argument);
+
+  //return mapCreators.crashSite(width, height, argument);
+
+  //return mapCreators.ricePaddy(width, height, argument);
+  return mapCreators.beach(width, height, argument);
 }
 
 export default { createLocalMap };

@@ -20,6 +20,8 @@
   "Crash Site": {
     "glyph": "╳",
     "enemySpawn": false,
+    "localMapCreationFunction": "crashSite",
+    "localMapCreationArgument": "{ \"percentDense\": \"50\" }",
     "fgColor": "#ffffff",
     "bgColor": "#11737A",
     "description": "",
@@ -29,6 +31,8 @@
   "Large Palm Trees": {
     "glyph": "Ϫ",
     "enemySpawn": true,
+    "localMapCreationFunction": "forest",
+    "localMapCreationArgument": "{ \"percentDense\": \"80\" }",
     "fgColor": "#BAE2BE",
     "bgColor": "#104B4F",
     "description": "",
@@ -38,6 +42,8 @@
   "Palm Trees": {
     "glyph": "ϫ",
     "enemySpawn": true,
+    "localMapCreationFunction": "forest",
+    "localMapCreationArgument": "{ \"percentDense\": \"60\" }",
     "fgColor": "#98C367",
     "bgColor": "#125459",
     "description": "",
@@ -224,6 +230,8 @@
   "Small Village": {
     "glyph": "⏏",
     "enemySpawn": false,
+    "localMapCreationFunction": "village",
+    "localMapCreationArgument": "{ \"percentDense\": \"20\" }",
     "fgColor": "#54542E",
     "bgColor": "#60A6AE",
     "description": "",
@@ -233,6 +241,8 @@
   "Water Tower": {
     "glyph": "⍾",
     "enemySpawn": false,
+    "localMapCreationFunction": "village",
+    "localMapCreationArgument": "{ \"percentDense\": \"90\" }",
     "fgColor": "#434324",
     "bgColor": "#8D8B8B",
     "description": "",
@@ -242,6 +252,8 @@
   "Village Field": {
     "glyph": "░",
     "enemySpawn": false,
+    "localMapCreationFunction": "ricePaddy",
+    "localMapCreationArgument": "{ \"percentDense\": \"10\" }",
     "fgColor": "#4F9DA6",
     "bgColor": "#155E63",
     "description": "",
@@ -251,6 +263,8 @@
   "Rice Paddy": {
     "glyph": "ʭ",
     "enemySpawn": false,
+    "localMapCreationFunction": "ricePaddy",
+    "localMapCreationArgument": "{ \"percentDense\": \"20\" }",
     "fgColor": "#73d800",
     "bgColor": "#1A87AD",
     "description": "",
@@ -260,6 +274,8 @@
   "North-South Highway": {
     "glyph": "│",
     "enemySpawn": false,
+    "localMapCreationFunction": "highway",
+    "localMapCreationArgument": "{ }",
     "fgColor": "#E2F004",
     "bgColor": "#747171",
     "description": "",
@@ -269,6 +285,8 @@
   "East-West Highway": {
     "glyph": "─",
     "enemySpawn": false,
+    "localMapCreationFunction": "highway",
+    "localMapCreationArgument": "{ }",
     "fgColor": "#E2F004",
     "bgColor": "#747171",
     "description": "",
@@ -278,6 +296,8 @@
   "West-South Highway": {
     "glyph": "╭",
     "enemySpawn": false,
+    "localMapCreationFunction": "highway",
+    "localMapCreationArgument": "{ }",
     "fgColor": "#E2F004",
     "bgColor": "#747171",
     "description": "",
@@ -287,6 +307,8 @@
   "East-South Highway": {
     "glyph": "╮",
     "enemySpawn": false,
+    "localMapCreationFunction": "highway",
+    "localMapCreationArgument": "{ }",
     "fgColor": "#E2F004",
     "bgColor": "#747171",
     "description": "",
@@ -296,6 +318,8 @@
   "West-North Highway": {
     "glyph": "╯",
     "enemySpawn": false,
+    "localMapCreationFunction": "highway",
+    "localMapCreationArgument": "{ }",
     "fgColor": "#E2F004",
     "bgColor": "#747171",
     "description": "",
@@ -305,6 +329,8 @@
   "East-North Highway": {
     "glyph": "╰",
     "enemySpawn": false,
+    "localMapCreationFunction": "highway",
+    "localMapCreationArgument": "{ }",
     "fgColor": "#E2F004",
     "bgColor": "#747171",
     "description": "",

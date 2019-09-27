@@ -479,11 +479,23 @@
     "concealment": 10,
     "cover": 5
   },
-  "Rice Paddy": {
+  "Rice Paddy 1": {
     "glyph": ",",
     "fgColor": "#BEF481",
     "bgColor": "#1D97C1",
-    "description": "",
+    "description": "ຯ",
+    "height": 1,
+    "traversable": true,
+    "startable": true,
+    "flammable": true,
+    "concealment": 0,
+    "cover": 10
+  },
+  "Rice Paddy 2": {
+    "glyph": ",",
+    "fgColor": "#BEF481",
+    "bgColor": "#1D97C1",
+    "description": "າ",
     "height": 1,
     "traversable": true,
     "startable": true,
@@ -634,5 +646,29 @@
     "flammable": true,
     "concealment": 10,
     "cover": 5
+  },
+  "Dry Sand": {
+    "glyph": ".",
+    "fgColor": "#a8a85d",
+    "bgColor": "#fdfdac",
+    "description": "",
+    "height": 1,
+    "traversable": true,
+    "startable": true,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 0
+  },
+  "Wet Sand": {
+    "glyph": ".",
+    "fgColor": "#86864a",
+    "bgColor": "#caca89",
+    "description": "",
+    "height": 1,
+    "traversable": true,
+    "startable": true,
+    "flammable": false,
+    "concealment": 0,
+    "cover": 0
   }
 }
