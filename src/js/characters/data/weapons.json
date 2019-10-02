@@ -293,5 +293,19 @@
     "power": 60,
     "accuracy": 100,
     "range": 500
+  },
+  "PKT": {
+    "type": "machine gun",
+    "assignable": true,
+    "slot": "primary",
+    "faction": "NVA",
+    "ammo": "7.62 WPC",
+    "description": "",
+    "role": "BRT-60",
+    "bursts": 4,
+    "roundsPerBurst": 2,
+    "power": 100,
+    "accuracy": 100,
+    "range": 500
   }
 }

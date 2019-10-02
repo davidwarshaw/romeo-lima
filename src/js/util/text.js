@@ -27,7 +27,7 @@ function createMeleeMessage(character) {
 }
 
 function createFireMessage(character, weapon) {
-  return { name: character.name, text: `fires his ${weapon.name}` };
+  return { name: character.name, text: `fires their ${weapon.name}` };
 }
 
 function createBattleMessages(actions) {
@@ -38,9 +38,9 @@ function createBattleMessages(actions) {
       const { hits, killed } = action[1];
       const impact = `(-${hits} ♦)`;
       if (killed) {
-        return { name, text: `was hit and killed: ${impact}` };
+        return { name, text: `is out of luck: ${impact}` };
       }
-      return { name, text: `was almost hit: ${impact}` };
+      return { name, text: `has a close call: ${impact}` };
     });
   return messages;
 }

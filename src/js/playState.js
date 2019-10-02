@@ -67,6 +67,9 @@ function createPlayState() {
     squad,
     enemies,
 
+    // Has the player defeated the miniboss?
+    minibossDefeated: false,
+
     // Local map is populated in the battle system
     localMap: null
   };

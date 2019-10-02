@@ -50,15 +50,16 @@ export default class SquadStatus extends Window {
       const glyph = textUtils.glyphForName(name);
       const statLevel = member.getStatDisplayLevel(name);
       const remainingLevel = maxlevel - statLevel;
-      console.log(`name: ${name}`);
-      console.log(`i: ${i}`);
-      console.log(`row: ${row}`);
+
+      // console.log(`name: ${name}`);
+      // console.log(`i: ${i}`);
+      // console.log(`row: ${row}`);
       this.renderBar(display, col, row + i, glyph, statLevel, glyph, remainingLevel);
     });
   }
 
   renderBar(display, col, row, full, fullValue, empty, emptyValue) {
-    console.log(`col: ${col} row: ${row}`);
+    // console.log(`col: ${col} row: ${row}`);
     const fullBar = full.repeat(fullValue);
     const emptyBar = empty.repeat(emptyValue);
     let formattedText =

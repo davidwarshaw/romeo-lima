@@ -124,12 +124,4 @@ export default class Character {
     this.pointman = false;
   }
 
-  // render(display, watchBrightness, map, xOffset, yOffset) {
-  //   const tile = map.getTile(this.x, this.y);
-  //   const glyph = this.alive ? this.overworldGlyph : this.deadGlyph;
-  //   const bgAdjusted = utils.adjustBrightness(tile.bgColor, watchBrightness);
-  //   display.draw(xOffset + this.x, yOffset + this.y, glyph,
-  //     this.fgColor, bgAdjusted);
-  // }
-
 }

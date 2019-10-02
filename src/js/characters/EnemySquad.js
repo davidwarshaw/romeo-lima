@@ -18,6 +18,7 @@ export default class EnemySquad extends Squad {
 
     this.fgColor = '#FF0000';
     this.bgColor = null;
+
   }
 
   renderSquadMembers(display, watchBrightness, map, xOffset, yOffset,
@@ -42,6 +43,12 @@ export default class EnemySquad extends Squad {
       display.draw(xOffset + x, yOffset + y, glyph,
         fgColor, bgColor);
     });
+
+    // If there's a vehicle, render it
+    if (this.vehicle) {
+      this.vehicle.render(display, watchBrightness, map, xOffset, yOffset,
+        playerSquadLocalFov);
+    }
   }
 
   renderSquad(display, watchBrightness, map, xOffset, yOffset,

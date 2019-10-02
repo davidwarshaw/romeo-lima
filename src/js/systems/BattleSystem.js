@@ -30,7 +30,7 @@ export default class BattleSystem {
     this.overworldTile = overworld
       .getTile(this.playerSquad.x, this.playerSquad.y);
 
-    // Create the local map and any vehicles
+    // Create the local map
     game.playState.localMap = localMapCreation.createLocalMap(
       this.overworldTile,
       properties.localWidth, properties.localHeight);
@@ -45,6 +45,15 @@ export default class BattleSystem {
       this.playerSquad, this.map, this.ambushState, this.playerSide);
     squadProcedures.placeEnemySquadInLocalMap(
       this.enemySquad, this.map, this.ambushState, this.playerSide);
+
+    // If we're on a highway and the miniboss hasn't been defeated, fight the miniboss
+    if (this.overworldTile.name.endsWith('Highway') && !game.playState.minibossDefeated) {
+      const members = this.enemySquad.getMembersByNumber();
+      const vehicleNumber = members[members.length - 1].number + 1;
+      const vehicle = squadProcedures.createVehicleSquadMember(
+        vehicleNumber, 'BRT-60', false, 'NVA', this.map);
+      this.enemySquad.addVehicle(vehicle);
+    }
 
     // Build one FOV map for each squad. Each squad member sees the same FOV.
     this.playerSquadLocalFov = new LocalFov(

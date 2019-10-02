@@ -19,6 +19,14 @@ export default class Squad {
     this.bgColor = null;
 
     this.stats = ['aggression', 'resilience', 'presence', 'luck'];
+
+    // By default, there's no vehicle
+    this.vehicle = null;
+  }
+
+  addVehicle(vehicle) {
+    this.vehicle = vehicle;
+    this.members.push(this.vehicle);
   }
 
   getAliveMembers() {

@@ -5,6 +5,7 @@ import TileMath from '../util/TileMath';
 
 import Inventory from './Inventory';
 import Character from './Character';
+import Vehicle from './Vehicle';
 
 import surnames from './data/surnames.json';
 import playerSquadDefinition from './data/playerSquadDefinition.json';
@@ -12,6 +13,7 @@ import enemyDefinitions from './data/enemyDefinitions.json';
 import enemyDistributions from './data/enemyDistributions.json';
 import weapons from './data/weapons.json';
 import equipment from './data/equipment.json';
+import vehicleDefinition from './data/vehicleDefinition';
 
 import overworldTileDictionary from '../maps/data/overworldTileDictionary.json';
 import localTileDictionary from '../maps/data/localTileDictionary.json';
@@ -101,6 +103,35 @@ function weaponForMember(member, faction) {
   return weapon;
 }
 
+function createVehicleSquadMember(number, name, playerControlled, faction, map) {
+  const memberDefinition = {
+    playerControlled,
+    faction,
+    rank: 'N/A',
+    role: name,
+    marchingOrder: 0,
+    pointman: false
+  };
+  const definition = Object.assign({}, vehicleDefinition[name], memberDefinition);
+  const weapon = weaponForMember(definition, faction);
+
+  return new Vehicle(number, definition, weapon, map);
+}
+
+function createSquadMember(number, definition, playerControlled, faction) {
+  const memberDefinition = {
+    playerControlled,
+    faction,
+    rank: definition.rank,
+    role: definition.role,
+    marchingOrder: definition.marchingOrder,
+    pointman: definition.pointman
+  };
+  const weapon = weaponForMember(memberDefinition, faction);
+
+  return new Character(number, memberDefinition, weapon);
+}
+
 function createPlayerSquadMembers() {
   const definitions = playerSquadDefinition;
   const faction = 'US';
@@ -109,21 +140,8 @@ function createPlayerSquadMembers() {
 }
 
 function createSquadMembers(definitions, playerControlled, faction) {
-  const members = definitions.map((definition, i) => {
-    const number = i + 1;
-    const memberDefinition = {
-      playerControlled,
-      faction,
-      rank: definition.rank,
-      role: definition.role,
-      marchingOrder: definition.marchingOrder,
-      pointman: definition.pointman
-    };
-    const weapon = weaponForMember(definition, faction);
-
-    return new Character(number, memberDefinition, weapon);
-  });
-  return members;
+  return definitions.map((definition, i) =>
+    createSquadMember(i + 1, definition, playerControlled, faction));
 }
 
 function getOverworldEnemyLocations(map) {
@@ -326,6 +344,8 @@ export default {
   nameCharacter,
   populatePlayerInventory,
   populateEnemyInventory,
+  createVehicleSquadMember,
+  createSquadMember,
   createPlayerSquadMembers,
   createSquadMembers,
   placePlayerSquadInLocalMap,

@@ -691,28 +691,28 @@ const mapCreators = {
 
 };
 function createLocalMap(seedTile, width, height) {
-  // const createFunction = seedTile.localMapCreationFunction;
-  // const createArgument = JSON.parse(seedTile.localMapCreationArgument);
-  // return mapCreators[createFunction](width, height, createArgument);
+  const createFunction = seedTile.localMapCreationFunction;
+  const createArgument = JSON.parse(seedTile.localMapCreationArgument);
+  return mapCreators[createFunction](width, height, createArgument);
 
   // const argument = { percentDense: 50 };
-  const argument = {
-    percentDense: 60,
-    angle: 0.75,
-    radius: 60,
-    noiseStd: 3,
-    southBend: true
-  };
+  // const argument = {
+  //   percentDense: 60,
+  //   angle: 0.75,
+  //   radius: 60,
+  //   noiseStd: 3,
+  //   southBend: true
+  // };
 
   //return mapCreators.forest(width, height, argument);
 
-  // return mapCreators.village(width, height, argument);
+  //return mapCreators.village(width, height, argument);
   //return mapCreators.highway(width, height, argument);
 
   //return mapCreators.crashSite(width, height, argument);
 
   //return mapCreators.ricePaddy(width, height, argument);
-  return mapCreators.beach(width, height, argument);
+  //return mapCreators.beach(width, height, argument);
 }
 
 export default { createLocalMap };

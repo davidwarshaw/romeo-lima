@@ -24,6 +24,7 @@ export default class BallisticsSystem {
       case 'sidearm':
       case 'rifle':
       case 'automatic rifle':
+      case 'machine gun':
         return this.effectSmallArmsFire(character, weapon, intendedLine);
       case 'grenade':
       case 'grenade launcher':
@@ -170,7 +171,7 @@ export default class BallisticsSystem {
     if (roll <= chanceToHit) {
       // Melee hits add aggresion xp
       attacker.xp('aggression');
-      
+
       [...Array(attacker.getNumberOfMeleeAttacks()).keys()]
         .forEach(() => this.hitCharacter(defenderSquad, defender, attackActions));
     }
@@ -412,6 +413,7 @@ export default class BallisticsSystem {
       case 'sidearm':
       case 'rifle':
       case 'automatic rifle':
+      case 'machine gun':
         fireAnimation.fireSequence = this.smallArmsFireSequence(
           weapon.bursts, weapon.roundsPerBurst);
         break;
