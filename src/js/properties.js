@@ -1,4 +1,4 @@
-import ROT from 'rot-js';
+import * as ROT from 'rot-js';
 
 ROT.RNG.setSeed(100);
 ROT.Display.Rect.cache = true;
@@ -24,27 +24,27 @@ export default {
   displayBorder: 0.0,
   rng: ROT.RNG,
   keyMap: {
-    [ROT.VK_LEFT]: 'LEFT',
-    [ROT.VK_RIGHT]: 'RIGHT',
-    [ROT.VK_UP]: 'UP',
-    [ROT.VK_DOWN]: 'DOWN',
-    [ROT.VK_RETURN]: 'ENTER',
-    [ROT.VK_Z]: 'WAIT',
-    [ROT.VK_A]: 'ATTACK',
-    [ROT.VK_S]: 'NEXT TARGET',
-    [ROT.VK_D]: 'TOGGLE WEAPON',
-    [ROT.VK_P]: 'PRONE',
-    [ROT.VK_E]: 'ENTER/EXIT',
-    [ROT.VK_I]: 'INVENTORY',
-    [ROT.VK_T]: 'TAKE',
-    [ROT.VK_1]: 'NUM_1',
-    [ROT.VK_2]: 'NUM_2',
-    [ROT.VK_3]: 'NUM_3',
-    [ROT.VK_4]: 'NUM_4',
-    [ROT.VK_5]: 'NUM_5',
-    [ROT.VK_6]: 'NUM_6',
-    [ROT.VK_7]: 'NUM_7',
-    [ROT.VK_8]: 'NUM_8'
+    [ROT.KEYS.VK_LEFT]: 'LEFT',
+    [ROT.KEYS.VK_RIGHT]: 'RIGHT',
+    [ROT.KEYS.VK_UP]: 'UP',
+    [ROT.KEYS.VK_DOWN]: 'DOWN',
+    [ROT.KEYS.VK_RETURN]: 'ENTER',
+    [ROT.KEYS.VK_Z]: 'WAIT',
+    [ROT.KEYS.VK_A]: 'ATTACK',
+    [ROT.KEYS.VK_S]: 'NEXT TARGET',
+    [ROT.KEYS.VK_D]: 'TOGGLE WEAPON',
+    [ROT.KEYS.VK_P]: 'PRONE',
+    [ROT.KEYS.VK_E]: 'ENTER/EXIT',
+    [ROT.KEYS.VK_I]: 'INVENTORY',
+    [ROT.KEYS.VK_T]: 'TAKE',
+    [ROT.KEYS.VK_1]: 'NUM_1',
+    [ROT.KEYS.VK_2]: 'NUM_2',
+    [ROT.KEYS.VK_3]: 'NUM_3',
+    [ROT.KEYS.VK_4]: 'NUM_4',
+    [ROT.KEYS.VK_5]: 'NUM_5',
+    [ROT.KEYS.VK_6]: 'NUM_6',
+    [ROT.KEYS.VK_7]: 'NUM_7',
+    [ROT.KEYS.VK_8]: 'NUM_8'
   },
   localMapNotVisibleBrightness: -75,
   overworldMapNotVisibleBrightness: -60,
@@ -62,5 +62,6 @@ export default {
   hitCharacterPowerLoss: 40,
   fovConcealmentThreshold: 100,
   fovCoverThreshold: 75,
-  animationIntervalMillis: 100
+  animationIntervalMillis: 100,
+  inGameStartDate: new Date(1967, 6, 3, 0)
 };

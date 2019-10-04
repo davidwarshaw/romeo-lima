@@ -1,4 +1,5 @@
 import properties from '../properties';
+import text from '../util/text';
 
 import Window from './Window';
 
@@ -14,44 +15,6 @@ export default class ActionReport extends Window {
     this.squad = game.playState.squad;
   }
 
-  formatMessages() {
-    const messageLines = [];
-    let messageLine = { name: '', text: '' };
-    let lineChar = 0;
-    const addMessageLine = () => {
-      messageLine.text = messageLine.text.trimEnd();
-      messageLines.push(messageLine);
-      messageLine = { name: '', text: '' };
-      lineChar = 0;
-    };
-
-    this.battleSystem.messages.forEach((message) => {
-      // console.log(`message: ${JSON.stringify(message)}`);
-      message.name.split(' ').forEach(token => {
-        // console.log(`token: ${JSON.stringify(token)}`);
-        if (token.length >= (this.width - lineChar)) {
-          addMessageLine();
-        }
-        messageLine.name += token + ' ';
-        lineChar += token.length + 1;
-      });
-      message.text.split(' ').forEach(token => {
-        // console.log(`token: ${JSON.stringify(token)}`);
-        if (token.length >= (this.width - lineChar)) {
-          addMessageLine();
-        }
-        messageLine.text += token + ' ';
-        lineChar += token.length + 1;
-      });
-      addMessageLine();
-    });
-    messageLines.push(messageLine);
-
-    // console.log('messageLines:');
-    // console.log(`${JSON.stringify(messageLines)}`);
-    return messageLines;
-  }
-
   render(display) {
     super.renderBorder(display);
     if (this.title) {
@@ -62,16 +25,10 @@ export default class ActionReport extends Window {
 
   renderMessages(display) {
     let textY = this.y + 1;
-    const fullText = this.formatMessages()
+    const messageLines = text.formatMessages(this.battleSystem.messages, this.width);
+    const messageText = text.textFromMessageLines(messageLines, this.style);
+    const fullText = messageText
       .slice(-1 * this.height)
-      .map(message => {
-        const formattedText =
-        `%c{${this.style.nameColor}}%b{${this.style.fieldBgColor}}` +
-          `${message.name}` +
-        `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` +
-          `${message.text}`;
-        return formattedText;
-      })
       .join('\n');
     display.drawText(this.x + 1, textY, fullText);
   }

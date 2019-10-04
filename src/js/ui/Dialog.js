@@ -39,37 +39,22 @@ export default class Dialog extends Window {
     }
   }
 
-  renderText(display, text) {
+  renderText(display, messages) {
     // Check if the text is a corpus (it will be an array)
-    if (Array.isArray(text)) {
+    if (Array.isArray(messages)) {
       let textY = this.y + 2;
-      text.forEach(paragraph => {
-        let formattedText =
-          `%c{${this.style.nameColor}}%b{${this.style.fieldBgColor}}` +
-            `${paragraph.name}`;
-        display.drawText(
-          this.x + 2, textY,
-          formattedText, this.width - 4);
-        formattedText =
-          `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` +
-            `${paragraph.text}`;
-
-        // Indent text two chars
-        display.drawText(
-          this.x + 4, textY + 1,
-          formattedText, this.width - 6);
-
-        // The new text y is the old y, plus 1 line for the name,
-        // 1 line for the paragraph space, and an estimate of the text lines
-        textY = textY + 3 + Math.ceil((this.width - 6) / paragraph.text.length);
-      });
+      const messageLines = text.formatMessages(messages, this.width);
+      const messageText = text.textFromMessageLines(messageLines, this.style);
+      const fullText = messageText
+        .join('\n\n');
+      display.drawText(this.x + 2, textY, fullText);
     }
 
     // Just normal text
     else {
       const formattedText =
         `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` +
-          `${text}`;
+          `${messages}`;
       display.drawText(
         this.x + 2, this.y + 2,
         formattedText, this.width - 4);

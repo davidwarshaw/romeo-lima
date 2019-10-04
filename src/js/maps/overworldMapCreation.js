@@ -1,4 +1,5 @@
-import ROT from 'rot-js';
+import * as ROT from 'rot-js';
+
 import properties from '../properties';
 import utils from '../util/utils';
 

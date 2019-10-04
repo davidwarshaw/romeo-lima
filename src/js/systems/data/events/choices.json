@@ -1,0 +1,21 @@
+[{
+  "tiles": [],
+  "watches": [],
+  "frequency": 1,
+  "squadSizeMin": 2,
+  "cooldown": 10,
+  "name": "\"Should we check it out?\"",
+  "intro": [{
+      "name": "POINTMAN",
+      "text": "\"A choice\""
+    }
+  ],
+  "proceedLabel": "\"Search it.\"",
+  "choice": true,
+  "chanceToSucceed": 0,
+  "skipLabel": "\"Leave it.\"",
+  "outcomes": {
+    "success": "You find some stuff",
+    "failure": "As POINTMAN carefully lifts the bicycle frame there's a faint clicking sound.\n\nAt this distance the explosion is deafening.\n\nWhen the smoke clears, what's left of POINTMAN's body lays torn apart on the ground.\n\nLEADER snaps off one of his ID tags and notes the location.\n\nThe next few hours are spent burying him."
+  }
+}]

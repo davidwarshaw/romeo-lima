@@ -1,0 +1,90 @@
+[
+  {
+    "tiles": [],
+    "watches": [],
+    "frequency": 1,
+    "squadSizeMin": 1,
+    "cooldown": 10,
+    "name": "\"Should I check it out?\"",
+    "intro": [
+      {
+        "name": "POINTMAN",
+        "text": "\"I got something in the brush up here. It's a bicycle.\""
+      },
+      {
+        "name": "POINTMAN",
+        "text": "\"It looks like it's been rigged to carry cargo. It's marked with a 'FINDABLE_NUMBER'\""
+      },
+      {
+        "name": "POINTMAN",
+        "text": "\"Could be trapped. Should I check it out?\""
+      },
+      {
+        "name": "[ check against presence (♣) ]",
+        "text": ""
+      }
+    ],
+    "proceedLabel": "\"Search it.\"",
+    "choice": true,
+    "findableChoice": true,
+    "statToCheck": "presence",
+    "skipLabel": "\"Leave it.\"",
+    "outcomes": {
+      "success": [
+        {
+          "name": "POINTMAN",
+          "text": "\"Fuck me! It's rigged!\""
+        },
+        {
+          "name": "POINTMAN",
+          "text": "\"Okay, that was close, but I got it disarmed. Looks like we got a FINDABLE_NAME.\""
+        }
+      ],
+      "failure": "As POINTMAN carefully lifts the bicycle frame there's a faint clicking sound.\n\nAt this distance the explosion is deafening.\n\nWhen the smoke clears, what's left of POINTMAN's body lays torn apart on the ground.\n\nLEADER snaps off one of his ID tags and notes the location.\n\nThe next few hours are spent burying him."
+    }
+  },
+  {
+    "tiles": [],
+    "watches": [],
+    "frequency": 100,
+    "squadSizeMin": 1,
+    "cooldown": 10,
+    "name": "\"Should I check it out?\"",
+    "intro": [
+      {
+        "name": "POINTMAN",
+        "text": "\"Wait, there's something here. I almost stepped on it.\""
+      },
+      {
+        "name": "POINTMAN",
+        "text": "\"It looks like a big pot that's been buried. Lid's marked with a 'FINDABLE_NUMBER'\""
+      },
+      {
+        "name": "POINTMAN",
+        "text": "\"Could be trapped. Should I check it out?\""
+      },
+      {
+        "name": "[ check against presence (♣) ]",
+        "text": ""
+      }
+    ],
+    "proceedLabel": "\"Search it.\"",
+    "choice": true,
+    "findableChoice": true,
+    "statToCheck": "presence",
+    "skipLabel": "\"Leave it.\"",
+    "outcomes": {
+      "success": [
+        {
+          "name": "POINTMAN",
+          "text": "\"There's a fucking land mine in here! I disarmed it.\""
+        },
+        {
+          "name": "POINTMAN",
+          "text": "\"There's a FINDABLE_NAME at the bottom.\""
+        }
+      ],
+      "failure": "As POINTMAN slowly rolls the old clay lid off the pot it explodes.\n\nThe ground absorbs most of the detonation, but the left side of POINTMAN's body is gone. Just gone. Totally gone.\n\nLEADER snaps off one of his ID tags and notes the location.\n\nThe next few hours are spent burying what's left of him."
+    }
+  }
+]

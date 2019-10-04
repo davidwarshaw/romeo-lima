@@ -66,6 +66,11 @@ export default class Character {
     return x === this.x && y === this.y;
   }
 
+  getStatChance(stat) {
+    //console.log(`${this.stats[stat].value} / ${this.statMax}`);
+    return this.stats[stat].value / this.statMax;
+  }
+
   getTurnOrder() {
     return this.stats.presence.value;
   }

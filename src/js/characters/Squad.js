@@ -1,5 +1,7 @@
 import utils from '../util/utils';
 
+import rankOrder from './data/rankOrder.json';
+
 export default class Squad {
 
   constructor(members, x, y, inventory) {
@@ -77,6 +79,10 @@ export default class Squad {
     return members[0] || null;
   }
 
+  getAliveByRank() {
+    return this.getAliveMembers()
+      .sort((l, r) => rankOrder.indexOf(r.rank) - rankOrder.indexOf(l.rank));
+  }
 
   numberOfAliveMembers() {
     return this.members
@@ -132,19 +138,28 @@ export default class Squad {
   }
 
   populate(text) {
-    // TODO needs formatting
+    const pointman = this.getPointman();
+    const restRanked = this.getAliveByRank()
+      .filter(member => member.number !== pointman.number);
+
+    const highestRanking = restRanked[0];
+    const other1 = restRanked.length >= 2 ? restRanked[restRanked.length - 1] : null;
+    const other2 = restRanked.length >= 3 ? restRanked[restRanked.length - 2] : null;
+    const other3 = restRanked.length >= 4 ? restRanked[restRanked.length - 3] : null;
+
     return text
-      .replace('${Pointman}', this.getPointman().name)
-      .replace('${Squad Lead}', this.getByRole('Squad Lead').name);
+      .replace(/POINTMAN/g, this.getPointman().name)
+      .replace(/LEADER/g, highestRanking.name)
+      .replace(/OTHER1/g, other1.name)
+      .replace(/OTHER2/g, other2.name)
+      .replace(/OTHER3/g, other3.name);
   }
 
   populateNames(text) {
     // Check if the text is a corpus (it will be an array)
     if (Array.isArray(text)) {
       return text.map(paragraph => {
-        console.log(paragraph);
         const { name, text } = paragraph;
-        console.log(this.populate(name));
         return { name: this.populate(name), text: this.populate(text) };
       });
     }

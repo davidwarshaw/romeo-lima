@@ -74,7 +74,8 @@ export default class SplashState extends State {
         this.imageAnimations = [];
         this.imageAnimations.push(new ImageAnimation(90, 11, () => {}, helicopters, explosion));
         this.imageAnimations.push(new ImageAnimation(70, 15, () => {}, helicopters, explosion));
-        this.sceneWindow = new ImageBox(this.splashSystem.nextScene, explosion, this.imageAnimations);
+        this.sceneWindow =
+          new ImageBox(this.splashSystem.nextScene, explosion, this.imageAnimations);
         this.windowManager.addWindow(this.sceneWindow);
       }
         break;
