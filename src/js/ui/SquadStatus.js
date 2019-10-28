@@ -10,8 +10,7 @@ export default class SquadStatus extends Window {
       properties.overworldHeight + properties.contextCommandsHeight,
       properties.width - 1,
       properties.height - properties.overworldHeight -
-        properties.contextCommandsHeight - 1,
-      'Squad');
+        properties.contextCommandsHeight - 1);
     this.game = game;
     this.system = system;
 
@@ -25,6 +24,9 @@ export default class SquadStatus extends Window {
   }
 
   render(display) {
+    const { day, watch } = this.game.playState;
+    const dateLine = textUtils.dateLine(day, watch);
+    this.title = `Squad ◷ ${dateLine}`;
     super.renderBorder(display);
     if (this.title) {
       super.renderTitle(display);

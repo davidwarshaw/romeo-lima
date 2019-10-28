@@ -1,0 +1,155 @@
+[{
+  "tiles": [],
+  "watches": [],
+  "frequency": 1,
+  "squadSizeMin": 2,
+  "cooldown": 10,
+  "name": "\"The prettiest girl I ever saw...\"",
+  "intro": [{
+      "name": "POINTMAN",
+      "text": "\"♫ The prettiest girl I ever saw, was drinking bourbon through a straw.\""
+    },
+    {
+      "name": "POINTMAN",
+      "text": "\"♫ I placed my hand upon her knee, she said, \"GI, you're teasing me.\"\""
+    },
+    {
+      "name": "POINTMAN",
+      "text": "\"♫ I placed my hand upon her thigh, she said, \"GI, that's way too high.\"\""
+    },
+    {
+      "name": "POINTMAN",
+      "text": "\"♫ I picked her up, I laid her down, her long black hair lay all around.\""
+    },
+    {
+      "name": "POINTMAN",
+      "text": "\"♫ The wedding was a formal one, her daddy brought a white shotgun.\""
+    }
+  ],
+  "proceedLabel": "\"I love that one.\""
+}, {
+  "tiles": [],
+  "watches": [],
+  "frequency": 1,
+  "squadSizeMin": 2,
+  "cooldown": 10,
+  "name": "\"Forever let us hold our banner high!\"",
+  "intro": [{
+      "name": "LEADER",
+      "text": "\"♫ Who's the leader of the club that's made for you and me?\""
+    },
+    {
+      "name": "(ALL)",
+      "text": "\"♫ M-I-C, K-E-Y, M-O-U-S-E.\""
+    },
+    {
+      "name": "LEADER",
+      "text": "\"♫ Who is marching coast to coast and far across the sea?\""
+    },
+    {
+      "name": "(ALL)",
+      "text": "\"♫ M-I-C, K-E-Y, M-O-U-S-E.\""
+    },
+    {
+      "name": "(ALL)",
+      "text": "\"♫ Mickey Mouse!\""
+    },
+    {
+      "name": "LEADER (falsetto)",
+      "text": "\"♫ Mickey Mouse!\""
+    }
+  ],
+  "proceedLabel": "\"♫ Mickey Mouse!\""
+}, {
+  "tiles": [],
+  "watches": [],
+  "frequency": 1,
+  "squadSizeMin": 3,
+  "cooldown": 10,
+  "name": "\"Dear 'Ole Dad\"",
+  "intro": [{
+      "name": "POINTMAN",
+      "text": "\"♫ I want a war, just like the war, that mutilated dear 'ole Dad.\""
+    },
+    {
+      "name": "POINTMAN",
+      "text": "\"♫ It was the one, and only war, that dear 'ole Daddy ever had.\""
+    },
+    {
+      "name": "LEADER",
+      "text": "\"Fucking lovely. Thanks POINTMAN.\""
+    },
+    {
+      "name": "POINTMAN",
+      "text": "\"Normally I warm up before a performance.\""
+    }
+  ],
+  "proceedLabel": "\"Enough.\""
+}, {
+  "tiles": [],
+  "watches": [],
+  "frequency": 1,
+  "squadSizeMin": 3,
+  "cooldown": 10,
+  "name": "\"Ba-Ba-Ba\"",
+  "intro": [{
+      "name": "OTHER1",
+      "text": "\"♫ Ba ba ba, ba Barbara Ann\""
+    },
+    {
+      "name": "POINTMAN & OTHER2",
+      "text": "\"♫ Ba ba ba, ba Barbara Ann\""
+    },
+    {
+      "name": "OTHER1 (falsetto)",
+      "text": "\"♫ Barbara Aaaaaaannnnn\""
+    },
+    {
+      "name": "POINTMAN & OTHER2",
+      "text": "\"♫ Take my haaaaaaannnd\""
+    }
+  ],
+  "proceedLabel": "\"Enough.\""
+}, {
+  "tiles": [],
+  "watches": [],
+  "frequency": 1,
+  "squadSizeMin": 3,
+  "cooldown": 10,
+  "name": "\"The first thing?\"",
+  "intro": [{
+      "name": "OTHER1",
+      "text": "\"A hamburger. Fries - a hamburger with cheese - and a chocolate milkshake. From the diner on route 7.\""
+    },
+    {
+      "name": "POINTMAN",
+      "text": "\"What's it called?\""
+    },
+    {
+      "name": "OTHER1",
+      "text": "\"...\""
+    },
+    {
+      "name": "OTHER1",
+      "text": "\"I don't think it has a name.\""
+    }
+  ],
+  "proceedLabel": "\"Ha! Okay.\""
+}, {
+  "tiles": [],
+  "watches": [],
+  "frequency": 1,
+  "squadSizeMin": 2,
+  "cooldown": 10,
+  "name": "\"Say Something!\"",
+  "intro": [{
+      "name": "OTHER2",
+      "text": "\"POINTMAN, why are you so quiet?\""
+    },
+    {
+      "name": "OTHER2",
+      "text": "\"Come'on man, say something. Anything.\""
+    }
+  ],
+  "proceedLabel": "\"Just leave him alone.\""
+}]

@@ -1,4 +1,4 @@
-import ROT from 'rot-js';
+import * as ROT from 'rot-js';
 
 function keyFromXY(x, y) {
   return `${x}-${y}`;

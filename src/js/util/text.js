@@ -1,3 +1,12 @@
+import properties from '../properties';
+
+function dateLine(day, watch) {
+  const startDate = properties.inGameStartDate;
+  const elapsedMillis = (((day * 24) + (watch * 2)) * 60 * 60 * 1000);
+  const currentDate = new Date(startDate.getTime() + elapsedMillis);
+  const hours = String(currentDate.getHours()).padStart(2, '0');
+  return `${currentDate.toDateString()} ${hours}:00`;
+}
 
 function titleCase(lower) {
   return lower.replace(/\b\w/, c => c.toUpperCase());
@@ -45,6 +54,55 @@ function createBattleMessages(actions) {
   return messages;
 }
 
+function formatMessages(messages, width) {
+  const messageLines = [];
+  let messageLine = { name: '', text: '' };
+  let lineChar = 0;
+  const addMessageLine = () => {
+    messageLine.text = messageLine.text.trimEnd();
+    messageLines.push(messageLine);
+    messageLine = { name: '', text: '' };
+    lineChar = 0;
+  };
+
+  messages.forEach((message) => {
+    // console.log(`message: ${JSON.stringify(message)}`);
+    message.name.split(' ').forEach(token => {
+      // console.log(`token: ${JSON.stringify(token)}`);
+      if (token.length >= (width - lineChar)) {
+        addMessageLine();
+      }
+      messageLine.name += token + ' ';
+      lineChar += token.length + 1;
+    });
+    message.text.split(/\s/).forEach(token => {
+      // console.log(`token: ${JSON.stringify(token)}`);
+      if (token.length >= (width - lineChar)) {
+        addMessageLine();
+      }
+      messageLine.text += token + ' ';
+      lineChar += token.length + 1;
+    });
+    addMessageLine();
+  });
+  messageLines.push(messageLine);
+
+  // console.log('messageLines:');
+  // console.log(`${JSON.stringify(messageLines)}`);
+  return messageLines;
+}
+
+function textFromMessageLines(messageLines, style) {
+  return messageLines.map(message => {
+    const formattedText =
+    `%c{${style.nameColor}}%b{${style.fieldBgColor}}` +
+      `${message.name}` +
+    `%c{${style.textColor}}%b{${style.fieldBgColor}}` +
+      `${message.text}`;
+    return formattedText;
+  });
+}
+
 function timesWords(number) {
   if (number === 1) {
     return '';
@@ -68,12 +126,15 @@ function truncateAndCenterText(text, left, width) {
 }
 
 export default {
+  dateLine,
   titleCase,
   glyphForName,
   createLevelUpMessages,
   createMeleeMessage,
   createFireMessage,
   createBattleMessages,
+  formatMessages,
+  textFromMessageLines,
   timesWords,
   truncateAndCenterText
 };

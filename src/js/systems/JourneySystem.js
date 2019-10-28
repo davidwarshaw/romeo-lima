@@ -1,14 +1,13 @@
-import properties from '../properties';
 import utils from '../util/utils';
 
 import OverworldFov from '../maps/OverworldFov';
-
-import events from './events';
 
 import Dialog from '../ui/Dialog';
 
 import InterstitialState from '../states/InterstitialState';
 import BattleState from '../states/BattleState';
+
+import EventSystem from './EventSystem';
 
 import squadProcedures from '../characters/squadProcedures';
 
@@ -23,6 +22,10 @@ export default class JourneySystem {
 
     this.map = this.playState.map;
 
+    this.eventSystem = new EventSystem();
+
+    this.eventDialogWidth = 90;
+    this.eventDialogHeight = 14;
     this.eventDialog = null;
 
     this.playerSquadOverworldFov = new OverworldFov(this.map, this.playerSquad);
@@ -100,10 +103,7 @@ export default class JourneySystem {
     this.advanceWatch();
 
     // Check for random events
-    const roll = properties.rng.getPercentage();
-    const eventCandidates = events
-      .filter(event => roll <= event.chanceToHappen);
-    const event = eventCandidates[0];
+    const event = this.eventSystem.checkForEvent(this.playState.watch, this.playerSquad);
     if (event) {
       this.startEvent(event);
     }
@@ -155,43 +155,43 @@ export default class JourneySystem {
   }
 
   startEvent(event) {
-    const { name, description, proceedLabel, skipLabel } = event;
-    this.eventDialog = new Dialog(
-      this.game, 40, 20,
-      name, this.playerSquad.populateNames(description.setup),
-      proceedLabel, () => this.proceedEvent(event),
-      skipLabel, () => this.endEvent(event));
+    const { eventId, choice, name, text, proceedLabel, skipLabel } = event;
+
+    if (choice) {
+      this.eventDialog = new Dialog(
+        this.game, this.eventDialogWidth, this.eventDialogHeight,
+        name, this.playerSquad.populateNames(text),
+        proceedLabel, () => this.proceedEvent(eventId),
+        skipLabel, () => this.endEvent());
+    }
+    else {
+      this.eventDialog = new Dialog(
+        this.game, this.eventDialogWidth, this.eventDialogHeight,
+        name, this.playerSquad.populateNames(text),
+        proceedLabel, () => this.endEvent(eventId));
+    }
+
     this.state.windowManager.addWindow(this.eventDialog);
   }
 
-  proceedEvent(event) {
-    const { name, description } = event;
+  proceedEvent(eventId) {
+    // Check if the event succeeds or fails
+    const { success, name, text } =
+      this.eventSystem.proceedWithEvent(eventId, this.playerSquad);
 
-    // Check for event success
-    const roll = properties.rng.getPercentage();
-    if (roll <= event.chanceToSucceed) {
-      // Remove the setup dialog and put up the success dialog
-      this.state.windowManager.removeWindow(this.eventDialog.id);
-      this.eventDialog = new Dialog(
-        this.game, 40, 20,
-        name, description.success,
-        'Continue', () => this.endEvent(event));
-      this.state.windowManager.addWindow(this.eventDialog);
-    }
-    else {
-      // Remove the setup dialog and put up the failure dialog
-      this.state.windowManager.removeWindow(this.eventDialog.id);
-      this.eventDialog = new Dialog(
-        this.game, 40, 20,
-        name, description.failure,
-        'Continue', () => this.endEvent(event));
-      this.state.windowManager.addWindow(this.eventDialog);
+    // Remove the setup dialog and put up the final dialog
+    this.state.windowManager.removeWindow(this.eventDialog.id);
+    this.eventDialog = new Dialog(
+      this.game, this.eventDialogWidth, this.eventDialogHeight,
+      name, text,
+      'Continue', () => this.endEvent(event));
+    this.state.windowManager.addWindow(this.eventDialog);
 
-      // Failure advances the watch and triggers a redraw
+    // Failure advances the watch and triggers a redraw
+    if (!success) {
       this.advanceWatch();
       this.game.refresh();
     }
-
   }
 
   endEvent() {
