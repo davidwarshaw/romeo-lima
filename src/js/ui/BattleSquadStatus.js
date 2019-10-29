@@ -67,8 +67,9 @@ export default class OverworldSquadStatus extends SquadStatus {
         if (this.system.targetMode) {
           moveText = 'Targetting';
         }
-        else if (!member.prone) {
-          moveText = `Moves: ${this.system.currentCharacterMoves}`;
+        else {
+          const moveType = member.prone ? 'Crawl' : 'Move'
+          moveText = `${moveType}: ${this.system.currentCharacterMoves}`;
         }
         formattedText =
         `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}` + moveText;

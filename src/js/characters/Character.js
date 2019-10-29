@@ -76,7 +76,10 @@ export default class Character {
   }
 
   getNumberOfMoves() {
-    return Math.round(this.stats.aggression.value / this.statFactor);
+    // You get half the moves as normal when prone
+    const proneFactor = this.prone ? 0.50 : 1.0;
+    const baseMoves = this.stats.aggression.value / this.statFactor;
+    return Math.round(proneFactor * baseMoves);
   }
 
   getNumberOfMeleeAttacks() {
@@ -94,14 +97,18 @@ export default class Character {
   }
 
   getWeaponAttackChance() {
-    const chance = this.stats.presence.value / this.statMax;
+    // Attack while prone is 120% of normal
+    const proneFactor = this.prone ? 1.20 : 1.0;
+    const chance = proneFactor * (this.stats.presence.value / this.statMax);
     return chance;
   }
 
   getWeaponVulnerableChance() {
+    // Vulnerability while prone is only 60% of normal
+    const proneFactor = this.prone ? 0.60 : 1.0;
     const presenceChance = (this.statMax - this.stats.presence.value) / this.statMax;
     const resilienceChance = (this.statMax - this.stats.resilience.value) / this.statMax;
-    const chance = (presenceChance + resilienceChance) / 2;
+    const chance = proneFactor * (presenceChance + resilienceChance) / 2;
     return chance;
   }
 

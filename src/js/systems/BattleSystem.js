@@ -251,7 +251,7 @@ export default class BattleSystem {
             utils.clamp(this.target.x - 1, 0, local.width - 1);
           this.setTarget();
         }
-        else if (!this.currentCharacter.prone) {
+        else {
           const { x, y } = this.currentCharacter;
           if (!this.shouldMove(local, x - 1, y)) {
             break;
@@ -269,7 +269,7 @@ export default class BattleSystem {
             utils.clamp(this.target.x + 1, 0, local.width - 1);
           this.setTarget();
         }
-        else if (!this.currentCharacter.prone) {
+        else {
           const { x, y } = this.currentCharacter;
           if (!this.shouldMove(local, x + 1, y)) {
             break;
@@ -287,7 +287,7 @@ export default class BattleSystem {
             utils.clamp(this.target.y - 1, 0, local.height - 1);
           this.setTarget();
         }
-        else if (!this.currentCharacter.prone) {
+        else {
           const { x, y } = this.currentCharacter;
           if (!this.shouldMove(local, x, y - 1)) {
             break;
@@ -306,7 +306,7 @@ export default class BattleSystem {
             utils.clamp(this.target.y + 1, 0, local.height - 1);
           this.setTarget();
         }
-        else if (!this.currentCharacter.prone) {
+        else {
           const { x, y } = this.currentCharacter;
           if (!this.shouldMove(local, x, y + 1)) {
             break;
