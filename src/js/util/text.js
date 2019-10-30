@@ -40,6 +40,18 @@ function createFireMessage(character, weapon) {
 }
 
 function createBattleMessages(actions) {
+  return createMessages(actions, 'has a close call');
+}
+
+function createSmokeMessages(actions) {
+  return createMessages(actions, 'is disoriented by smoke');
+}
+
+function createFireMessages(actions) {
+  return createMessages(actions, 'is surrounded by flames');
+}
+
+function createMessages(actions, hitText) {
   // console.log(`createBattleMessages: actions: ${JSON.stringify(actions)}`);
   const messages = Object.entries(actions)
     .map(action => {
@@ -47,9 +59,9 @@ function createBattleMessages(actions) {
       const { hits, killed } = action[1];
       const impact = `(-${hits} ♦)`;
       if (killed) {
-        return { name, text: `is out of luck: ${impact}` };
+        return { name, text: `runs out of luck: ${impact}` };
       }
-      return { name, text: `has a close call: ${impact}` };
+      return { name, text: `${hitText}: ${impact}` };
     });
   return messages;
 }
@@ -132,6 +144,8 @@ export default {
   createLevelUpMessages,
   createMeleeMessage,
   createFireMessage,
+  createSmokeMessages,
+  createFireMessages,
   createBattleMessages,
   formatMessages,
   textFromMessageLines,

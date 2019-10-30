@@ -232,6 +232,20 @@ export default class BattleSystem {
       }
     }
 
+    const enemyEnvironmentDamageActions = this.environmentSystem
+      .damageCharacters(this.ballisticsSystem, this.enemySquad);
+    const playerEnvironmentDamageActions = this.environmentSystem
+      .damageCharacters(this.ballisticsSystem, this.playerSquad);
+
+    const smokeActions = Object.assign(
+      enemyEnvironmentDamageActions.smokeActions,
+      playerEnvironmentDamageActions.smokeActions);
+    const fireActions = Object.assign(
+      enemyEnvironmentDamageActions.fireActions,
+      playerEnvironmentDamageActions.fireActions);
+
+    text.createSmokeMessages(smokeActions).forEach(message => this.messages.push(message));
+    text.createFireMessages(fireActions).forEach(message => this.messages.push(message));
   }
 
   handleInput(input, local) {

@@ -68,7 +68,7 @@ export default class OverworldSquadStatus extends SquadStatus {
           moveText = 'Targetting';
         }
         else {
-          const moveType = member.prone ? 'Crawl' : 'Move'
+          const moveType = member.prone ? 'Crawl' : 'Move';
           moveText = `${moveType}: ${this.system.currentCharacterMoves}`;
         }
         formattedText =

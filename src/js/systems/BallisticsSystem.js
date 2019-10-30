@@ -42,7 +42,7 @@ export default class BallisticsSystem {
     const smokeAreas = [];
     const fireAreas = [];
 
-    const xpStatNames = ['aggresion', 'presence'];
+    const xpStatNames = ['aggression', 'presence'];
 
     // One flame shot to every tile in the blast ring
     const origin = intendedLine[0];

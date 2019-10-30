@@ -48,6 +48,7 @@ export default class Character {
   }
 
   xp(stat) {
+    // console.log(`xp: ${stat}`);
     this.stats[stat].xp += 1;
   }
 

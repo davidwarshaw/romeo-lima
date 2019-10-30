@@ -273,4 +273,45 @@ export default class EnvironmentSystem {
       .map(tile => tile.amount)
       .reduce((agg, e) => agg + e);
   }
+
+  damageCharacters(ballisticsSystem, squad) {
+    let smokeActions = {};
+    let fireActions = {};
+
+    // Smoke damages one
+    Object.entries(this.smoke)
+      .filter(entry => entry[1].amount > 0)
+      .forEach((entry) => {
+        const point = utils.xyFromKey(entry[0]);
+        const effectedMember = squad.getAliveByXY(point.x, point.y);
+        if (effectedMember) {
+          const roll = properties.rng.getPercentage();
+
+          // Smoke checks presence
+          const statChance = effectedMember.getStatChance('presence');
+          if (roll > statChance) {
+            ballisticsSystem.hitCharacter(squad, effectedMember, smokeActions);
+          }
+        }
+      });
+
+    // Fire damages two
+    Object.entries(this.fire)
+      .filter(entry => entry[1].onFire)
+      .forEach((entry) => {
+        const point = utils.xyFromKey(entry[0]);
+        const effectedMember = squad.getAliveByXY(point.x, point.y);
+        if (effectedMember) {
+          const roll = properties.rng.getPercentage();
+          
+          // Fire checks resilience
+          const statChance = effectedMember.getStatChance('resilience');
+          if (roll > statChance) {
+            ballisticsSystem.hitCharacter(squad, effectedMember, fireActions);
+          }
+        }
+      });
+
+    return { smokeActions, fireActions };
+  }
 }

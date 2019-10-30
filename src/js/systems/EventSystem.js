@@ -41,6 +41,9 @@ export default class EventSystem {
 
   checkForEvent(watch, playerSquad) {
 
+    // TODO: remove This
+    return null;
+
     // First, decrement the cooldowns
     this.events.forEach(event => {
       event.currentCooldown -= 1;
@@ -118,9 +121,7 @@ export default class EventSystem {
       const statChance = pointman.getStatChance(statToCheck);
 
       //console.log(`statToCheck: ${statToCheck} roll: ${roll} statChance: ${statChance}`);
-      // TODO: remove this
-      //if (roll <= statChance) {
-      if (true) {
+      if (roll <= statChance) {
         const { findableNumber } = event;
 
         success = true;
