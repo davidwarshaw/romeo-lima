@@ -9,7 +9,7 @@ export default class Dialog extends Window {
     yesLabel, yesCb, noLabel, noCb,
     style) {
     const x = Math.round((properties.width - width) / 2);
-    const y = Math.round((properties.height - height) / 2);
+    const y = Math.round((properties.height - height) / 2) - 4;
     super(x, y, width, height, title, style);
     this.game = game;
     this.text = text;

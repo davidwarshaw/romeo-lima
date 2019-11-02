@@ -67,54 +67,76 @@ export default class Character {
     return x === this.x && y === this.y;
   }
 
+  hasSecondaryWeapon() {
+    const weapons = ['grenage', 'grenade launcher', 'rocket launcher', 'flamethrower'];
+    return this.secondary && weapons.includes(this.secondary.type);
+  }
+
+  hasSecondaryBoost() {
+    const boosts = ['medical equipment', 'existence equipment'];
+    return this.secondary && boosts.includes(this.secondary.type);
+  }
+
+  getAdjustedStat(stat) {
+    let value = this.stats[stat].value;
+    if (this.hasSecondaryBoost() && this.secondary.stat === stat) {
+      value += (this.secondary.boost * this.statFactor);
+    }
+    return value;
+  }
+
   getStatChance(stat) {
     //console.log(`${this.stats[stat].value} / ${this.statMax}`);
-    return this.stats[stat].value / this.statMax;
+    return this.getAdjustedStat(stat) / this.statMax;
   }
 
   getTurnOrder() {
-    return this.stats.presence.value;
+    return this.getAdjustedStat('presence');
   }
 
   getNumberOfMoves() {
     // You get half the moves as normal when prone
     const proneFactor = this.prone ? 0.50 : 1.0;
-    const baseMoves = this.stats.aggression.value / this.statFactor;
+    const baseMoves = this.getAdjustedStat('aggression') / this.statFactor;
     return Math.round(proneFactor * baseMoves);
   }
 
   getNumberOfMeleeAttacks() {
-    return Math.round(this.stats.presence.value / this.statFactor);
+    return Math.round(this.getAdjustedStat('presence') / this.statFactor);
   }
 
   getMeleeAttackChance() {
-    const chance = this.stats.aggression.value / this.statMax;
+    const chance = this.getAdjustedStat('aggression') / this.statMax;
     return chance;
   }
 
   getMeleeVulnerableChance() {
-    const chance = (this.statMax - this.stats.resilience.value) / this.statMax;
+    const chance = (this.statMax - this.getAdjustedStat('resilience')) / this.statMax;
     return chance;
   }
 
   getWeaponAttackChance() {
     // Attack while prone is 120% of normal
     const proneFactor = this.prone ? 1.20 : 1.0;
-    const chance = proneFactor * (this.stats.presence.value / this.statMax);
+    const chance = proneFactor * (this.getAdjustedStat('presence') / this.statMax);
     return chance;
   }
 
   getWeaponVulnerableChance() {
     // Vulnerability while prone is only 60% of normal
     const proneFactor = this.prone ? 0.60 : 1.0;
-    const presenceChance = (this.statMax - this.stats.presence.value) / this.statMax;
-    const resilienceChance = (this.statMax - this.stats.resilience.value) / this.statMax;
+    const presenceChance = (this.statMax - this.getAdjustedStat('presence')) / this.statMax;
+    const resilienceChance = (this.statMax - this.getAdjustedStat('resilience')) / this.statMax;
     const chance = proneFactor * (presenceChance + resilienceChance) / 2;
     return chance;
   }
 
   getStatDisplayLevel(stat) {
-    return Math.round(this.stats[stat].value / this.statFactor);
+    const value = Math.round(this.getAdjustedStat(stat) / this.statFactor);
+    const max = Math.round(this.stats[stat].max / this.statFactor);
+    const deficit = Math.max(0, max - value);
+    const extra = Math.max(0, value - max);
+    return { value, deficit, extra };
   }
 
   hit() {
@@ -123,7 +145,7 @@ export default class Character {
     let killed = false;
 
     this.stats.luck.value -= this.statFactor;
-    if (this.stats.luck.value <= 0) {
+    if (this.getAdjustedStat('luck') <= 0) {
       this.stats.luck.value = 0;
       killed = true;
     }

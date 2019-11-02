@@ -373,7 +373,7 @@ export default class BattleSystem {
 
         // If the primary weapon is selected and there's a secondary weapon, then
         // select the secondary weapon
-        if (this.currentCharacter.primarySelected && this.currentCharacter.secondary) {
+        if (this.currentCharacter.primarySelected && this.currentCharacter.hasSecondaryWeapon()) {
           this.currentCharacter.primarySelected = false;
 
         // Otherwise vice versa

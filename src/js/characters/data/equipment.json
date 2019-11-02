@@ -1,33 +1,43 @@
 {
-  "Battle Dressings": {
-    "type": "medical equipment",
-    "faction": "US",
-    "startWith": 2,
-    "description": ""
-  },
   "Morphine Syrettes": {
     "type": "medical equipment",
+    "assignable": true,
+    "slot": "secondary",
     "faction": "US",
-    "startWith": 2,
-    "description": ""
+    "startWith": 0,
+    "description": "",
+    "stat": "resilience",
+    "boost": 2
   },
-  "Cigarette Packs": {
+  "Cigarettes": {
     "type": "existence equipment",
+    "assignable": true,
+    "slot": "secondary",
     "faction": "US",
-    "startWith": 4,
-    "description": ""
+    "startWith": 1,
+    "description": "",
+    "stat": "presence",
+    "boost": 2
   },
   "C-Rations": {
     "type": "existence equipment",
+    "assignable": true,
+    "slot": "secondary",
     "faction": "US",
-    "startWith": 10,
-    "description": ""
+    "startWith": 1,
+    "description": "",
+    "stat": "resilience",
+    "boost": 2
   },
   "Extra Socks": {
     "type": "existence equipment",
+    "assignable": true,
+    "slot": "secondary",
     "faction": "US",
-    "startWith": 2,
-    "description": ""
+    "startWith": 1,
+    "description": "",
+    "stat": "aggression",
+    "boost": 2
   },
   "9x19mm NATO": {
     "type": "ammunition",

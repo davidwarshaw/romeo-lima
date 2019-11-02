@@ -25,7 +25,7 @@ export default class JourneySystem {
     this.eventSystem = new EventSystem();
 
     this.eventDialogWidth = 90;
-    this.eventDialogHeight = 14;
+    this.eventDialogHeight = 16;
     this.eventDialog = null;
 
     this.playerSquadOverworldFov = new OverworldFov(this.map, this.playerSquad);

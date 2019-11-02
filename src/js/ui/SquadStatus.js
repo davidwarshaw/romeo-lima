@@ -50,23 +50,27 @@ export default class SquadStatus extends Window {
     const maxlevel = 13;
     this.stats.forEach((name, i) => {
       const glyph = textUtils.glyphForName(name);
-      const statLevel = member.getStatDisplayLevel(name);
-      const remainingLevel = maxlevel - statLevel;
+      const { value, deficit, extra } = member.getStatDisplayLevel(name);
+      const remaining = maxlevel - extra - deficit - value;
 
       // console.log(`name: ${name}`);
       // console.log(`i: ${i}`);
       // console.log(`row: ${row}`);
-      this.renderBar(display, col, row + i, glyph, statLevel, glyph, remainingLevel);
+      this.renderBar(display, col, row + i, glyph, value, deficit, extra, remaining);
     });
   }
 
-  renderBar(display, col, row, full, fullValue, empty, emptyValue) {
+  renderBar(display, col, row, glyph, value, deficit, extra, remaining) {
     // console.log(`col: ${col} row: ${row}`);
-    const fullBar = full.repeat(fullValue);
-    const emptyBar = empty.repeat(emptyValue);
+    const valueBar = glyph.repeat(value);
+    const deficitBar = glyph.repeat(deficit);
+    const extraBar = glyph.repeat(extra);
+    const remainingBar = glyph.repeat(remaining);
     let formattedText =
-      `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}${fullBar}` +
-      `%c{${this.style.lineColor}}%b{${this.style.fieldBgColor}}${emptyBar}`;
+      `%c{${this.style.textColor}}%b{${this.style.fieldBgColor}}${valueBar}` +
+      `%c{${this.style.lineColor}}%b{${this.style.fieldBgColor}}${deficitBar}` +
+      `%c{${this.style.titleColor}}%b{${this.style.fieldBgColor}}${extraBar}` +
+      `%c{${this.style.inactiveTextColor}}%b{${this.style.fieldBgColor}}${remainingBar}`;
     display.drawText(col, row, formattedText);
   }
 
