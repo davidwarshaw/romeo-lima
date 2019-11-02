@@ -1,6 +1,6 @@
 import Game from './Game.js';
 
-import MenuState from './states/MenuState';
+import TitleState from './states/TitleState';
 
 window.onload = () => {
   const game = new Game();
@@ -9,5 +9,5 @@ window.onload = () => {
     .querySelector('#game-container')
     .appendChild(game.display.getContainer());
 
-  game.switchState(new MenuState(game));
+  game.switchState(new TitleState(game));
 };

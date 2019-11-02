@@ -1,5 +1,6 @@
 import State from './State';
 
+import MenuState from '../states/MenuState';
 import JourneyState from '../states/JourneyState';
 import InterstitialState from '../states/InterstitialState';
 
@@ -45,9 +46,9 @@ export default class BattleState extends State {
     const memberStatsParagraph = memberStats.join('\n');
     const endGameText = `${header}${memberStatsParagraph}`;
 
-    const journeyState = new JourneyState(this.game);
+    const menuState = new MenuState(this.game);
     this.game.switchState(
-      new InterstitialState(this.game, endGameText, journeyState));
+      new InterstitialState(this.game, endGameText, menuState));
   }
 
   showLevelUp(text, loot) {

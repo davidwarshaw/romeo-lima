@@ -1,12 +1,17 @@
 
 export default class ImageAnimation {
-  constructor(x, y, updateFunction, animationArrays, bgTileArrays) {
+  constructor(x, y, loop, updateFunction, animationArrays, bgTileArrays) {
     this.x = x;
     this.y = y;
+    this.loop = loop;
     this.updateFunction = updateFunction;
     this.animationArrays = animationArrays;
     this.bgTileArrays = bgTileArrays;
     this.animationFrameIndex = 0;
+  }
+
+  complete() {
+    return !this.loop && this.animationFrameIndex === this.animationArrays.length - 1;
   }
 
   render(display) {
@@ -29,7 +34,7 @@ export default class ImageAnimation {
   frame() {
     this.animationFrameIndex++;
     if (this.animationFrameIndex >= this.animationArrays.length) {
-      this.animationFrameIndex = 0;
+      this.animationFrameIndex = this.loop ? 0 : this.animationArrays.length - 1;
     }
   }
 }

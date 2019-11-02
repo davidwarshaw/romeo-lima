@@ -41,6 +41,9 @@ export default class EventSystem {
 
   checkForEvent(watch, playerSquad) {
 
+    //TODO: remove
+    return null;
+
     // First, decrement the cooldowns
     this.events.forEach(event => {
       event.currentCooldown -= 1;

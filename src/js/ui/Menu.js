@@ -11,21 +11,23 @@ export default class Menu extends Window {
 
     this.pointer = 0;
 
-    this.bgColor = '#ffff5f';
+    this.bgColor = '#051e3e';
   }
 
   render(display) {
 
-    const menuX = 60;
+    const menuX = 80;
     const menuY = 22;
     display.drawText(menuX, menuY,
       `%c{${this.style.titleColor}}%b{${this.bgColor}}New Game`);
     display.drawText(menuX, menuY + 2,
       `%c{${this.style.titleColor}}%b{${this.bgColor}}Intro`);
     display.drawText(menuX, menuY + 4,
+      `%c{${this.style.titleColor}}%b{${this.bgColor}}Options`);
+    display.drawText(menuX, menuY + 6,
       `%c{${this.style.titleColor}}%b{${this.bgColor}}Help`);
 
-    const pointerX = 58;
+    const pointerX = 78;
     const pointerY = menuY + (this.pointer * 2);
     display.drawText(pointerX, pointerY,
       `%c{${this.style.titleColor}}%b{${this.bgColor}}♠`);
