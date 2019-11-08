@@ -7,6 +7,9 @@ export default class TitleSystem {
     this.game = game;
     this.state = state;
     this.frameNumber = 0;
+
+    // This method is passed as a callback, so must be bound
+    this.goToMenuState = this.goToMenuState.bind(this);
   }
 
   startAnimation() {
@@ -15,13 +18,18 @@ export default class TitleSystem {
       properties.animationIntervalMillis);
   }
 
+  goToMenuState() {
+    clearInterval(this.intervalId);
+    this.game.switchState(new MenuState(this.game));
+  }
+
   animationFrame() {
     // If all animations are complete, go to the menu
     const allComplete = this.state.imageAnimations
       .every(imageAnimation => imageAnimation.complete());
     if (allComplete) {
-      clearInterval(this.intervalId);
-      this.game.switchState(new MenuState(this.game));
+      this.goToMenuState();
+      return;
     }
 
     if (this.state.imageAnimations) {

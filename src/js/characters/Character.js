@@ -68,7 +68,7 @@ export default class Character {
   }
 
   hasSecondaryWeapon() {
-    const weapons = ['grenage', 'grenade launcher', 'rocket launcher', 'flamethrower'];
+    const weapons = ['grenade', 'grenade launcher', 'rocket launcher', 'flamethrower'];
     return this.secondary && weapons.includes(this.secondary.type);
   }
 

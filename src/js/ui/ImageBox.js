@@ -8,9 +8,14 @@ export default class ImageBox extends Window {
     this.cb = cb;
     this.tileArrays = tileArrays;
     this.imageAnimations = imageAnimations;
+
+    this.shouldRender = true;
   }
 
   render(display) {
+    if (!this.shouldRender) {
+      return;
+    }
     this.tileArrays.forEach((row, y) =>
       row.forEach((tile, x) =>
         display.draw(x, y, tile.glyph, tile.colorFg, tile.colorBg)));

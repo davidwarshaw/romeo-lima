@@ -1,4 +1,3 @@
-import properties from '../properties';
 
 import State from './State';
 
@@ -8,6 +7,7 @@ import Menu from '../ui/Menu';
 
 import SplashState from '../states/SplashState';
 import JourneyState from '../states/JourneyState';
+import HelpState from '../states/HelpState';
 
 import card07R from '../systems/data/images/card-07-R.unipaint.json';
 import card07O from '../systems/data/images/card-07-O.unipaint.json';
@@ -26,21 +26,31 @@ export default class MenuState extends State {
     const menuStates = [
       new JourneyState(this.game),
       new SplashState(this.game),
-      new JourneyState(this.game)
+      new HelpState(this.game),
+      new HelpState(this.game)
     ];
 
     const loop = false;
     this.imageAnimations = [];
-    this.imageAnimations.push(new ImageAnimation(10, 2, loop, () => {}, [card07R], menuBackground));
-    this.imageAnimations.push(new ImageAnimation(25, 2, loop, () => {}, [card07O], menuBackground));
-    this.imageAnimations.push(new ImageAnimation(40, 2, loop, () => {}, [card07M], menuBackground));
-    this.imageAnimations.push(new ImageAnimation(55, 2, loop, () => {}, [card07E], menuBackground));
-    this.imageAnimations.push(new ImageAnimation(70, 2, loop, () => {}, [card07O], menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(10, 2, loop, () => {}, [card07R], menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(25, 2, loop, () => {}, [card07O], menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(40, 2, loop, () => {}, [card07M], menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(55, 2, loop, () => {}, [card07E], menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(70, 2, loop, () => {}, [card07O], menuBackground));
 
-    this.imageAnimations.push(new ImageAnimation(15, 16, loop, () => {}, [card07L], menuBackground));
-    this.imageAnimations.push(new ImageAnimation(30, 16, loop, () => {}, [card07I], menuBackground));
-    this.imageAnimations.push(new ImageAnimation(45, 16, loop, () => {}, [card07M], menuBackground));
-    this.imageAnimations.push(new ImageAnimation(60, 16, loop, () => {}, [card07A], menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(15, 16, loop, () => {}, [card07L], menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(30, 16, loop, () => {}, [card07I], menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(45, 16, loop, () => {}, [card07M], menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(60, 16, loop, () => {}, [card07A], menuBackground));
 
     this.windowManager.addWindow(new ImageBox(null, menuBackground, this.imageAnimations));
 

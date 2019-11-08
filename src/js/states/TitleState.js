@@ -25,29 +25,38 @@ export default class TitleState extends State {
     const loop = false;
     const updateFunction = function(stopX) {
       return function() {
-        console.log(this);
-        if (this.x > stopX) {
+        if (this.x > stopX) { // eslint-disable-line no-invalid-this
           this.x -= 5; // eslint-disable-line no-invalid-this
-        } else {
-          this.frame();
+        }
+        else {
+          this.frame(); // eslint-disable-line no-invalid-this
         }
       };
     };
     const cards = [card01, card02, card03, card04, card05, card06, card07];
     this.imageAnimations = [];
-    this.imageAnimations.push(new ImageAnimation(100, 2, loop, updateFunction(10), cards, menuBackground));
-    this.imageAnimations.push(new ImageAnimation(100, 2, loop, updateFunction(25), cards, menuBackground));
-    this.imageAnimations.push(new ImageAnimation(100, 2, loop, updateFunction(40), cards, menuBackground));
-    this.imageAnimations.push(new ImageAnimation(100, 2, loop, updateFunction(55), cards, menuBackground));
-    this.imageAnimations.push(new ImageAnimation(100, 2, loop, updateFunction(70), cards, menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(100, 2, loop, updateFunction(10), cards, menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(100, 2, loop, updateFunction(25), cards, menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(100, 2, loop, updateFunction(40), cards, menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(100, 2, loop, updateFunction(55), cards, menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(100, 2, loop, updateFunction(70), cards, menuBackground));
 
-    this.imageAnimations.push(new ImageAnimation(100, 16, loop, updateFunction(15), cards, menuBackground));
-    this.imageAnimations.push(new ImageAnimation(100, 16, loop, updateFunction(30), cards, menuBackground));
-    this.imageAnimations.push(new ImageAnimation(100, 16, loop, updateFunction(45), cards, menuBackground));
-    this.imageAnimations.push(new ImageAnimation(100, 16, loop, updateFunction(60), cards, menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(100, 16, loop, updateFunction(15), cards, menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(100, 16, loop, updateFunction(30), cards, menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(100, 16, loop, updateFunction(45), cards, menuBackground));
+    this.imageAnimations.push(
+      new ImageAnimation(100, 16, loop, updateFunction(60), cards, menuBackground));
 
-    this.sceneWindow = new ImageBox(this.titleSystem.nextScene, menuBackground, this.imageAnimations);
-
+    this.sceneWindow =
+      new ImageBox(this.titleSystem.goToMenuState, menuBackground, this.imageAnimations);
     this.windowManager.addWindow(this.sceneWindow);
   }
 

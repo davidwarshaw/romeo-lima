@@ -54,8 +54,10 @@ export default class SplashState extends State {
         };
         const helicopters = [helicopterFlying0, helicopterFlying1];
         this.imageAnimations = [];
-        this.imageAnimations.push(new ImageAnimation(-10, 11, loop, updateFunction, helicopters, sunset));
-        this.imageAnimations.push(new ImageAnimation(-30, 15, loop, updateFunction, helicopters, sunset));
+        this.imageAnimations.push(
+          new ImageAnimation(-10, 11, loop, updateFunction, helicopters, sunset));
+        this.imageAnimations.push(
+          new ImageAnimation(-30, 15, loop, updateFunction, helicopters, sunset));
         this.imageAnimations.push(new RocketAnimation(393, 313, rocketFunction, sunset));
         this.imageAnimations.push(new RocketAnimation(398, 317, rocketFunction, sunset));
         this.imageAnimations.push(new RocketAnimation(391, 310, rocketFunction, sunset));
@@ -74,8 +76,10 @@ export default class SplashState extends State {
         const loop = true;
         const helicopters = [helicopterFlying0, helicopterFlying1];
         this.imageAnimations = [];
-        this.imageAnimations.push(new ImageAnimation(90, 11, loop, () => {}, helicopters, explosion));
-        this.imageAnimations.push(new ImageAnimation(70, 15, loop, () => {}, helicopters, explosion));
+        this.imageAnimations.push(
+          new ImageAnimation(90, 11, loop, () => {}, helicopters, explosion));
+        this.imageAnimations.push(
+          new ImageAnimation(70, 15, loop, () => {}, helicopters, explosion));
         this.sceneWindow =
           new ImageBox(this.splashSystem.nextScene, explosion, this.imageAnimations);
         this.windowManager.addWindow(this.sceneWindow);
@@ -92,8 +96,10 @@ export default class SplashState extends State {
         const helicopter1 = [helicopterSpinning0, helicopterSpinning1, helicopterSpinning2];
         const helicopter2 = [helicopterSpinning1, helicopterSpinning2, helicopterSpinning0];
         this.imageAnimations = [];
-        this.imageAnimations.push(new ImageAnimation(90, 11, loop, updateFunction, helicopter1, sunset));
-        this.imageAnimations.push(new ImageAnimation(70, 15, loop, updateFunction, helicopter2, sunset));
+        this.imageAnimations.push(
+          new ImageAnimation(90, 11, loop, updateFunction, helicopter1, sunset));
+        this.imageAnimations.push(
+          new ImageAnimation(70, 15, loop, updateFunction, helicopter2, sunset));
         this.imageAnimations.push(new SmokeAnimation(90, 11, updateFunction, sunset));
         this.imageAnimations.push(new SmokeAnimation(70, 15, updateFunction, sunset));
         this.sceneWindow = new ImageBox(this.splashSystem.nextScene, sunset, this.imageAnimations);

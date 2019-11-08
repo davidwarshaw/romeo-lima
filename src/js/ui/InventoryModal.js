@@ -140,10 +140,11 @@ export default class InventoryModal extends Window {
   }
 
   tryToAssignItemToMember(itemNumber, memberNumber) {
-    // console.log('tryToAssignToMember: ' +
-    //   `itemNumber: ${itemNumber} memberNumber: ${memberNumber}`);
-    const item = this.squad.inventory.inventory[itemNumber];
-    const itemIsWeapon = item.type === 'weapon';
+    console.log('tryToAssignToMember: ' +
+      `itemNumber: ${itemNumber} memberNumber: ${memberNumber}`);
+    const { item } = this.squad.inventory.getItemByNumber(itemNumber);
+    console.log(`assigned: ${item.assigned}`);
+    const primarySlot = item.slot === 'primary';
 
     // Don't allow assignment if the item is not assignable
     if (!item.assignable) {
@@ -165,7 +166,7 @@ export default class InventoryModal extends Window {
       // If the item is assigned to someone else, unassign it
       if (currentlyAssignedNumber) {
         const currentlyAssigned = this.squad.getByNumber(currentlyAssignedNumber);
-        if (itemIsWeapon) {
+        if (primarySlot) {
           currentlyAssigned.weapon = null;
         }
         else {
@@ -174,7 +175,7 @@ export default class InventoryModal extends Window {
         this.squad.inventory.unassignItem(itemNumber);
       }
       this.squad.inventory.assignItem(itemNumber, memberNumber);
-      if (itemIsWeapon) {
+      if (primarySlot) {
         member.weapon = item;
       }
       else {
@@ -185,7 +186,7 @@ export default class InventoryModal extends Window {
     // Otherwise, unassign the item
     else {
       this.squad.inventory.unassignItem(itemNumber);
-      if (itemIsWeapon) {
+      if (primarySlot) {
         member.weapon = null;
       }
       else {

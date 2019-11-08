@@ -6,6 +6,7 @@ import Window from './Window';
 export default class Menu extends Window {
   constructor(game, states) {
     super(0, 0, properties.localWidth, properties.localHeight);
+    
     this.game = game;
     this.states = states;
 
@@ -25,7 +26,7 @@ export default class Menu extends Window {
     display.drawText(menuX, menuY + 4,
       `%c{${this.style.titleColor}}%b{${this.bgColor}}Options`);
     display.drawText(menuX, menuY + 6,
-      `%c{${this.style.titleColor}}%b{${this.bgColor}}Help`);
+      `%c{${this.style.titleColor}}%b{${this.bgColor}}Manual`);
 
     const pointerX = 78;
     const pointerY = menuY + (this.pointer * 2);
@@ -36,10 +37,10 @@ export default class Menu extends Window {
   inputHandler(input) {
     switch (input) {
       case 'UP':
-        this.pointer = utils.wrap(this.pointer - 1, 0, 2);
+        this.pointer = utils.wrap(this.pointer - 1, 0, this.states.length - 1);
         break;
       case 'DOWN':
-        this.pointer = utils.wrap(this.pointer + 1, 0, 2);
+        this.pointer = utils.wrap(this.pointer + 1, 0, this.states.length - 1);
         break;
       case 'ENTER':
         this.game.switchState(this.states[this.pointer]);

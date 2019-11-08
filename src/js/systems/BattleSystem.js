@@ -344,6 +344,30 @@ export default class BattleSystem {
       case 'ATTACK':
         // Only attack if not already moving
         if (!this.characterIsMoving) {
+
+          // Only allow targetting if there is at least one unit of ammo for a weapon
+          const primaryAmmoCount = this.playerSquad.inventory
+            .getAmmoCountForWeapon(this.currentCharacter.weapon) || 0;
+          const secondaryAmmoCount = this.playerSquad.inventory
+            .getAmmoCountForWeapon(this.currentCharacter.secondary) || 0;
+
+          // Neither primary nor secondary has ammo, so don't target
+          if (primaryAmmoCount <= 0 && secondaryAmmoCount <= 0) {
+            break;
+          }
+
+          // Only one has ammo, so switch to that one, but allow targetting
+          else if (primaryAmmoCount > 0 && secondaryAmmoCount <= 0) {
+            this.currentCharacter.primarySelected = true;
+          }
+
+          // Only one has ammo, so switch to that one, but allow targetting
+          else if (primaryAmmoCount <= 0 && secondaryAmmoCount > 0) {
+            this.currentCharacter.primarySelected = false;
+          }
+
+          // They both have ammo, so do not switch weapons and allow targetting
+
           // Turn on target mode and auto target the nearest enemy
           if (!this.targetMode) {
             this.targetMode = true;
@@ -365,23 +389,36 @@ export default class BattleSystem {
           this.setTarget(this.target.enemy);
         }
         break;
-      case 'TOGGLE WEAPON':
+      case 'TOGGLE WEAPON': {
+
         // Only toggle in target mode
         if (!this.targetMode) {
           break;
         }
 
+        // Only allow toggling to weapon if there is at least one unit of ammo for a weapon
+        const primaryAmmoCount = this.playerSquad.inventory
+          .getAmmoCountForWeapon(this.currentCharacter.weapon) || 0;
+        const secondaryAmmoCount = this.playerSquad.inventory
+          .getAmmoCountForWeapon(this.currentCharacter.secondary) || 0;
+
+        console.log(`primaryAmmoCount: ${primaryAmmoCount}`);
+        console.log(`secondaryAmmoCount: ${secondaryAmmoCount}`);
+
         // If the primary weapon is selected and there's a secondary weapon, then
         // select the secondary weapon
-        if (this.currentCharacter.primarySelected && this.currentCharacter.hasSecondaryWeapon()) {
+        if (this.currentCharacter.primarySelected &&
+          this.currentCharacter.hasSecondaryWeapon() && secondaryAmmoCount > 0) {
           this.currentCharacter.primarySelected = false;
 
         // Otherwise vice versa
         }
-        else if (!this.currentCharacter.primarySelected && this.currentCharacter.weapon) {
+        else if (!this.currentCharacter.primarySelected &&
+          this.currentCharacter.weapon && primaryAmmoCount > 0) {
           this.currentCharacter.primarySelected = true;
         }
         break;
+      }
       case 'ENTER':
         // Only attack if not already moving
         if (this.targetMode) {
@@ -517,6 +554,11 @@ export default class BattleSystem {
     const firedWeapon = this.currentCharacter.primarySelected ?
       this.currentCharacter.weapon :
       this.currentCharacter.secondary;
+
+    // The player squad expends ammo
+    if (this.currentCharacter.playerControlled) {
+      this.playerSquad.inventory.expendAmmoForWeapon(firedWeapon, this.playerSquad);
+    }
 
     const {
       effectAreas,

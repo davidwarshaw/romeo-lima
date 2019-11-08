@@ -6,7 +6,9 @@ export default class Inventory {
   }
 
   addItem(itemName, itemDetail) {
-    const itemNumber = this.inventory.length;
+    const numbers = this.inventory.map(item => item.number);
+    const largestNumber = numbers.length > 0 ? Math.max(...numbers) : 0;
+    const itemNumber = largestNumber + 1;
     const newItem = Object.assign({},
       { name: itemName, number: itemNumber }, itemDetail);
     this.inventory.push(newItem);
@@ -14,7 +16,7 @@ export default class Inventory {
   }
 
   assignItem(itemNumber, memberNumber) {
-    const item = this.inventory[itemNumber];
+    const { item } = this.getItemByNumber(itemNumber);
 
     // Only assign if item is assignable
     if (item.assignable) {
@@ -36,12 +38,60 @@ export default class Inventory {
   }
 
   unassignItem(itemNumber) {
-    const item = this.inventory[itemNumber];
+    const { item } = this.getItemByNumber(itemNumber);
 
     // Only assign if item is assignable
     if (item.assignable) {
       item.assigned = 0;
     }
+  }
+
+  destroyItem(itemNumber) {
+    const { item, i } = this.getItemByNumber(itemNumber);
+    console.log(`Destroying itemNumber: ${itemNumber}: ${item.name}`);
+    this.inventory.splice(i, 1);
+  }
+
+  expendAmmoForWeapon(weapon, squad) {
+    console.log('inventory:');
+    console.log(this.inventory);
+    if (!weapon) {
+      return null;
+    }
+
+    const smallArms = ['sidearm', 'rifle', 'automatic rifle', 'machine gun'];
+
+    const smallArm = smallArms.includes(weapon.type);
+
+    const weaponAmmoUsage = smallArm ? weapon.bursts * weapon.roundsPerBurst : 1;
+
+    // If the weapon uses ammo, find it. Other wise the weapon is it's own ammo
+    let ammoUnits = [];
+    if (weapon.ammo) {
+      ammoUnits = this.inventory
+        .filter(item => item.type === 'ammunition' && item.name === weapon.ammo)
+        .slice(0, weaponAmmoUsage);
+    }
+    else {
+      const { item } = this.getItemByNumber(weapon.number);
+
+      // Find the member and unassign the weapon from them
+      const currentlyAssigned = squad.getByNumber(item.assigned);
+      currentlyAssigned.secondary = null;
+
+      // Unassign the item
+      this.unassignItem(item.number);
+
+      ammoUnits = [item];
+    }
+
+    const ammoExpendedCount = ammoUnits.length;
+
+    console.log(ammoUnits);
+    ammoUnits.forEach(unit => this.destroyItem(unit.number));
+
+    console.log(`Expending ${ammoExpendedCount} of ${weaponAmmoUsage} of type ${weapon.ammo}`);
+    return ammoExpendedCount;
   }
 
   size() {
@@ -52,8 +102,34 @@ export default class Inventory {
     return this.inventory;
   }
 
+  getItemByNumber(number) {
+    const itemPairs = this.inventory
+      .map((item, i) => ({ item, i }))
+      .filter(itemPair => itemPair.item.number === number);
+    const { item, i } = itemPairs.length > 0 ? itemPairs[0] : { item: null, i: null };
+    return { item, i };
+  }
+
   getItemsByMemberNumber(memberNumber) {
     return this.inventory.filter(item => item.assigned === memberNumber);
+  }
+
+  getAmmoCountForWeapon(weapon) {
+    if (!weapon) {
+      return null;
+    }
+
+    // If the weapon doesn't take ammo, then it's its own ammo
+    if (!weapon.ammo) {
+      return 1;
+    }
+    const ammoCount = this.inventory
+      .filter(item => item.type === 'ammunition' && item.name === weapon.ammo)
+      .length;
+    console.log('weapon:');
+    console.log(weapon);
+    console.log(`ammoCount: ${ammoCount}`);
+    return ammoCount;
   }
 
   getDisplayForm() {
