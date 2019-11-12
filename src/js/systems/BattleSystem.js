@@ -556,9 +556,11 @@ export default class BattleSystem {
       this.currentCharacter.secondary;
 
     // The player squad expends ammo
+    let expendedAmmo = 0;
     if (this.currentCharacter.playerControlled) {
-      this.playerSquad.inventory.expendAmmoForWeapon(firedWeapon, this.playerSquad);
+      expendedAmmo = this.playerSquad.inventory.expendAmmoForWeapon(firedWeapon, this.playerSquad);
     }
+    console.log(`expendedAmmo: ${expendedAmmo}`);
 
     const {
       effectAreas,
@@ -566,7 +568,7 @@ export default class BattleSystem {
       fireAreas,
       attackActions
     } = this.ballisticsSystem
-      .effectFire(this.currentCharacter, firedWeapon, this.projectile.intendedLine);
+      .effectFire(this.currentCharacter, firedWeapon, this.projectile.intendedLine, expendedAmmo);
 
     this.projectile.effectAreas = effectAreas;
     this.projectile.smokeAreas = smokeAreas;
@@ -584,7 +586,7 @@ export default class BattleSystem {
       .forEach(message => this.messages.push(message));
 
     this.projectile.fireAnimation = this.ballisticsSystem
-      .generateFireAnimation(firedWeapon, this.projectile.effectAreas);
+      .generateFireAnimation(firedWeapon, this.projectile.effectAreas, expendedAmmo);
 
     // console.log('this.projectile.fireAnimation');
     // console.log(this.projectile.fireAnimation);

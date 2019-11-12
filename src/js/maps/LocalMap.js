@@ -180,7 +180,6 @@ export default class LocalMap extends Window {
 
     // console.log(effectAreasIndex);
     // console.log(projectile.effectAreas);
-
     projectile.effectAreas[effectAreasIndex]
 
       // Only render visible points of the line

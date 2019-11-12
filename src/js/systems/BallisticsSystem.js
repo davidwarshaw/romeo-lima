@@ -17,7 +17,7 @@ export default class BallisticsSystem {
     this.enemySquadLocalFov = enemySquadLocalFov;
   }
 
-  effectFire(character, weapon, intendedLine) {
+  effectFire(character, weapon, intendedLine, expendedAmmo) {
     // console.log('effectFire');
     // console.log(weapon);
     switch (weapon.type) {
@@ -25,7 +25,7 @@ export default class BallisticsSystem {
       case 'rifle':
       case 'automatic rifle':
       case 'machine gun':
-        return this.effectSmallArmsFire(character, weapon, intendedLine);
+        return this.effectSmallArmsFire(character, weapon, intendedLine, expendedAmmo);
       case 'grenade':
       case 'grenade launcher':
       case 'rocket launcher':
@@ -183,8 +183,8 @@ export default class BallisticsSystem {
     return chance;
   }
 
-  effectSmallArmsFire(character, weapon, intendedLine) {
-    const { roundsPerBurst, bursts, power, accuracy, range } = weapon;
+  effectSmallArmsFire(character, weapon, intendedLine, expendedAmmo) {
+    const { bursts, roundsPerBurst, power, accuracy, range } = weapon;
     const attackActions = {};
     const effectAreas = [];
     const smokeAreas = [];
@@ -193,7 +193,14 @@ export default class BallisticsSystem {
     const xpStatNames = ['presence'];
 
     // Simulate each round from each burst
-    const roundsToSimulate = roundsPerBurst * bursts;
+    let roundsToSimulate = bursts * roundsPerBurst;
+
+    // If a player character is firing, expendedAmmo will have the ammo that has been used
+    // If so, only fire this many rounds
+    if (!!expendedAmmo && expendedAmmo > 0) {
+      roundsToSimulate = expendedAmmo;
+    }
+
     for (let round = 0; round < roundsToSimulate; round++) {
       effectAreas.push(this.simulateProjectile(
         power, accuracy, range, intendedLine, character,
@@ -339,7 +346,7 @@ export default class BallisticsSystem {
     }
   }
 
-  smallArmsFireSequence(bursts, roundsPerBurst) {
+  smallArmsFireSequence(bursts, roundsPerBurst, expendedAmmo) {
     const roundsPattern =
       Array(roundsPerBurst).fill('-true-');
     const roundBreaksPattern =
@@ -356,12 +363,33 @@ export default class BallisticsSystem {
       .filter(token => token)
       .map(token => token === 'true');
 
+    console.log('sequence:');
+    console.log(sequence);
+
+    // Only the player squad expends ammo, so it will be null for enemies
+    const actualRounds = expendedAmmo || bursts * roundsPerBurst;
+
+    // Only allow as many rounds as expended ammo
+    const adjustedSequence = [];
+    let roundCount = 0;
+    sequence.forEach(fired => {
+      if (fired) {
+        roundCount++;
+      }
+      if (roundCount <= actualRounds) {
+        adjustedSequence.push(fired);
+      }
+    });
+
+    console.log('adjustedSequence:');
+    console.log(adjustedSequence);
+
     // For the animation timing to look nice, there has to be a beat
     // at the begining and two beats at the end.
     const initialFalse = [false];
-    sequence.push(false);
-    sequence.push(false);
-    initialFalse.push(...sequence);
+    adjustedSequence.push(false);
+    adjustedSequence.push(false);
+    initialFalse.push(...adjustedSequence);
     return initialFalse;
   }
 
@@ -394,7 +422,7 @@ export default class BallisticsSystem {
     return fireSequence;
   }
 
-  generateFireAnimation(weapon, effectAreas) {
+  generateFireAnimation(weapon, effectAreas, expendedAmmo) {
     // TODO do something with this
     const fireAnimation = {
       weaponType: weapon.type,
@@ -415,7 +443,7 @@ export default class BallisticsSystem {
       case 'automatic rifle':
       case 'machine gun':
         fireAnimation.fireSequence = this.smallArmsFireSequence(
-          weapon.bursts, weapon.roundsPerBurst);
+          weapon.bursts, weapon.roundsPerBurst, expendedAmmo);
         break;
       case 'grenade': {
         const projectileSpeed = 2;
