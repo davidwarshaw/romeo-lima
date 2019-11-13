@@ -58,10 +58,12 @@ export default {
   projectileRoundBreakFrames: 1,
   projectileBurstBreakFrames: 5,
   moveIntervalMillis: 400,
-  maxInjuries: 2,
   hitCharacterPowerLoss: 40,
   fovConcealmentThreshold: 100,
   fovCoverThreshold: 75,
   animationIntervalMillis: 100,
+  startingAmmoBursts: 5,
+  enemyEquipmentChance: 60,
+  maxDifficulty: 10,
   inGameStartDate: new Date(1967, 6, 3, 0)
 };

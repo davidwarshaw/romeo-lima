@@ -48,17 +48,57 @@ function nameCharacter(faction, role) {
   return `${faction} ${role}`;
 }
 
-function populateInventory(members, inventory, startWithEquipment) {
+function addEquipmentForDifficulty(members, inventory, difficulty) {
 
-  // Add starting equipment
-  if (startWithEquipment) {
-    Object.entries(equipment)
-      .forEach(item => {
-        [...Array(item[1].startWith).keys()]
-          .forEach(() => inventory.addItem(item[0], item[1]));
-      });
-  }
+  // Get frequency weights for all equipment at or below difficulty level
+  const candidateWeights = {};
+  Object.entries(equipment)
+    .filter(item => item[1].difficulty <= difficulty)
+    .forEach(item => candidateWeights[item[0]] = item[1].frequency);
+  console.log(candidateWeights);
 
+  console.log(`difficulty: ${difficulty} candidates: ${Object.entries(candidateWeights).length}`);
+
+  // For each member, see if we should assign equipment
+  members.forEach(member => {
+
+    // Don't always assign equipment
+    const roll = properties.rng.getPercentage();
+    console.log(`roll: ${roll} enemyEquipmentChance: ${properties.enemyEquipmentChance}`);
+    if (roll <= properties.enemyEquipmentChance) {
+
+      // If we assign, assign by frequency
+      const itemName = properties.rng.getWeightedValue(candidateWeights);
+      const item = Object.assign({}, { name: itemName }, equipment[itemName]);
+      console.log('assigned:');
+      console.log(item);
+
+      // Add and assign
+      member.secondary = item;
+      const itemNumber = inventory.addItem(item.name, item);
+      inventory.assignItem(itemNumber, member.number);
+
+      // Add ammo if needed
+      if (item.ammo) {
+        const startingRounds = properties.startingAmmoBursts;
+        const ammoName = item.ammo;
+        const ammoDetail = equipment[ammoName];
+        [...Array(startingRounds).keys()]
+          .forEach(() => inventory.addItem(ammoName, ammoDetail));
+      }
+    }
+  });
+}
+
+function addStartingEquipment(inventory) {
+  Object.entries(equipment)
+    .forEach(item => {
+      [...Array(item[1].startWith).keys()]
+        .forEach(() => inventory.addItem(item[0], item[1]));
+    });
+}
+
+function addWeapons(members, inventory) {
   // Add and assign member weapons
   members.forEach(member => {
     // Add weapon
@@ -77,13 +117,13 @@ function populateInventory(members, inventory, startWithEquipment) {
 }
 
 function populatePlayerInventory(members, inventory) {
-  const startWithEquipment = true;
-  return populateInventory(members, inventory, startWithEquipment);
+  addWeapons(members, inventory);
+  addStartingEquipment(inventory);
 }
 
-function populateEnemyInventory(members, inventory) {
-  const startWithEquipment = false;
-  return populateInventory(members, inventory, startWithEquipment);
+function populateEnemyInventory(members, inventory, difficulty) {
+  addWeapons(members, inventory);
+  addEquipmentForDifficulty(members, inventory, difficulty);
 }
 
 function weaponForMember(member, faction) {
@@ -155,7 +195,8 @@ function getOverworldEnemyLocations(map) {
       const {
         overworldWidth, overworldHeight,
         baseOverworldEnemyProb, xOverworldEnemyProb,
-        southernOverworldEnemyHeight, southernOverworldEnemyProb
+        southernOverworldEnemyHeight, southernOverworldEnemyProb,
+        maxDifficulty
       } = properties;
       const xProb =
         (1 - ((overworldWidth - x) / overworldWidth))
@@ -163,7 +204,7 @@ function getOverworldEnemyLocations(map) {
       const ySouthernThreshold = overworldHeight - southernOverworldEnemyHeight;
       const yProb = y >= ySouthernThreshold ? southernOverworldEnemyProb : 0;
       const tileProb = Math.max(xProb, yProb);
-      const difficulty = utils.clamp(~~(1 + (10 * tileProb)), 1, 10);
+      const difficulty = utils.clamp(~~(1 + (maxDifficulty * tileProb)), 1, maxDifficulty);
       const enemyProb = ~~(100 * tileProb * baseOverworldEnemyProb);
       const roll = properties.rng.getPercentage();
       if (roll < enemyProb) {

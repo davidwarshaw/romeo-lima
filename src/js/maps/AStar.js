@@ -7,10 +7,19 @@ function distance(from, to) {
 }
 
 export default class AStar {
-  constructor(map, playerSquad, enemySquad) {
+  constructor(map, playerSquad, enemySquad, playerSquadLocalFov) {
     this.map = map;
     this.playerSquad = playerSquad;
     this.enemySquad = enemySquad;
+    this.playerSquadLocalFov = playerSquadLocalFov;
+
+    this.visibleTileCost = 2;
+    this.notVisibleTileCost = 1;
+  }
+
+  tileCost(x, y) {
+    return this.playerSquadLocalFov.visibleMap[utils.keyFromXY(x, y)] ?
+      this.visibleTileCost : this.notVisibleTileCost;
   }
 
   addNeighbor(neighbors, x, y) {
@@ -43,17 +52,11 @@ export default class AStar {
 
   addToOpenSet(openSet, goal, current, previous) {
     // Calculate the scores need to judge better paths
-    const gScore = previous ? previous.gScore + 1 : 0;
+    const { x, y } = current;
+    const gScore = previous ? previous.gScore + this.tileCost(x, y) : 0;
     const hScore = distance(current, goal);
     const fScore = gScore + hScore;
-    const currentNode = {
-      x: current.x,
-      y: current.y,
-      previous,
-      gScore,
-      hScore,
-      fScore
-    };
+    const currentNode = { x, y, previous, gScore, hScore, fScore };
 
     // if the open set is empty no need to search for the insertion point
     if (openSet.length === 0) {

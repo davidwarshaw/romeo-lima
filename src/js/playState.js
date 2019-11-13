@@ -54,11 +54,17 @@ function createPlayState() {
       const { glyph, overworldVisible } = definition;
       const enemySquadInventory = new Inventory();
       squadProcedures
-        .populateEnemyInventory(enemySquadMembers, enemySquadInventory);
+        .populateEnemyInventory(enemySquadMembers, enemySquadInventory, difficulty);
+
+      // console.log('enemySquadInventory:');
+      // console.log(enemySquadInventory);
+
       return new EnemySquad(
         enemySquadMembers, x, y, enemySquadInventory,
-        glyph, overworldVisible);
+        glyph, overworldVisible, difficulty);
     });
+
+  console.log(enemies);
 
   return {
     day: 0,

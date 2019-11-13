@@ -14,6 +14,8 @@ import LootModal from '../ui/LootModal';
 
 import LocalMap from '../maps/LocalMap';
 
+import playState from '../playState';
+
 export default class BattleState extends State {
   constructor(game, overworld, enemySquad, ambushState, playerSide) {
     super(game);
@@ -45,6 +47,9 @@ export default class BattleState extends State {
       .map(member => `${member.rank} ${member.name}: Killed in action.`);
     const memberStatsParagraph = memberStats.join('\n');
     const endGameText = `${header}${memberStatsParagraph}`;
+
+    // Reset the playstate
+    this.game.playState = playState.createPlayState();
 
     const menuState = new MenuState(this.game);
     this.game.switchState(
@@ -86,9 +91,9 @@ export default class BattleState extends State {
 
   showYouDiedBox() {
     const title = null;
-    const text = 'All members of the squad have perished.';
+    const text = 'All members of ROMEO-LIMA have been killed.';
     this.youDiedBox = new Dialog(
-      this.game, 30, 10, title, text, 'Ok',
+      this.game, 30, 10, title, text, 'Game Over',
       () => {
         this.windowManager.removeWindow(this.youDiedBox);
         this.youDiedBox = null;

@@ -111,6 +111,10 @@ export default class BattleSystem {
     this.nextCharacter();
   }
 
+  registerLocalMap(local) {
+    this.local = local;
+  }
+
   initProjectile() {
     // The projectile
     this.projectile = {
@@ -144,6 +148,22 @@ export default class BattleSystem {
     // console.log(this.characters);
     // Update the environment
     this.environmentSystem.update();
+
+    // Resolve smoke and fire damage before characters are picked for actions
+    const enemyEnvironmentDamageActions = this.environmentSystem
+      .damageCharacters(this.ballisticsSystem, this.enemySquad);
+    const playerEnvironmentDamageActions = this.environmentSystem
+      .damageCharacters(this.ballisticsSystem, this.playerSquad);
+
+    const smokeActions = Object.assign(
+      enemyEnvironmentDamageActions.smokeActions,
+      playerEnvironmentDamageActions.smokeActions);
+    const fireActions = Object.assign(
+      enemyEnvironmentDamageActions.fireActions,
+      playerEnvironmentDamageActions.fireActions);
+
+    text.createSmokeMessages(smokeActions).forEach(message => this.messages.push(message));
+    text.createFireMessages(fireActions).forEach(message => this.messages.push(message));
 
     // If there is nobody from the enemy squad, end the battle
     if (this.enemySquad.numberOfAliveMembers() <= 0) {
@@ -202,16 +222,11 @@ export default class BattleSystem {
         this.currentCharacterMoves,
         this.map,
         this.enemySquadLocalFov,
-        this.playerSquad);
+        this.playerSquad,
+        this.playerSquadLocalFov);
       console.log(action);
 
-      if (action.action === 'WAIT') {
-        // Log the action message
-        this.messages.push(action.message);
-
-        this.nextCharacter();
-      }
-      else if (action.action === 'MOVE') {
+      if (action.action === 'MOVE') {
         // Log the action message
         this.messages.push(action.message);
 
@@ -220,32 +235,41 @@ export default class BattleSystem {
         this.movement.line = action.moveLine;
         this.movement.index = 0;
         this.movement.intervalId = setInterval(
-          () => this.moveAnimationFrame(),
+          () => this.moveEnemyCharacter(),
           properties.moveIntervalMillis);
       }
+      else if (action.action === 'WAIT') {
+
+        // Log the action message
+        this.messages.push(action.message);
+
+        this.nextCharacter();
+      }
       else if (action.action === 'ATTACK') {
+
+        // Use the primary or secondary weapon as specified by the action
+        this.currentCharacter.primarySelected = action.primary;
+
         this.shouldFireProjectile(action.target);
 
         // Turn off target mode
         this.targetMode = false;
         this.clearTarget();
       }
+      else if (action.action === 'PRONE') {
+        this.currentCharacter.prone = !this.currentCharacter.prone;
+
+        // Going prone or geting up uses up all moves and clears the target
+        this.targetMode = false;
+        this.clearTarget();
+
+        // Log the action message
+        const message = this.currentCharacter.prone ?
+          { name: this.currentCharacter.name, text: 'goes prone' } :
+          { name: this.currentCharacter.name, text: 'stands' };
+        this.messages.push(message);
+      }
     }
-
-    const enemyEnvironmentDamageActions = this.environmentSystem
-      .damageCharacters(this.ballisticsSystem, this.enemySquad);
-    const playerEnvironmentDamageActions = this.environmentSystem
-      .damageCharacters(this.ballisticsSystem, this.playerSquad);
-
-    const smokeActions = Object.assign(
-      enemyEnvironmentDamageActions.smokeActions,
-      playerEnvironmentDamageActions.smokeActions);
-    const fireActions = Object.assign(
-      enemyEnvironmentDamageActions.fireActions,
-      playerEnvironmentDamageActions.fireActions);
-
-    text.createSmokeMessages(smokeActions).forEach(message => this.messages.push(message));
-    text.createFireMessages(fireActions).forEach(message => this.messages.push(message));
   }
 
   handleInput(input, local) {
@@ -531,6 +555,26 @@ export default class BattleSystem {
 
     if (this.movement.index >=
       this.movement.line.length) {
+      clearInterval(this.movement.intervalId);
+
+      this.initMovement();
+
+      // Select the next character, and refresh the screen again
+      this.nextCharacter();
+      this.game.refresh();
+    }
+  }
+
+  moveEnemyCharacter() {
+    const { x, y } = this.movement.line[this.movement.index];
+    const enemyShouldMove = this.shouldMove(this.local, x, y);
+
+    // If the enemy should not move, then advance to the end of the movement index to make
+    // sure that the characters movement ends on the next frame.
+    if (enemyShouldMove) {
+      this.moveAnimationFrame();
+    }
+    else {
       clearInterval(this.movement.intervalId);
 
       this.initMovement();

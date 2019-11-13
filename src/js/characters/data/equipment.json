@@ -7,7 +7,9 @@
     "startWith": 0,
     "description": "",
     "stat": "resilience",
-    "boost": 2
+    "boost": 2,
+    "difficulty": 2,
+    "frequency": 5
   },
   "Cigarettes": {
     "type": "existence equipment",
@@ -17,7 +19,9 @@
     "startWith": 1,
     "description": "",
     "stat": "presence",
-    "boost": 2
+    "boost": 2,
+    "difficulty": 2,
+    "frequency": 5
   },
   "C-Rations": {
     "type": "existence equipment",
@@ -27,7 +31,9 @@
     "startWith": 1,
     "description": "",
     "stat": "resilience",
-    "boost": 2
+    "boost": 2,
+    "difficulty": 2,
+    "frequency": 5
   },
   "Extra Socks": {
     "type": "existence equipment",
@@ -37,7 +43,9 @@
     "startWith": 1,
     "description": "",
     "stat": "aggression",
-    "boost": 2
+    "boost": 2,
+    "difficulty": 2,
+    "frequency": 5
   },
   "9x19mm NATO": {
     "type": "ammunition",
@@ -138,7 +146,9 @@
     "accuracy": 100,
     "range": 10,
     "smoke": 500,
-    "fire": 0
+    "fire": 0,
+    "difficulty": 4,
+    "frequency": 8
   },
   "Mk II Grenade": {
     "type": "grenade",
@@ -153,7 +163,9 @@
     "accuracy": 100,
     "range": 10,
     "smoke": 75,
-    "fire": 0
+    "fire": 0,
+    "difficulty": 1,
+    "frequency": 10
   },
   "M26 Grenade": {
     "type": "grenade",
@@ -168,7 +180,9 @@
     "accuracy": 100,
     "range": 8,
     "smoke": 20,
-    "fire": 0
+    "fire": 0,
+    "difficulty": 3,
+    "frequency": 10
   },
   "M79": {
     "type": "grenade launcher",
@@ -184,7 +198,9 @@
     "accuracy": 100,
     "range": 20,
     "smoke": 20,
-    "fire": 0
+    "fire": 0,
+    "difficulty": 5,
+    "frequency": 8
   },
   "China Lake": {
     "type": "grenade launcher",
@@ -200,7 +216,9 @@
     "accuracy": 100,
     "range": 16,
     "smoke": 20,
-    "fire": 0
+    "fire": 0,
+    "difficulty": 6,
+    "frequency": 7
   },
   "M20": {
     "type": "rocket launcher",
@@ -216,7 +234,9 @@
     "accuracy": 100,
     "range": 30,
     "smoke": 50,
-    "fire": 0
+    "fire": 0,
+    "difficulty": 7,
+    "frequency": 6
   },
   "M67": {
     "type": "rocket launcher",
@@ -232,7 +252,9 @@
     "accuracy": 100,
     "range": 24,
     "smoke": 100,
-    "fire": 0
+    "fire": 0,
+    "difficulty": 8,
+    "frequency": 5
   },
   "M72 LAW": {
     "type": "rocket launcher",
@@ -248,7 +270,9 @@
     "accuracy": 100,
     "range": 20,
     "smoke": 25,
-    "fire": 0
+    "fire": 0,
+    "difficulty": 8,
+    "frequency": 4
   },
   "M2A1-7": {
     "type": "flame thrower",
@@ -263,6 +287,8 @@
     "accuracy": 100,
     "range": 18,
     "smoke": 80,
-    "fire": 200
+    "fire": 200,
+    "difficulty": 9,
+    "frequency": 1
   }
 }

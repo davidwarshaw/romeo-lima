@@ -24,6 +24,9 @@ export default class LocalMap extends Window {
     this.enemySquad = battleSystem.enemySquad;
 
     this.cache = new Cache();
+
+    // Register the local map with the battle system
+    this.battleSystem.registerLocalMap(this);
   }
 
   getTile(x, y) {
