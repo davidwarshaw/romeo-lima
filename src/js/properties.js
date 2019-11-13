@@ -63,5 +63,7 @@ export default {
   fovConcealmentThreshold: 100,
   fovCoverThreshold: 75,
   animationIntervalMillis: 100,
+  startingAmmoBursts: 5,
+  enemyEquipmentChance: 60,
   inGameStartDate: new Date(1967, 6, 3, 0)
 };

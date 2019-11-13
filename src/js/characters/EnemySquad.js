@@ -9,10 +9,11 @@ import Squad from './Squad';
 
 export default class EnemySquad extends Squad {
 
-  constructor(members, x, y, inventory, overworldGlyph, overworldVisible) {
+  constructor(members, x, y, inventory, overworldGlyph, overworldVisible, difficulty) {
     super(members, x, y, inventory);
     this.overworldGlyph = overworldGlyph;
     this.overworldVisible = overworldVisible;
+    this.difficulty = difficulty;
 
     this.coverMap = null;
 
