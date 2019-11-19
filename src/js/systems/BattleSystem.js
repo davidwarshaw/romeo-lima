@@ -205,13 +205,7 @@ export default class BattleSystem {
         this.playerSquad);
       console.log(action);
 
-      if (action.action === 'WAIT') {
-        // Log the action message
-        this.messages.push(action.message);
-
-        this.nextCharacter();
-      }
-      else if (action.action === 'MOVE') {
+      if (action.action === 'MOVE') {
         // Log the action message
         this.messages.push(action.message);
 
@@ -223,7 +217,20 @@ export default class BattleSystem {
           () => this.moveAnimationFrame(),
           properties.moveIntervalMillis);
       }
+      else if (action.action === 'WAIT') {
+        // Log the action message
+        this.messages.push(action.message);
+
+        this.nextCharacter();
+      }
       else if (action.action === 'ATTACK') {
+        this.shouldFireProjectile(action.target);
+
+        // Turn off target mode
+        this.targetMode = false;
+        this.clearTarget();
+      }
+      else if (action.action === 'PRONE') {
         this.shouldFireProjectile(action.target);
 
         // Turn off target mode
