@@ -195,7 +195,8 @@ function getOverworldEnemyLocations(map) {
       const {
         overworldWidth, overworldHeight,
         baseOverworldEnemyProb, xOverworldEnemyProb,
-        southernOverworldEnemyHeight, southernOverworldEnemyProb
+        southernOverworldEnemyHeight, southernOverworldEnemyProb,
+        maxDifficulty
       } = properties;
       const xProb =
         (1 - ((overworldWidth - x) / overworldWidth))
@@ -203,7 +204,7 @@ function getOverworldEnemyLocations(map) {
       const ySouthernThreshold = overworldHeight - southernOverworldEnemyHeight;
       const yProb = y >= ySouthernThreshold ? southernOverworldEnemyProb : 0;
       const tileProb = Math.max(xProb, yProb);
-      const difficulty = utils.clamp(~~(1 + (10 * tileProb)), 1, 10);
+      const difficulty = utils.clamp(~~(1 + (maxDifficulty * tileProb)), 1, maxDifficulty);
       const enemyProb = ~~(100 * tileProb * baseOverworldEnemyProb);
       const roll = properties.rng.getPercentage();
       if (roll < enemyProb) {

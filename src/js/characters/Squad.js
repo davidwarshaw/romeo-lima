@@ -84,6 +84,14 @@ export default class Squad {
       .sort((l, r) => rankOrder.indexOf(r.rank) - rankOrder.indexOf(l.rank));
   }
 
+  getNearAliveByMember(member, distance) {
+    const { x, y } = member;
+    const nearMembers = this.nearMembers
+      .filter(nearMember => nearMember.alive)
+      .filter(nearMember => utils.tileLine(x, y, nearMember.x, nearMember.y).length <= distance);
+    return nearMembers[0] || null;
+  }
+
   numberOfAliveMembers() {
     return this.members
       .map(member => member.alive ? 1 : 0)

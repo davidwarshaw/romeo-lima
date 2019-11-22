@@ -214,16 +214,21 @@ export default class BattleSystem {
         this.movement.line = action.moveLine;
         this.movement.index = 0;
         this.movement.intervalId = setInterval(
-          () => this.moveAnimationFrame(),
+          () => this.moveEnemyCharacter(),
           properties.moveIntervalMillis);
       }
       else if (action.action === 'WAIT') {
+
         // Log the action message
         this.messages.push(action.message);
 
         this.nextCharacter();
       }
       else if (action.action === 'ATTACK') {
+
+        // Use the primary or secondary weapon as specified by the action
+        this.currentCharacter.primarySelected = action.primary;
+
         this.shouldFireProjectile(action.target);
 
         // Turn off target mode
@@ -231,11 +236,17 @@ export default class BattleSystem {
         this.clearTarget();
       }
       else if (action.action === 'PRONE') {
-        this.shouldFireProjectile(action.target);
+        this.currentCharacter.prone = !this.currentCharacter.prone;
 
-        // Turn off target mode
+        // Going prone or geting up uses up all moves and clears the target
         this.targetMode = false;
         this.clearTarget();
+
+        // Log the action message
+        const message = this.currentCharacter.prone ?
+          { name: this.currentCharacter.name, text: 'goes prone' } :
+          { name: this.currentCharacter.name, text: 'stands' };
+        this.messages.push(message);
       }
     }
 
@@ -538,6 +549,26 @@ export default class BattleSystem {
 
     if (this.movement.index >=
       this.movement.line.length) {
+      clearInterval(this.movement.intervalId);
+
+      this.initMovement();
+
+      // Select the next character, and refresh the screen again
+      this.nextCharacter();
+      this.game.refresh();
+    }
+  }
+
+  moveEnemyCharacter() {
+    const { x, y } = this.movement.line[this.movement.index];
+    const enemyShouldMove = this.shouldMove(this.map, x, y);
+
+    // If the enemy should not move, then advance to the end of the movement index to make
+    // sure that the characters movement ends on the next frame.
+    if (enemyShouldMove) {
+      this.moveAnimationFrame();
+    }
+    else {
       clearInterval(this.movement.intervalId);
 
       this.initMovement();

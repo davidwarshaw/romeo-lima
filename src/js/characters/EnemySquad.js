@@ -20,6 +20,7 @@ export default class EnemySquad extends Squad {
     this.fgColor = '#FF0000';
     this.bgColor = null;
 
+    this.explosiveSafeDistance = 8;
   }
 
   renderSquadMembers(display, watchBrightness, map, xOffset, yOffset,
@@ -98,8 +99,17 @@ export default class EnemySquad extends Squad {
         text: 'moves'
       }
     };
-    const attackAction = {
+    const primaryAttackAction = {
       action: 'ATTACK',
+      primary: true,
+      message: {
+        name: member.name,
+        text: 'attacks'
+      }
+    };
+    const secondaryAttackAction = {
+      action: 'ATTACK',
+      primary: false,
       message: {
         name: member.name,
         text: 'attacks'
@@ -143,16 +153,21 @@ export default class EnemySquad extends Squad {
       .sort((l, r) => l.distance - r.distance);
 
     // Which is the closest?
-    const closestTargettableMember = targettableMembers.length ?
+    const closestTarget = targettableMembers.length ?
       targettableMemberDistances[0].targetMember : null;
+    const closestTargetDistance = targettableMembers.length ?
+      targettableMemberDistances[0].distance : null;
+
+    // Is this member far enough away for grenades?
+    const inGrenadeRange = closestTargetDistance >= this.explosiveSafeDistance;
 
     // Is this member close enough for melee?
     let pathToMelee = null;
     let meleeInRange = false;
-    if (closestTargettableMember) {
+    if (closestTarget) {
       pathToMelee = this.astar.findPath(
         { x: member.x, y: member.y },
-        { x: closestTargettableMember.x, y: closestTargettableMember.y });
+        { x: closestTarget.x, y: closestTarget.y });
       meleeInRange = pathToMelee.length - 1 <= numberOfMoves;
     }
 
@@ -162,35 +177,64 @@ export default class EnemySquad extends Squad {
       return tile.name.startsWith('Hut');
     }
     const outsideShootingIn =
-      closestTargettableMember && inBuilding(closestTargettableMember) && !inBuilding(member);
+      closestTarget && inBuilding(closestTarget) && !inBuilding(member);
     const insideShootingOut =
-      closestTargettableMember && !inBuilding(closestTargettableMember) && inBuilding(member);
+      closestTarget && !inBuilding(closestTarget) && inBuilding(member);
+
+    // Enemies with higher difficulty should use powerful weapons more
+    const chanceToUseSecondary = Math.round(100 * (this.difficulty / properties.maxDifficulty));
+    const roll = properties.rng.getPercentage();
+    const useSecondary = roll <= chanceToUseSecondary;
 
     // Decision Making
     //
 
+    console.log(`difficulty: ${this.difficulty}`);
     console.log(`uncovered: ${uncovered}`);
-    console.log(`closestTargettableMember: ${closestTargettableMember}`);
+    console.log(`closestCoveredTilePath: ${JSON.stringify(closestCoveredTilePath)}`);
+    console.log(`closestTarget: ${JSON.stringify(closestTarget)}`);
+    console.log(`closestTargetDistance: ${closestTargetDistance}`);
+    console.log(`inGrenadeRange: ${inGrenadeRange}`);
+    console.log(`pathToMelee: ${JSON.stringify(pathToMelee)}`);
     console.log(`meleeInRange: ${meleeInRange}`);
     console.log(`outsideShootingIn: ${outsideShootingIn}`);
     console.log(`insideShootingOut: ${insideShootingOut}`);
+    console.log(`member.hasSecondaryWeapon(): ${member.hasSecondaryWeapon()}`);
 
     // If you're uncovered and there's an enemy in melee distance, melee attack
     if (uncovered && meleeInRange) {
-      moveAction.moveLine = pathToMelee.path.slice(1, numberOfMoves + 1);
+      moveAction.moveLine = pathToMelee.slice(1, numberOfMoves + 1);
+      console.log('moveAction: melee');
+      console.log(moveAction);
+      console.log(`member.x: ${member.x} member.y: ${member.y}`);
+      console.log(`closestTarget.x: ${closestTarget.x} closestTarget.y: ${closestTarget.y}`);
       return moveAction;
     }
 
     // If you're uncovered and there's cover nearby, move to cover.
     if (uncovered && closestCoveredTilePath) {
       moveAction.moveLine = closestCoveredTilePath.path.slice(1, numberOfMoves + 1);
+      console.log('moveAction: move to cover');
+      console.log(moveAction);
       return moveAction;
     }
 
     // Otherwise, if there's a player member nearby, attack them.
-    if (closestTargettableMember) {
-      attackAction.target = closestTargettableMember;
-      return attackAction;
+    //
+    // Attack with smalls arms if we have no secondary or we're danger close
+    if (closestTarget && (!inGrenadeRange || !member.hasSecondaryWeapon() || !useSecondary)) {
+      primaryAttackAction.target = closestTarget;
+      console.log('primaryAttackAction');
+      console.log(primaryAttackAction);
+      return primaryAttackAction;
+    }
+
+    // Attack with explosives if we have them and we're far enough away
+    if (closestTarget && (inGrenadeRange && member.hasSecondaryWeapon() && useSecondary)) {
+      secondaryAttackAction.target = closestTarget;
+      console.log('secondaryAttackAction');
+      console.log(secondaryAttackAction);
+      return secondaryAttackAction;
     }
 
     // Do nothing.
