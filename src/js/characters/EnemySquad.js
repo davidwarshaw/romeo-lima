@@ -8,7 +8,6 @@ import AStar from '../maps/AStar';
 import Squad from './Squad';
 
 export default class EnemySquad extends Squad {
-
   constructor(members, x, y, inventory, overworldGlyph, overworldVisible, difficulty) {
     super(members, x, y, inventory);
     this.overworldGlyph = overworldGlyph;
@@ -24,9 +23,8 @@ export default class EnemySquad extends Squad {
     this.tooFarFromPlayerDistance = 20;
   }
 
-  renderSquadMembers(display, watchBrightness, map, xOffset, yOffset,
-    playerSquadLocalFov) {
-    this.getBattleMembersByNumber().forEach((member) => {
+  renderSquadMembers(display, watchBrightness, map, xOffset, yOffset, playerSquadLocalFov) {
+    this.getBattleMembersByNumber().forEach(member => {
       const { x, y } = member;
 
       // Early exit if the tile the member is on is not visible
@@ -37,52 +35,42 @@ export default class EnemySquad extends Squad {
       const tile = map.getTile(x, y);
       const bgAdjusted = utils.adjustBrightness(tile.bgColor, watchBrightness);
       const selectionFgColor = member.selected ? tile.bgColor : this.fgColor;
-      const fgColor = invisibleButShown ?
-        properties.debug.invisibleEnemiesFgColor :
-        selectionFgColor;
+      const fgColor = invisibleButShown
+        ? properties.debug.invisibleEnemiesFgColor
+        : selectionFgColor;
       const bgColor = member.selected ? this.fgColor : bgAdjusted;
       const roleGlyph = member.role[0].toLowerCase();
       const glyph = member.alive ? roleGlyph : this.deadGlyph;
-      display.draw(xOffset + x, yOffset + y, glyph,
-        fgColor, bgColor);
+      display.draw(xOffset + x, yOffset + y, glyph, fgColor, bgColor);
     });
 
     // If there's a vehicle, render it
     if (this.vehicle) {
-      this.vehicle.render(display, watchBrightness, map, xOffset, yOffset,
-        playerSquadLocalFov);
+      this.vehicle.render(display, watchBrightness, map, xOffset, yOffset, playerSquadLocalFov);
     }
   }
 
-  renderSquad(display, watchBrightness, map, xOffset, yOffset,
-    playerSquadOverworldFov) {
+  renderSquad(display, watchBrightness, map, xOffset, yOffset, playerSquadOverworldFov) {
     // Early exit if the tile the member is on is not visible or the enemy
     // is not visible on the overworld map
     const tileIsVisible = playerSquadOverworldFov.isVisible(this.x, this.y);
-    const invisibleButShown =
-      properties.debug.showInvisibleEnemies && !this.overworldVisible;
+    const invisibleButShown = properties.debug.showInvisibleEnemies && !this.overworldVisible;
     if (!tileIsVisible || (!this.overworldVisible && !invisibleButShown)) {
       return;
     }
     const glyph = this.alive ? this.overworldGlyph : this.deadGlyph;
     const tile = map.getTile(this.x, this.y);
     const bgAdjusted = utils.adjustBrightness(tile.bgColor, watchBrightness);
-    const fgColor = invisibleButShown ?
-      properties.debug.invisibleEnemiesFgColor :
-      this.fgColor;
-    display.draw(xOffset + this.x, yOffset + this.y, glyph,
-      fgColor, bgAdjusted);
+    const fgColor = invisibleButShown ? properties.debug.invisibleEnemiesFgColor : this.fgColor;
+    display.draw(xOffset + this.x, yOffset + this.y, glyph, fgColor, bgAdjusted);
   }
 
   initCoverMap(map, playerSquadMembers) {
     // The cover map is just an FOV that uses cover instead of concealment
-    this.coverMap = new LocalFov(
-      map, playerSquadMembers, properties.fovCoverThreshold, 'cover');
+    this.coverMap = new LocalFov(map, playerSquadMembers, properties.fovCoverThreshold, 'cover');
   }
 
-  actionForTurn(
-    member, numberOfMoves, map, enemySquadLocalFov, playerSquad, playerSquadLocalFov) {
-
+  actionForTurn(member, numberOfMoves, map, enemySquadLocalFov, playerSquad, playerSquadLocalFov) {
     this.coverMap.recalculate();
     this.astar = new AStar(map, playerSquad, this, playerSquadLocalFov);
 
@@ -126,9 +114,10 @@ export default class EnemySquad extends Squad {
     // How far away is cover?
     const coveredReachableTilesByDistance = Object.values(map)
       .filter(tile => !this.coverMap.isVisible(tile.x, tile.y))
-      .filter(tile =>
-        TileMath.tileLine(member.x, member.y, tile.x, tile.y).length <= numberOfMoves * 2)
-      .map((tile) => {
+      .filter(
+        tile => TileMath.tileLine(member.x, member.y, tile.x, tile.y).length <= numberOfMoves * 2
+      )
+      .map(tile => {
         const path = this.astar.findPath({ x: member.x, y: member.y }, { x: tile.x, y: tile.y });
         return { tile, path };
       })
@@ -136,31 +125,30 @@ export default class EnemySquad extends Squad {
       .sort((l, r) => l.path.length - r.path.length);
 
     // What's the path to the closest cover tile?
-    const closestCoveredTilePath = coveredReachableTilesByDistance.length > 0 ?
-      coveredReachableTilesByDistance.slice(0, 1)[0] :
-      null;
+    const closestCoveredTilePath =
+      coveredReachableTilesByDistance.length > 0
+        ? coveredReachableTilesByDistance.slice(0, 1)[0]
+        : null;
 
     // What player squad members can be targetted?
-    const targettableMembers = playerSquad.members
-      .filter(targetMember => targetMember.alive);
-      // .filter(targetMember =>
-      //   enemySquadLocalFov.isVisible(targetMember.x, targetMember.y));
+    const targettableMembers = playerSquad.members.filter(targetMember => targetMember.alive);
 
     // How far away are these members?
     const targettableMemberDistances = targettableMembers
       .map(targetMember => {
-        const line = TileMath.tileLine(
-          member.x, member.y, targetMember.x, targetMember.y);
+        const line = TileMath.tileLine(member.x, member.y, targetMember.x, targetMember.y);
         const distance = line.length;
         return { targetMember, distance };
       })
       .sort((l, r) => l.distance - r.distance);
 
     // Which is the closest?
-    const closestTarget = targettableMembers.length ?
-      targettableMemberDistances[0].targetMember : null;
-    const closestTargetDistance = targettableMembers.length ?
-      targettableMemberDistances[0].distance : null;
+    const closestTarget = targettableMembers.length
+      ? targettableMemberDistances[0].targetMember
+      : null;
+    const closestTargetDistance = targettableMembers.length
+      ? targettableMemberDistances[0].distance
+      : null;
 
     // Is there a friendly in the line of fire?
     function friendlyInTargetLine(target, enemySquad) {
@@ -170,7 +158,8 @@ export default class EnemySquad extends Squad {
     const friendlyAtRisk = friendlyInTargetLine(closestTarget, this);
 
     // Is this member far enough away for grenades?
-    const inGrenadeRange = closestTargetDistance < this.tooFarFromPlayerDistance &&
+    const inGrenadeRange =
+      closestTargetDistance < this.tooFarFromPlayerDistance &&
       closestTargetDistance >= this.explosiveSafeDistance;
 
     // Is the member too far from the battle?
@@ -182,9 +171,10 @@ export default class EnemySquad extends Squad {
     if (closestTarget) {
       pathToClosestTarget = this.astar.findPath(
         { x: member.x, y: member.y },
-        { x: closestTarget.x, y: closestTarget.y });
-      meleeInRange = pathToClosestTarget.length > 0 &&
-        pathToClosestTarget.length - 1 <= numberOfMoves;
+        { x: closestTarget.x, y: closestTarget.y }
+      );
+      meleeInRange =
+        pathToClosestTarget.length > 0 && pathToClosestTarget.length - 1 <= numberOfMoves;
     }
 
     // What direction is toward the player, and what direction is away?
@@ -194,10 +184,8 @@ export default class EnemySquad extends Squad {
       const tile = map[utils.keyFromXY(member.x, member.y)];
       return tile.name.startsWith('Hut');
     }
-    const outsideShootingIn =
-      closestTarget && inBuilding(closestTarget) && !inBuilding(member);
-    const insideShootingOut =
-      closestTarget && !inBuilding(closestTarget) && inBuilding(member);
+    const outsideShootingIn = closestTarget && inBuilding(closestTarget) && !inBuilding(member);
+    const insideShootingOut = closestTarget && !inBuilding(closestTarget) && inBuilding(member);
 
     // Enemies with higher difficulty should use powerful weapons more
     const chanceToUseSecondary = Math.round(100 * (this.difficulty / properties.maxDifficulty));
@@ -223,8 +211,12 @@ export default class EnemySquad extends Squad {
     console.log(`member.hasSecondaryWeapon(): ${member.hasSecondaryWeapon()}`);
 
     // If we're too far from the battle, move closer. Use the path to the closest target.
-    if ((tooFarFromPlayer || friendlyAtRisk) && winning &&
-      pathToClosestTarget && pathToClosestTarget.length > 0) {
+    if (
+      (tooFarFromPlayer || friendlyAtRisk) &&
+      winning &&
+      pathToClosestTarget &&
+      pathToClosestTarget.length > 0
+    ) {
       moveAction.moveLine = pathToClosestTarget.slice(1, numberOfMoves + 1);
       console.log('moveAction: close distance');
       console.log(moveAction);
@@ -254,8 +246,11 @@ export default class EnemySquad extends Squad {
     // Otherwise, if there's a player member nearby, attack them.
     //
     // Attack with smalls arms if we have no secondary or we're danger close
-    if (closestTarget && !friendlyAtRisk &&
-        (!inGrenadeRange || !member.hasSecondaryWeapon() || !useSecondary)) {
+    if (
+      closestTarget &&
+      !friendlyAtRisk &&
+      (!inGrenadeRange || !member.hasSecondaryWeapon() || !useSecondary)
+    ) {
       primaryAttackAction.target = closestTarget;
       console.log('primaryAttackAction');
       console.log(primaryAttackAction);
@@ -263,8 +258,11 @@ export default class EnemySquad extends Squad {
     }
 
     // Attack with explosives if we have them and we're far enough away
-    if (closestTarget && !friendlyAtRisk &&
-        (inGrenadeRange && member.hasSecondaryWeapon() && useSecondary)) {
+    if (
+      closestTarget &&
+      !friendlyAtRisk &&
+      (inGrenadeRange && member.hasSecondaryWeapon() && useSecondary)
+    ) {
       secondaryAttackAction.target = closestTarget;
       console.log('secondaryAttackAction');
       console.log(secondaryAttackAction);
